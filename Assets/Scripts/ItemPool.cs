@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using MatchThreePrototype.PlayAreaCellContent;
 
 namespace MatchThreePrototype
 {
@@ -13,7 +14,7 @@ namespace MatchThreePrototype
 
         private bool _isInitialized = false;
 
-        private List<Item> _availableItems = new List<Item>();
+        private List<PlayAreaItem> _availableItems = new List<PlayAreaItem>();
 
         [SerializeField] private List<ItemTypeConfig> _itemTypeConfig = new List<ItemTypeConfig>();
 
@@ -45,7 +46,7 @@ namespace MatchThreePrototype
             {
                 for (int j = 0; j < _maxPerType; j++)
                 {
-                    PutInPool(Instantiate(_itemTypeConfig[i].Prefab) as Item);
+                    PutInPool(Instantiate(_itemTypeConfig[i].Prefab) as PlayAreaItem);
                 }
             }
 
@@ -54,7 +55,7 @@ namespace MatchThreePrototype
 
 
 
-        private void PutInPool(Item item)
+        private void PutInPool(PlayAreaItem item)
         {
             //item.transform.parent = transform;
             item.transform.SetParent(transform);
@@ -65,7 +66,7 @@ namespace MatchThreePrototype
         }
 
         // get next available with given type
-        internal Item GetNextAvailable(ItemTypes type)
+        internal PlayAreaItem GetNextAvailable(ItemTypes type)
         {
             if (_availableItems.Count > 0)
             {
@@ -73,7 +74,7 @@ namespace MatchThreePrototype
                 {
                     if (_availableItems[i].ItemType == type)
                     {
-                        Item returnItem = _availableItems[i];
+                        PlayAreaItem returnItem = _availableItems[i];
                         _availableItems.RemoveAt(i);
                         return returnItem;
                     }
@@ -86,11 +87,11 @@ namespace MatchThreePrototype
 
         }
         // get next available without regard to type
-        internal Item GetNextAvailable()
+        internal PlayAreaItem GetNextAvailable()
         {
             if (_availableItems.Count > 0)
             {
-                Item returnItem = _availableItems[0];
+                PlayAreaItem returnItem = _availableItems[0];
                 _availableItems.RemoveAt(0);
                 return returnItem;
             }
@@ -101,7 +102,7 @@ namespace MatchThreePrototype
         }
 
 
-        internal void Return(Item item)
+        internal void Return(PlayAreaItem item)
         {
             PutInPool(item);
         }
@@ -128,7 +129,7 @@ namespace MatchThreePrototype
         public struct ItemTypeConfig
         {
             public ItemTypes Type;
-            public Item Prefab;
+            public PlayAreaItem Prefab;
             public List<AudioClip> MatchAudioClip;
         }
     }

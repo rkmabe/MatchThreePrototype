@@ -1,12 +1,10 @@
 using UnityEngine;
 
-namespace MatchThreePrototype
+namespace MatchThreePrototype.PlayAreaCellContent
 {
-    public class Item : MonoBehaviour
+    public class PlayAreaItem : MonoBehaviour
     {
         // Start is called before the first frame update
-
-
 
         public ItemTypes ItemType { get => _type; }
         [SerializeField] private ItemTypes _type;

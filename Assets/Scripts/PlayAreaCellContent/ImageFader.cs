@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MatchThreePrototype.PlayAreaManagment
+namespace MatchThreePrototype.PlayAreaCellContent
 {
 
     public class ImageFader : MonoBehaviour, IImageFader

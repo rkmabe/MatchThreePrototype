@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using MatchThreePrototype.PlayAreaCellContent;
 
 namespace MatchThreePrototype
 {
@@ -64,7 +65,7 @@ namespace MatchThreePrototype
 
         private int _numCells;
 
-        private List<Item> _drawnItems = new List<Item>();
+        private List<PlayAreaItem> _drawnItems = new List<PlayAreaItem>();
 
         public bool IsPopulated { get => _isPopulated; }
         private bool _isPopulated = false;
@@ -184,7 +185,7 @@ namespace MatchThreePrototype
                 for (int j = 0; j < _columns[i].Cells.Count; j++)
                 {
                     List<ItemTypes> excludedItemTypes = new List<ItemTypes>();
-                    Item validItem = null;
+                    PlayAreaItem validItem = null;
                     int o = 0;
                     while (validItem == null)
                     {
@@ -338,12 +339,12 @@ namespace MatchThreePrototype
             }
         }
 
-        internal Item GetFromDrawnItems()
+        internal PlayAreaItem GetFromDrawnItems()
         {
             if (_drawnItems.Count > 0)
             {
                 int index = UnityEngine.Random.Range(0, _drawnItems.Count);
-                Item item = _drawnItems[index];
+                PlayAreaItem item = _drawnItems[index];
                 _drawnItems.RemoveAt(index);
 
                 return item;
@@ -353,7 +354,7 @@ namespace MatchThreePrototype
             return null;
         }
 
-        internal void ReturnToDrawnItems(Item item)
+        internal void ReturnToDrawnItems(PlayAreaItem item)
         {
             _drawnItems.Add(item);
         }
@@ -373,7 +374,7 @@ namespace MatchThreePrototype
                 {
                     ItemTypes itemType = _allowedItemTypes[i];
 
-                    Item item = _itemPool.GetNextAvailable(itemType);
+                    PlayAreaItem item = _itemPool.GetNextAvailable(itemType);
 
                     _drawnItems.Add(item);
                 }
@@ -382,7 +383,7 @@ namespace MatchThreePrototype
             int modTypesPerDrawCount = drawCount % _allowedItemTypes.Count;
             for (int i = 0; i < modTypesPerDrawCount; i++)
             {
-                Item item = _itemPool.GetNextAvailable();
+                PlayAreaItem item = _itemPool.GetNextAvailable();
                 _drawnItems.Add(item);
             }
 
@@ -393,7 +394,7 @@ namespace MatchThreePrototype
             for (int i = _drawnItems.Count - 1; i > 0; i--)
             {
                 int k = UnityEngine.Random.Range(0, i + 1);
-                Item itemToSwap = _drawnItems[k];
+                PlayAreaItem itemToSwap = _drawnItems[k];
                 _drawnItems[k] = _drawnItems[i];
                 _drawnItems[i] = itemToSwap;
             }
@@ -445,7 +446,7 @@ namespace MatchThreePrototype
             bool isMatch = false;
 
             // get item at position columnNum, cellnum 
-            Item itemAtPosition = GetPlayAreaItemAt(columnNum, cellNum);
+            PlayAreaItem itemAtPosition = GetPlayAreaItemAt(columnNum, cellNum);
             if (itemAtPosition != null)
             {
                 isMatch = itemTypeToMatch == itemAtPosition.ItemType ? true : false;
@@ -454,7 +455,7 @@ namespace MatchThreePrototype
             return isMatch;
         }
 
-        private Item GetPlayAreaItemAt(int columnNum, int cellNum)
+        private PlayAreaItem GetPlayAreaItemAt(int columnNum, int cellNum)
         {
             PlayAreaColumn column = GetPlayAreaColumn(columnNum);
 

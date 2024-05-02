@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MatchThreePrototype.PlayAreaManagment
+namespace MatchThreePrototype.PlayAreaCellContent
 {
-    public interface IItemHandler
+    public interface IPlayAreaItemHandler
     {
-        public void SetItem(Item item);
+        public void SetItem(PlayAreaItem item);
 
         public void RemoveItemReferenceAndImage();
         public void RemoveItemReference();
@@ -17,7 +17,7 @@ namespace MatchThreePrototype.PlayAreaManagment
 
         //public ItemTypes GetItemType();
 
-        public Item GetItem();
+        public PlayAreaItem GetItem();
         public Image GetImage();
     }
 }

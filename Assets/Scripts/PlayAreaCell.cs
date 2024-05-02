@@ -1,4 +1,4 @@
-using MatchThreePrototype.PlayAreaManagment;
+using MatchThreePrototype.PlayAreaCellContent;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,12 +33,12 @@ namespace MatchThreePrototype
         private Block _block;
         [SerializeField] private Image _blockImage;
 
-        public IItemHandler ItemHandler { get => _itemHandler; }
-        private IItemHandler _itemHandler;
+        public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
+        private IPlayAreaItemHandler _itemHandler;
 
 
-        internal Item StagedItem { get => _stagedItem; }
-        private Item _stagedItem;
+        internal PlayAreaItem StagedItem { get => _stagedItem; }
+        private PlayAreaItem _stagedItem;
 
         internal bool MatchWithStagedItem { get => _matchWithStagedItem; }
         private bool _matchWithStagedItem = false;
@@ -336,7 +336,7 @@ namespace MatchThreePrototype
 
 
             //Item thisCellItem = (_matchWithStagedItem) ? _stagedItem : _item;
-            Item thisCellItem = (_matchWithStagedItem) ? _stagedItem : _itemHandler.GetItem();
+            PlayAreaItem thisCellItem = (_matchWithStagedItem) ? _stagedItem : _itemHandler.GetItem();
             
 
             // if there is NO item in the cell, there are NO matches.
@@ -352,7 +352,7 @@ namespace MatchThreePrototype
             if (cellUp != null)
             {
                 //Item itemUP = (cellUp.MatchWithStagedItem) ? cellUp.StagedItem : cellUp.Item;
-                Item itemUP = (cellUp.MatchWithStagedItem) ? cellUp.StagedItem : cellUp.ItemHandler.GetItem();
+                PlayAreaItem itemUP = (cellUp.MatchWithStagedItem) ? cellUp.StagedItem : cellUp.ItemHandler.GetItem();
                 if (itemUP != null && !cellUp.IsProcessingItemRemoval)
                 {
                     m.IsMatchUp = (itemUP.ItemType == m.ItemType) ? true : false;
@@ -373,7 +373,7 @@ namespace MatchThreePrototype
             if (cellDOWN != null)
             {
                 //Item itemDOWN = (cellDOWN.MatchWithStagedItem) ? cellDOWN.StagedItem : cellDOWN.Item;
-                Item itemDOWN = (cellDOWN.MatchWithStagedItem) ? cellDOWN.StagedItem : cellDOWN.ItemHandler.GetItem();
+                PlayAreaItem itemDOWN = (cellDOWN.MatchWithStagedItem) ? cellDOWN.StagedItem : cellDOWN.ItemHandler.GetItem();
                 if (itemDOWN != null && !cellDOWN.IsProcessingItemRemoval)
                 {
                     m.IsMatchDown = (itemDOWN.ItemType == m.ItemType) ? true : false;
@@ -397,7 +397,7 @@ namespace MatchThreePrototype
                 if (cellLEFT != null)
                 {
                     //Item itemLEFT = (cellLEFT.MatchWithStagedItem) ? cellLEFT.StagedItem : cellLEFT.Item;
-                    Item itemLEFT = (cellLEFT.MatchWithStagedItem) ? cellLEFT.StagedItem : cellLEFT.ItemHandler.GetItem();
+                    PlayAreaItem itemLEFT = (cellLEFT.MatchWithStagedItem) ? cellLEFT.StagedItem : cellLEFT.ItemHandler.GetItem();
                     if (itemLEFT != null && !cellLEFT.IsProcessingItemRemoval)
                     {
                         m.IsMatchLeft = (itemLEFT.ItemType == m.ItemType) ? true : false;
@@ -422,7 +422,7 @@ namespace MatchThreePrototype
                 if (cellRIGHT != null)
                 {
                     //Item itemRIGHT = (cellRIGHT.MatchWithStagedItem) ? cellRIGHT.StagedItem : cellRIGHT.Item;
-                    Item itemRIGHT = (cellRIGHT.MatchWithStagedItem) ? cellRIGHT.StagedItem : cellRIGHT.ItemHandler.GetItem();
+                    PlayAreaItem itemRIGHT = (cellRIGHT.MatchWithStagedItem) ? cellRIGHT.StagedItem : cellRIGHT.ItemHandler.GetItem();
                     if (itemRIGHT != null && !cellRIGHT.IsProcessingItemRemoval)
                     {
                         m.IsMatchRight = (itemRIGHT.ItemType == m.ItemType) ? true : false;
@@ -506,7 +506,7 @@ namespace MatchThreePrototype
             _stagedDropCell = null;
         }
 
-        internal void SetStagedItem(Item item)
+        internal void SetStagedItem(PlayAreaItem item)
         {
             _matchWithStagedItem = true;
             _stagedItem = item;
@@ -709,7 +709,7 @@ namespace MatchThreePrototype
             _blockPool = FindAnyObjectByType<BlockPool>();
 
 
-            _itemHandler = GetComponent<ItemHandler>();
+            _itemHandler = GetComponent<PlayAreaItemHandler>();
 
         }
 

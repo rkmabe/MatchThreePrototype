@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MatchThreePrototype.PlayAreaManagment
+namespace MatchThreePrototype.PlayAreaCellContent
 {
 
-    public class ItemHandler : MonoBehaviour, IItemHandler
+    public class PlayAreaItemHandler : MonoBehaviour, IPlayAreaItemHandler
     {
         [SerializeField] private Image _itemImage;
 
-        private Item _item;
+        private PlayAreaItem _item;
 
 
-        public void SetItem(Item item)
+        public void SetItem(PlayAreaItem item)
         {
             _item = item;
             _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 1);
@@ -47,7 +47,7 @@ namespace MatchThreePrototype.PlayAreaManagment
         //{
         //    return _item.ItemType;
         //}
-        public Item GetItem()
+        public PlayAreaItem GetItem()
         {
             return _item;
         }

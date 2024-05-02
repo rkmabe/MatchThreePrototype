@@ -1,4 +1,4 @@
-using MatchThreePrototype.PlayAreaManagment;
+using MatchThreePrototype.PlayAreaCellContent;
 using UnityEngine;
 using UnityEngine.UI;
 using static MatchThreePrototype.PlayAreaColumn;
@@ -14,8 +14,8 @@ namespace MatchThreePrototype
         private Obstacle _obstacle;  // ITEM currently in cell
         [SerializeField] private Image _obstacleImage;
 
-        public IItemHandler ItemHandler { get => _itemHandler; }
-        private IItemHandler _itemHandler;
+        public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
+        private IPlayAreaItemHandler _itemHandler;
 
         //private Image _image;
         private TMPro.TextMeshProUGUI _debugText;
@@ -141,7 +141,7 @@ namespace MatchThreePrototype
 
             SettingsController.OnNewDropSpeedDelegate += OnNewDropSpeed;
 
-            _itemHandler = GetComponent<ItemHandler>();
+            _itemHandler = GetComponent<PlayAreaItemHandler>();
 
         }
         // Start is called before the first frame update
