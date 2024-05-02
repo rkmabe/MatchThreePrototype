@@ -26,7 +26,8 @@ namespace MatchThreePrototype
 
             for (int i = 0; i < _dropCells.Count; i++)
             {
-                if (_dropCells[i].Item == null && _dropCells[i].Obstacle == null)
+                //if (_dropCells[i].Item == null && _dropCells[i].Obstacle == null)
+                if (!_dropCells[i].ItemHandler.ContainsItem() && _dropCells[i].Obstacle == null)
                 {
                     return _dropCells[i];
                 }
@@ -65,10 +66,8 @@ namespace MatchThreePrototype
                     {
                         dropCell = GetEmptyDropCell();
                         dropCell.SetDropFromPosition(GetRowInfo(cellUp.Number));
-                        //dropCell.SetItem(cellUp.Item);
-                        dropCell.SetItem(cellUp.ItemHandler.GetItem());
+                        dropCell.ItemHandler.SetItem(cellUp.ItemHandler.GetItem());
 
-                        //cellUp.RemoveItem();
                         cellUp.ItemHandler.RemoveItemReferenceAndImage();
                     }
                     else if (cellUp.Obstacle != null && cellUp.Obstacle.CanDrop)
@@ -95,7 +94,8 @@ namespace MatchThreePrototype
                     float topmostMaxY = 0;
                     for (int i = 0; i < _dropCells.Count; i++)
                     {
-                        if (_dropCells[i].Item != null || _dropCells[i].Obstacle != null)
+                        //if (_dropCells[i].Item != null || _dropCells[i].Obstacle != null)
+                        if (_dropCells[i].ItemHandler.ContainsItem() || _dropCells[i].Obstacle != null)
                         {
                             if (_dropCells[i].RectMinY > topmostMinY)
                             {
@@ -122,7 +122,8 @@ namespace MatchThreePrototype
                     ////Debug.Log("FORCE 4 BLUE PINS");
                     //dropCell.SetItem(bluepin);
 
-                    dropCell.SetItem(_playArea.GetFromDrawnItems());
+                    //dropCell.SetItem(_playArea.GetFromDrawnItems());
+                    dropCell.ItemHandler.SetItem(_playArea.GetFromDrawnItems());
                 }
             }
 
@@ -175,13 +176,6 @@ namespace MatchThreePrototype
                 }
                 else if (_cells[i].IsProcessingItemRemoval)
                 {
-                    //// remove the actual item
-                    //if (_cells[i].Item != null)
-                    //{
-                    //    _playArea.ReturnToDrawnItems(_cells[i].Item);
-                    //    _cells[i].SetItemNull();
-                    //}
-
                     // remove the actual item (but leave the sprite)
                     if (_cells[i].ItemHandler.ContainsItem())
                     {

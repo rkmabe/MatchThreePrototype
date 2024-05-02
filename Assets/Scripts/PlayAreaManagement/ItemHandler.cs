@@ -8,21 +8,10 @@ namespace MatchThreePrototype.PlayAreaManagment
 
     public class ItemHandler : MonoBehaviour, IItemHandler
     {
-        //public Item Item { get => _item; }
-        private Item _item;  // ITEM currently in cell
         [SerializeField] private Image _itemImage;
 
-        //public void Set(Item item, Image itemImage)
-        //{
-        //    _item = item;
-        //    itemImage.color = new Color(itemImage.color.r, itemImage.color.g, itemImage.color.b, 1);
-        //    itemImage.sprite = item.Sprite;
-        //}
-        //public void Remove()
-        //{
-        //    RemoveItemReference();
-        //    RemoveItemSprite();
-        //}
+        private Item _item;
+
 
         public void SetItem(Item item)
         {
@@ -67,11 +56,6 @@ namespace MatchThreePrototype.PlayAreaManagment
         {
             return _itemImage;
         }
-
-        //public Image GetImage()
-        //{
-        //    return _itemImage;
-        //}
 
     }
 }

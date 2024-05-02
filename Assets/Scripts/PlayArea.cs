@@ -696,7 +696,8 @@ namespace MatchThreePrototype
             // process any active SwapItemCells
             bool anyCellsSwapping = false;
 
-            if (_cellMoveToOrigin.Item != null)
+            //if (_cellMoveToOrigin.Item != null)
+            if (_cellMoveToOrigin.ItemHandler.ContainsItem())
             {
                 anyCellsSwapping = true;
                 bool hasSwapArrived;
@@ -706,7 +707,8 @@ namespace MatchThreePrototype
                     _cellMoveToOrigin.ProcessOnArrival();
                 }
             }
-            if (_cellMoveToDestination.Item != null)
+            //if (_cellMoveToDestination.Item != null)
+            if (_cellMoveToDestination.ItemHandler.ContainsItem())
             {
                 anyCellsSwapping = true;
                 bool hasSwapArrived;

@@ -93,7 +93,10 @@ namespace MatchThreePrototype
 
                         _playArea.HeldItemCell.transform.position = cell.transform.position;
                         //_playArea.HeldItemCell.SetItem(cell.Item);
-                        _playArea.HeldItemCell.SetItem(cell.ItemHandler.GetItem());
+                        //_playArea.HeldItemCell.SetItem(cell.ItemHandler.GetItem());
+
+                        // TODO: move HeldItemCell to Player .. assign when you assign play area .. 
+                        _playArea.HeldItemCell.ItemHandler.SetItem(cell.ItemHandler.GetItem());
                     }
                 }
 
@@ -132,7 +135,8 @@ namespace MatchThreePrototype
                             _playArea.CellMoveToDestination.transform.position = _dragOriginCell.transform.position;
                             _playArea.CellMoveToDestination.SetTargetCell(dragDestinationCell);
                             //_playArea.CellMoveToDestination.SetItem(_dragOriginCell.Item);       // _dragOriginCell.Item should NEVER be null
-                            _playArea.CellMoveToDestination.SetItem(_dragOriginCell.ItemHandler.GetItem());       // _dragOriginCell.Item should NEVER be null
+                            //_playArea.CellMoveToDestination.SetItem(_dragOriginCell.ItemHandler.GetItem());       // _dragOriginCell.Item should NEVER be null
+                            _playArea.CellMoveToDestination.ItemHandler.SetItem(_dragOriginCell.ItemHandler.GetItem());       // _dragOriginCell.Item should NEVER be null
                             _playArea.CellMoveToDestination.SetCellMatchesCaught(matchesCaughtAtDestination);
 
                             _playArea.CellMoveToDestination.SetObstaclesCaught(obstaclesCaughtAtDestination);
@@ -153,7 +157,8 @@ namespace MatchThreePrototype
                                 _playArea.CellMoveToOrigin.transform.position = dragDestinationCell.transform.position;
                                 _playArea.CellMoveToOrigin.SetTargetCell(_dragOriginCell);
                                 //_playArea.CellMoveToOrigin.SetItem(dragDestinationCell.Item);
-                                _playArea.CellMoveToOrigin.SetItem(dragDestinationCell.ItemHandler.GetItem());
+                                //_playArea.CellMoveToOrigin.SetItem(dragDestinationCell.ItemHandler.GetItem());
+                                _playArea.CellMoveToOrigin.ItemHandler.SetItem(dragDestinationCell.ItemHandler.GetItem());
                                 _playArea.CellMoveToOrigin.SetCellMatchesCaught(matchesCaughtAtOrigin);
 
                                 _playArea.CellMoveToOrigin.SetObstaclesCaught(obstaclesCaughtAtOrigin);
@@ -177,7 +182,8 @@ namespace MatchThreePrototype
 
                 _playArea.ClearDragIndicators();
 
-                _playArea.HeldItemCell.RemoveItem();
+                //_playArea.HeldItemCell.RemoveItem();
+                _playArea.HeldItemCell.ItemHandler.RemoveItemReferenceAndImage();
 
                 _dragOriginCell = null;
 
@@ -188,7 +194,8 @@ namespace MatchThreePrototype
             {
                 //Debug.Log("Drag to " + _dragTouch.position);
 
-                if (_dragOriginCell != null && _playArea.HeldItemCell.Item != null)
+                //if (_dragOriginCell != null && _playArea.HeldItemCell.Item != null)
+                if (_dragOriginCell != null && _playArea.HeldItemCell.ItemHandler.ContainsItem()) 
                 {
                     PlayAreaCell dragOverCell;
                     if (_playArea.IsPositionInSwapRange(_dragTouch.position, _dragOriginCell, out dragOverCell))

@@ -33,21 +33,8 @@ namespace MatchThreePrototype
         private Block _block;
         [SerializeField] private Image _blockImage;
 
-
-
-
-        //public Item Item { get => _item; }
-        //private Item _item;  // ITEM currently in cell
-        //[SerializeField] private Image _itemImage;
-
         public IItemHandler ItemHandler { get => _itemHandler; }
         private IItemHandler _itemHandler;
-        //[SerializeField] private Image _itemImage;
-
-        private IImageFader _itemImageFader;
-
-        //public Content Item { get => _item; }
-        //private Content _item;
 
 
         internal Item StagedItem { get => _stagedItem; }
@@ -530,48 +517,6 @@ namespace MatchThreePrototype
             _stagedItem = null;
         }
 
-
-        //internal void SetItem(Item item)
-        //{
-        //    _itemHandler.Set(item,_itemImage);
-        //}
-
-
-        //internal void SetItem(Item item)
-        //{
-
-        //    _itemHandler.SetItem(item);
-
-        //    //_item = item;
-        //    //_itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 1);
-        //    //_itemImage.sprite = item.Sprite;
-        //}
-        //internal void RemoveItem()
-        //{
-
-        //    RemoveItemHandlerReference();
-        //    _itemHandler.RemoveImage(_itemImage);
-
-        //    //_itemHandler.Remove();
-
-        //    //_itemHandler.
-
-        //    //_item = null;
-        //    //_itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 0);
-
-        //    //_itemImage.sprite = null;
-        //}
-
-        //internal void RemoveItemHandlerReference()
-        //{
-        //    _itemHandler.RemoveReference();
-        //}
-
-        //internal void SetImageAlpha(float alpha)
-        //{
-        //    _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, alpha);
-        //}
-
         private void OnCellCheckMatchRequest()
         {
             PlayAreaCellMatches m = CheckAdjacentMatches(true);
@@ -725,13 +670,6 @@ namespace MatchThreePrototype
                 _secsObstacleRemovalProcessing = 0;
             }
         }
-
-        // used in conjunction with UpdateAnimation to remove an item in two stages - first the actual item (here) and THEN the sprite once animation is complete
-        //internal void SetItemNull()
-        //{
-        //    //_item = null;
-        //    _itemHandler.RemoveItemReference();
-        //}
 
 
         internal void OnNewRemoveDuration(float duration)

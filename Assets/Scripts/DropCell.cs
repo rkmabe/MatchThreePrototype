@@ -1,3 +1,4 @@
+using MatchThreePrototype.PlayAreaManagment;
 using UnityEngine;
 using UnityEngine.UI;
 using static MatchThreePrototype.PlayAreaColumn;
@@ -13,9 +14,8 @@ namespace MatchThreePrototype
         private Obstacle _obstacle;  // ITEM currently in cell
         [SerializeField] private Image _obstacleImage;
 
-        public Item Item { get => _item; }
-        private Item _item;  // ITEM currently in cell
-        [SerializeField] private Image _itemImage;
+        public IItemHandler ItemHandler { get => _itemHandler; }
+        private IItemHandler _itemHandler;
 
         //private Image _image;
         private TMPro.TextMeshProUGUI _debugText;
@@ -57,18 +57,6 @@ namespace MatchThreePrototype
             _rectTransform.anchorMin = new Vector2(_rectTransform.anchorMin.x, rowInfo.MinY);
             _rectTransform.anchorMax = new Vector2(_rectTransform.anchorMax.x, rowInfo.MaxY);
         }
-        internal void SetItem(Item item)
-        {
-            _item = item;
-            _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 1f);
-            _itemImage.sprite = item.Sprite;
-        }
-        internal void RemoveItem()
-        {
-            _item = null;
-            _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 0);
-            _itemImage.sprite = null;
-        }
 
         internal void SetObstacle(Obstacle obstacle)
         {
@@ -85,7 +73,8 @@ namespace MatchThreePrototype
 
         public override string ToString()
         {
-            return base.ToString() + "Item=" + _item + " Obsatcle=" + _obstacle;
+            //return base.ToString() + "Item=" + _item + " Obsatcle=" + _obstacle;
+            return base.ToString() + "Item=" + _itemHandler.GetItem() + " Obsatcle=" + _obstacle;
         }
 
         internal void UpdateDropPosition(out bool hasArrived)
@@ -106,12 +95,10 @@ namespace MatchThreePrototype
         {
             _targetCell.RemoveStagedDropCell();
 
-            if (_item!= null) 
+            if (_itemHandler.ContainsItem())
             {
-                //_targetCell.SetItem(_item);
-                _targetCell.ItemHandler.SetItem(_item);
-
-                RemoveItem();
+                _targetCell.ItemHandler.SetItem(_itemHandler.GetItem());
+                _itemHandler.RemoveItemReferenceAndImage();
             }
             else if (_obstacle != null)
             {
@@ -153,6 +140,8 @@ namespace MatchThreePrototype
             //}
 
             SettingsController.OnNewDropSpeedDelegate += OnNewDropSpeed;
+
+            _itemHandler = GetComponent<ItemHandler>();
 
         }
         // Start is called before the first frame update

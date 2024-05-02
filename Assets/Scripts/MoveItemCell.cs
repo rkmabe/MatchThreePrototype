@@ -1,3 +1,4 @@
+using MatchThreePrototype.PlayAreaManagment;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,10 +22,11 @@ namespace MatchThreePrototype
 
         private List<PlayAreaCell> _obstaclesCaught = new List<PlayAreaCell>();
 
-        public Item Item { get => _item; }
-        private Item _item;  // ITEM currently in cell
 
-        private Image _image;
+        public IItemHandler ItemHandler { get => _itemHandler; }
+        private IItemHandler _itemHandler;
+
+
         private TMPro.TextMeshProUGUI _debugText;
 
         private RectTransform _rectTransform;
@@ -57,21 +59,6 @@ namespace MatchThreePrototype
             _isMoving = true;
         }
 
-        internal void SetItem(Item item)
-        {
-            _item = item;
-            _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 1f);
-            _image.sprite = item.Sprite;
-        }
-        private void RemoveItem()
-        {
-            _item = null;
-            _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
-            _image.sprite = null;
-
-            RemoveTarget();
-        }
-
         internal void RemoveTarget()
         {
             _targetCell = null;
@@ -81,15 +68,15 @@ namespace MatchThreePrototype
         internal void ProcessOnArrival()
         {
 
-            if (_item == null)
+            //if (_item == null)
+            if (!_itemHandler.ContainsItem())
             {
-                //Debug.LogError("ITEM should NOT be null on arrival!");
+                Debug.LogError("ITEM should NOT be null on arrival!");
                 //Debug.Break();
             }
             else
             {
-                //_targetCell.SetItem(_item);
-                _targetCell.ItemHandler.SetItem(_item);
+                _targetCell.ItemHandler.SetItem(_itemHandler.GetItem());
             }
 
             for (int i = _cellMatchesCaught.Count-1; i >= 0; i--)
@@ -104,7 +91,9 @@ namespace MatchThreePrototype
                 _obstaclesCaught.RemoveAt(j);
             }
 
-            RemoveItem();
+            //RemoveItem();
+            _itemHandler.RemoveItemReferenceAndImage();
+                RemoveTarget();
         }
 
 
@@ -136,11 +125,12 @@ namespace MatchThreePrototype
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
-            _image = GetComponentInChildren<Image>();
+
             _debugText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
 
-
             SettingsController.OnNewMoveSpeedDelegate  += OnNewMoveSpeed;
+
+            _itemHandler = GetComponent<ItemHandler>();
         }
 
         // Start is called before the first frame update
