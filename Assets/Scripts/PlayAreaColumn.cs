@@ -60,13 +60,16 @@ namespace MatchThreePrototype
                         break;
                     }
 
-                    if (cellUp.Item != null && !cellUp.IsProcessingItemRemoval)
+                    if (cellUp.ItemHandler.ContainsItem() && !cellUp.IsProcessingItemRemoval)
+                    //if (cellUp.Item != null && !cellUp.IsProcessingItemRemoval)
                     {
                         dropCell = GetEmptyDropCell();
                         dropCell.SetDropFromPosition(GetRowInfo(cellUp.Number));
-                        dropCell.SetItem(cellUp.Item);
+                        //dropCell.SetItem(cellUp.Item);
+                        dropCell.SetItem(cellUp.ItemHandler.GetItem());
 
-                        cellUp.RemoveItem();
+                        //cellUp.RemoveItem();
+                        cellUp.ItemHandler.RemoveItemReferenceAndImage();
                     }
                     else if (cellUp.Obstacle != null && cellUp.Obstacle.CanDrop)
                     {
@@ -173,10 +176,17 @@ namespace MatchThreePrototype
                 else if (_cells[i].IsProcessingItemRemoval)
                 {
                     //// remove the actual item
-                    if (_cells[i].Item != null)
+                    //if (_cells[i].Item != null)
+                    //{
+                    //    _playArea.ReturnToDrawnItems(_cells[i].Item);
+                    //    _cells[i].SetItemNull();
+                    //}
+
+                    // remove the actual item (but leave the sprite)
+                    if (_cells[i].ItemHandler.ContainsItem())
                     {
-                        _playArea.ReturnToDrawnItems(_cells[i].Item);
-                        _cells[i].SetItemNull();
+                        _playArea.ReturnToDrawnItems(_cells[i].ItemHandler.GetItem());
+                        _cells[i].ItemHandler.RemoveItemReference();
                     }
 
                     // when removal animation is complete, IsProcesingRemoval will be set to false
@@ -191,7 +201,8 @@ namespace MatchThreePrototype
             anyCellsStaged = false;
             for (int i = _cells.Count - 1; i >= 0; i--)
             {
-                if (_cells[i].Item == null && _cells[i].Obstacle == null && _cells[i].StagedDropCell == null)
+                //if (_cells[i].Item == null && _cells[i].Obstacle == null && _cells[i].StagedDropCell == null)
+                if (!_cells[i].ItemHandler.ContainsItem() && _cells[i].Obstacle == null && _cells[i].StagedDropCell == null)
                 {
                     DropCell dropCell = FindDropItem(_cells[i]);
                     if (dropCell != null)

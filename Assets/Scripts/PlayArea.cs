@@ -195,7 +195,10 @@ namespace MatchThreePrototype
                         if (IsPopulationPlacementValid(candidateItemType, _columns[i].Number, _columns[i].Cells[j].Number))
                         {
                             validItem = _drawnItems[drawnItemsIndex];
-                            _columns[i].Cells[j].SetItem(validItem);
+
+                            //_columns[i].Cells[j].SetItem(validItem);
+                            _columns[i].Cells[j].ItemHandler.SetItem(validItem);
+
                             _drawnItems.RemoveAt(drawnItemsIndex);
 
                             k++;
@@ -204,8 +207,6 @@ namespace MatchThreePrototype
                             item.column = _columns[i].Number;
                             item.row = _columns[i].Cells[j].Number;
                             cellsIToPick.Add(item);
-
-
 
                         }
                         else
@@ -244,10 +245,18 @@ namespace MatchThreePrototype
                             PlayAreaCell cell = GetPlayAreaCell(col, cellToObstruct.row);
 
                             //cell.RemoveItem();
-                            if (cell.Item != null)
+                            //if (cell.Item != null)
+                            //{
+                            //    cell.RemoveItem();
+                            //}
+
+                            if(cell.ItemHandler.ContainsItem())
                             {
-                                cell.RemoveItem();
+                                //cell.ItemHandler.Remove();
+                                //cell.RemoveItem();
+                                cell.ItemHandler.RemoveItemReferenceAndImage();
                             }
+
                             cell.SetObstacle(obstacle);
 
                             cellsIToPick.RemoveAt(rand);
@@ -454,7 +463,8 @@ namespace MatchThreePrototype
                 PlayAreaCell cell = GetPlayAreaCell(column, cellNum);
                 if (cell != null)
                 {
-                    return cell.Item;
+                    //return cell.Item;
+                    return cell.ItemHandler.GetItem();
                 }
             }
 

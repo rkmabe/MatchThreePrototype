@@ -88,7 +88,8 @@ namespace MatchThreePrototype
             }
             else
             {
-                _targetCell.SetItem(_item);
+                //_targetCell.SetItem(_item);
+                _targetCell.ItemHandler.SetItem(_item);
             }
 
             for (int i = _cellMatchesCaught.Count-1; i >= 0; i--)

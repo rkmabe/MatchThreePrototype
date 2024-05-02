@@ -108,8 +108,10 @@ namespace MatchThreePrototype
 
             if (_item!= null) 
             {
-                _targetCell.SetItem(_item);
-                 RemoveItem();
+                //_targetCell.SetItem(_item);
+                _targetCell.ItemHandler.SetItem(_item);
+
+                RemoveItem();
             }
             else if (_obstacle != null)
             {

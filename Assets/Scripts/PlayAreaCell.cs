@@ -1,7 +1,9 @@
+using MatchThreePrototype.PlayAreaManagment;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 namespace MatchThreePrototype
 {
@@ -24,13 +26,29 @@ namespace MatchThreePrototype
         private Obstacle _obstacle;
         [SerializeField] private Image _obstacleImage;
 
+        //public Content Obstacle { get => _obstacle; }
+        //private Content _obstacle;
+
         public Block Block { get => _block; }
         private Block _block;
         [SerializeField] private Image _blockImage;
 
-        public Item Item { get => _item; }
-        private Item _item;  // ITEM currently in cell
-        [SerializeField] private Image _itemImage;
+
+
+
+        //public Item Item { get => _item; }
+        //private Item _item;  // ITEM currently in cell
+        //[SerializeField] private Image _itemImage;
+
+        public IItemHandler ItemHandler { get => _itemHandler; }
+        private IItemHandler _itemHandler;
+        //[SerializeField] private Image _itemImage;
+
+        private IImageFader _itemImageFader;
+
+        //public Content Item { get => _item; }
+        //private Content _item;
+
 
         internal Item StagedItem { get => _stagedItem; }
         private Item _stagedItem;
@@ -75,7 +93,8 @@ namespace MatchThreePrototype
 
         public override string ToString()
         {
-            return ColumnNumber + "," + _number + " Item=" + _item + ", StagedItem=" + _stagedItem;
+            return ColumnNumber + "," + _number + " Item=" + _itemHandler.GetItem() + ", StagedItem=" + _stagedItem;
+
         }
 
 
@@ -329,7 +348,9 @@ namespace MatchThreePrototype
             m.CellObstacleRight = null;
 
 
-            Item thisCellItem = (_matchWithStagedItem) ? _stagedItem : _item;
+            //Item thisCellItem = (_matchWithStagedItem) ? _stagedItem : _item;
+            Item thisCellItem = (_matchWithStagedItem) ? _stagedItem : _itemHandler.GetItem();
+            
 
             // if there is NO item in the cell, there are NO matches.
             if (thisCellItem == null)
@@ -343,7 +364,8 @@ namespace MatchThreePrototype
             PlayAreaCell cellUp = _playArea.GetPlayAreaCell(_parentColumn, _number - 1);
             if (cellUp != null)
             {
-                Item itemUP = (cellUp.MatchWithStagedItem) ? cellUp.StagedItem : cellUp.Item;
+                //Item itemUP = (cellUp.MatchWithStagedItem) ? cellUp.StagedItem : cellUp.Item;
+                Item itemUP = (cellUp.MatchWithStagedItem) ? cellUp.StagedItem : cellUp.ItemHandler.GetItem();
                 if (itemUP != null && !cellUp.IsProcessingItemRemoval)
                 {
                     m.IsMatchUp = (itemUP.ItemType == m.ItemType) ? true : false;
@@ -363,7 +385,8 @@ namespace MatchThreePrototype
             PlayAreaCell cellDOWN = _playArea.GetPlayAreaCell(_parentColumn, _number + 1);
             if (cellDOWN != null)
             {
-                Item itemDOWN = (cellDOWN.MatchWithStagedItem) ? cellDOWN.StagedItem : cellDOWN.Item;
+                //Item itemDOWN = (cellDOWN.MatchWithStagedItem) ? cellDOWN.StagedItem : cellDOWN.Item;
+                Item itemDOWN = (cellDOWN.MatchWithStagedItem) ? cellDOWN.StagedItem : cellDOWN.ItemHandler.GetItem();
                 if (itemDOWN != null && !cellDOWN.IsProcessingItemRemoval)
                 {
                     m.IsMatchDown = (itemDOWN.ItemType == m.ItemType) ? true : false;
@@ -386,7 +409,8 @@ namespace MatchThreePrototype
                 PlayAreaCell cellLEFT = _playArea.GetPlayAreaCell(colulmnLeft, _number);
                 if (cellLEFT != null)
                 {
-                    Item itemLEFT = (cellLEFT.MatchWithStagedItem) ? cellLEFT.StagedItem : cellLEFT.Item;
+                    //Item itemLEFT = (cellLEFT.MatchWithStagedItem) ? cellLEFT.StagedItem : cellLEFT.Item;
+                    Item itemLEFT = (cellLEFT.MatchWithStagedItem) ? cellLEFT.StagedItem : cellLEFT.ItemHandler.GetItem();
                     if (itemLEFT != null && !cellLEFT.IsProcessingItemRemoval)
                     {
                         m.IsMatchLeft = (itemLEFT.ItemType == m.ItemType) ? true : false;
@@ -410,7 +434,8 @@ namespace MatchThreePrototype
                 PlayAreaCell cellRIGHT = _playArea.GetPlayAreaCell(columnRight, _number);
                 if (cellRIGHT != null)
                 {
-                    Item itemRIGHT = (cellRIGHT.MatchWithStagedItem) ? cellRIGHT.StagedItem : cellRIGHT.Item;
+                    //Item itemRIGHT = (cellRIGHT.MatchWithStagedItem) ? cellRIGHT.StagedItem : cellRIGHT.Item;
+                    Item itemRIGHT = (cellRIGHT.MatchWithStagedItem) ? cellRIGHT.StagedItem : cellRIGHT.ItemHandler.GetItem();
                     if (itemRIGHT != null && !cellRIGHT.IsProcessingItemRemoval)
                     {
                         m.IsMatchRight = (itemRIGHT.ItemType == m.ItemType) ? true : false;
@@ -505,24 +530,47 @@ namespace MatchThreePrototype
             _stagedItem = null;
         }
 
-        internal void SetItem(Item item)
-        {
-            _item = item;
-            _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 1);
-            _itemImage.sprite = item.Sprite;
-        }
-        internal void RemoveItem()
-        {
-            _item = null;
-            _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 0);
 
-            _itemImage.sprite = null;
-        }
+        //internal void SetItem(Item item)
+        //{
+        //    _itemHandler.Set(item,_itemImage);
+        //}
 
-        internal void SetImageAlpha(float alpha)
-        {
-            _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, alpha);
-        }
+
+        //internal void SetItem(Item item)
+        //{
+
+        //    _itemHandler.SetItem(item);
+
+        //    //_item = item;
+        //    //_itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 1);
+        //    //_itemImage.sprite = item.Sprite;
+        //}
+        //internal void RemoveItem()
+        //{
+
+        //    RemoveItemHandlerReference();
+        //    _itemHandler.RemoveImage(_itemImage);
+
+        //    //_itemHandler.Remove();
+
+        //    //_itemHandler.
+
+        //    //_item = null;
+        //    //_itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 0);
+
+        //    //_itemImage.sprite = null;
+        //}
+
+        //internal void RemoveItemHandlerReference()
+        //{
+        //    _itemHandler.RemoveReference();
+        //}
+
+        //internal void SetImageAlpha(float alpha)
+        //{
+        //    _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, alpha);
+        //}
 
         private void OnCellCheckMatchRequest()
         {
@@ -591,21 +639,41 @@ namespace MatchThreePrototype
 
         internal void UpdateItemRemovalAnimation()
         {
+            //float alphaLerp;
+            //if (_secsItemRemovalProcessing < _removalDuration)
+            //{
+            //    _itemHandler.geti
+
+            //    alphaLerp = Mathf.Lerp(ALPHA_ON, ALPHA_OFF, _secsItemRemovalProcessing / _removalDuration);
+            //    _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, alphaLerp);
+
+            //    _secsItemRemovalProcessing += Time.deltaTime;
+            //}
+            //else
+            //{
+            //    _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 0);
+            //    _itemImage.sprite = null;
+
+            //    _isProcessingItemRemoval = false;
+            //}
+
             float alphaLerp;
             if (_secsItemRemovalProcessing < _removalDuration)
-            {
+            {                
                 alphaLerp = Mathf.Lerp(ALPHA_ON, ALPHA_OFF, _secsItemRemovalProcessing / _removalDuration);
-                _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, alphaLerp);
+                _itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, alphaLerp);
 
                 _secsItemRemovalProcessing += Time.deltaTime;
             }
             else
             {
-                _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, 0);
-                _itemImage.sprite = null;
+                _itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, 0);
+                _itemHandler.GetImage().sprite = null;
 
                 _isProcessingItemRemoval = false;
             }
+
+
         }
 
 
@@ -659,10 +727,11 @@ namespace MatchThreePrototype
         }
 
         // used in conjunction with UpdateAnimation to remove an item in two stages - first the actual item (here) and THEN the sprite once animation is complete
-        internal void SetItemNull()
-        {
-            _item = null;
-        }
+        //internal void SetItemNull()
+        //{
+        //    //_item = null;
+        //    _itemHandler.RemoveItemReference();
+        //}
 
 
         internal void OnNewRemoveDuration(float duration)
@@ -685,33 +754,11 @@ namespace MatchThreePrototype
 
             SettingsController.OnNewRemoveDurationDelegate += OnNewRemoveDuration;
 
+            _rectTransform = GetComponentInChildren<RectTransform>();
+
             _playArea = GetComponentInParent<PlayArea>();
-            //if (_playArea == null)
-            //{
-            //    Debug.LogError("CELL with NO play area!");
-            //}
 
             _parentColumn = GetComponentInParent<PlayAreaColumn>();
-            //if (_parentColumn == null)
-            //{
-            //    Debug.LogError("CELL with NO column!");
-            //}
-
-            //_itemImage = GetComponentInChildren<Image>();
-            //if (_itemImage == null)
-            //{
-            //    Debug.LogError("CELL with NO image!");
-            //}
-            //if (_blockImage == null)
-            //{
-            //    Debug.LogError("CELL with NO BLOCK image!!");
-            //}
-
-            _rectTransform = GetComponentInChildren<RectTransform>();
-            //if (_rectTransform == null)
-            //{
-            //    Debug.LogError("CELL with no RECT!");
-            //}
 
             _debugText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (_debugText != null)
@@ -723,6 +770,8 @@ namespace MatchThreePrototype
 
             _blockPool = FindAnyObjectByType<BlockPool>();
 
+
+            _itemHandler = GetComponent<ItemHandler>();
 
         }
 
