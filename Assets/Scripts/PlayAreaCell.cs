@@ -22,13 +22,6 @@ namespace MatchThreePrototype
         private PlayArea _playArea;
         private PlayAreaColumn _parentColumn;
 
-        public Obstacle Obstacle { get => _obstacle; }
-        private Obstacle _obstacle;
-        [SerializeField] private Image _obstacleImage;
-
-        //public Content Obstacle { get => _obstacle; }
-        //private Content _obstacle;
-
         public Block Block { get => _block; }
         private Block _block;
         [SerializeField] private Image _blockImage;
@@ -36,6 +29,8 @@ namespace MatchThreePrototype
         public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
         private IPlayAreaItemHandler _itemHandler;
 
+        public IPlayAreaObstacleHandler ObstacleHandler { get => _obstacleHandler; }
+        private IPlayAreaObstacleHandler _obstacleHandler;
 
         internal PlayAreaItem StagedItem { get => _stagedItem; }
         private PlayAreaItem _stagedItem;
@@ -74,8 +69,8 @@ namespace MatchThreePrototype
         internal static float DEFAULT_REMOVAL_DURATION = .5f;
         private float _removalDuration = DEFAULT_REMOVAL_DURATION;
 
-        private static float ALPHA_ON = 1;
-        private static float ALPHA_OFF = 0;
+        //private static float ALPHA_ON = 1;
+        //private static float ALPHA_OFF = 0;
 
 
         public override string ToString()
@@ -361,7 +356,8 @@ namespace MatchThreePrototype
                         m.CellMatchUp = cellUp;
                     }
                 }
-                else if (cellUp.Obstacle != null && !cellUp.IsProcessingObstacleRemoval)
+                //else if (cellUp.Obstacle != null && !cellUp.IsProcessingObstacleRemoval)
+                else if (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.IsProcessingObstacleRemoval)
                 {
                     m.IsObstacleUp = true;
                     m.CellObstacleUp = cellUp;
@@ -382,7 +378,8 @@ namespace MatchThreePrototype
                         m.CellMatchDown = cellDOWN;
                     }
                 }
-                else if (cellDOWN.Obstacle != null && !cellDOWN.IsProcessingObstacleRemoval)
+                //else if (cellDOWN.Obstacle != null && !cellDOWN.IsProcessingObstacleRemoval)
+                else if (cellDOWN.ObstacleHandler.GetObstacle() != null && !cellDOWN.IsProcessingObstacleRemoval)
                 {
                     m.IsObstacleDown = true;
                     m.CellObstacleDown = cellDOWN;
@@ -406,7 +403,8 @@ namespace MatchThreePrototype
                             m.CellMatchLeft = cellLEFT;
                         }
                     }
-                    else if (cellLEFT.Obstacle != null && !cellLEFT.IsProcessingObstacleRemoval)
+                    //else if (cellLEFT.Obstacle != null && !cellLEFT.IsProcessingObstacleRemoval)
+                    else if (cellLEFT.ObstacleHandler.GetObstacle() != null && !cellLEFT.IsProcessingObstacleRemoval)
                     {
                         m.IsObstacleLeft = true;
                         m.CellObstacleLeft = cellLEFT;
@@ -431,7 +429,8 @@ namespace MatchThreePrototype
                             m.CellMatchRight = cellRIGHT;
                         }
                     }
-                    else if (cellRIGHT.Obstacle != null && !cellRIGHT.IsProcessingObstacleRemoval)
+                    //else if (cellRIGHT.Obstacle != null && !cellRIGHT.IsProcessingObstacleRemoval)
+                    else if (cellRIGHT.ObstacleHandler.GetObstacle() != null && !cellRIGHT.IsProcessingObstacleRemoval)
                     {
                         m.IsObstacleRight = true;
                         m.CellObstacleRight = cellRIGHT;
@@ -456,19 +455,6 @@ namespace MatchThreePrototype
 
             return m;
 
-        }
-
-        internal void RemoveObstacle()
-        {
-            _obstacle = null;
-            _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, ALPHA_OFF);
-            _obstacleImage.sprite = null;
-        }
-        internal void SetObstacle(Obstacle obstacle)
-        {
-            _obstacle = obstacle;
-            _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, ALPHA_ON);
-            _obstacleImage.sprite = obstacle.Sprite;
         }
 
         internal void SetBlock(Block block)
@@ -543,22 +529,41 @@ namespace MatchThreePrototype
 
         internal void UpdateObstacleRemovalAnimation(out bool isComplete)
         {
+            //float alphaLerp;
+            //if (_secsObstacleRemovalProcessing < _removalDuration)
+            //{
+            //    alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsObstacleRemovalProcessing / _removalDuration);
+            //    _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, alphaLerp);
+
+            //    _secsObstacleRemovalProcessing += Time.deltaTime;
+            //}
+            //else
+            //{
+            //    _obstacleImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
+            //    _obstacleImage.sprite = null;
+
+            //    _isProcessingObstacleRemoval = false;
+            //}
+            //isComplete = !_isProcessingObstacleRemoval;
+
+
             float alphaLerp;
             if (_secsObstacleRemovalProcessing < _removalDuration)
             {
-                alphaLerp = Mathf.Lerp(ALPHA_ON, ALPHA_OFF, _secsObstacleRemovalProcessing / _removalDuration);
-                _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, alphaLerp);
+                alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsObstacleRemovalProcessing / _removalDuration);
+                _obstacleHandler.GetImage().color = new Color(_obstacleHandler.GetImage().color.r, _obstacleHandler.GetImage().color.g, _obstacleHandler.GetImage().color.b, alphaLerp);
 
                 _secsObstacleRemovalProcessing += Time.deltaTime;
             }
             else
             {
-                _obstacleImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
-                _obstacleImage.sprite = null;
+                _obstacleHandler.GetImage().color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
+                _obstacleHandler.GetImage().sprite = null;
 
                 _isProcessingObstacleRemoval = false;
             }
             isComplete = !_isProcessingObstacleRemoval;
+
         }
 
         internal void UpdateBlockRemovalAnimation(out bool isComplete)
@@ -566,7 +571,7 @@ namespace MatchThreePrototype
             float alphaLerp;
             if (_secsBlockRemovalProcessing < _removalDuration)
             {
-                alphaLerp = Mathf.Lerp(BLOCK_ALPHA_ON, ALPHA_OFF, _secsBlockRemovalProcessing / _removalDuration);
+                alphaLerp = Mathf.Lerp(BLOCK_ALPHA_ON, Statics.ALPHA_OFF, _secsBlockRemovalProcessing / _removalDuration);
                 _blockImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, alphaLerp);
 
                 _secsBlockRemovalProcessing += Time.deltaTime;
@@ -605,7 +610,7 @@ namespace MatchThreePrototype
             float alphaLerp;
             if (_secsItemRemovalProcessing < _removalDuration)
             {                
-                alphaLerp = Mathf.Lerp(ALPHA_ON, ALPHA_OFF, _secsItemRemovalProcessing / _removalDuration);
+                alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsItemRemovalProcessing / _removalDuration);
                 _itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, alphaLerp);
 
                 _secsItemRemovalProcessing += Time.deltaTime;
@@ -664,7 +669,8 @@ namespace MatchThreePrototype
             //    Debug.LogError("OBSTACLE already null! - " + _parentColumn.Number + ", " + _number);
             //}
 
-            if (_obstacle != null)
+            //if (_obstacle != null)
+            if (_obstacleHandler.GetObstacle() != null)
             {
                 _isProcessingObstacleRemoval = true;
                 _secsObstacleRemovalProcessing = 0;
@@ -709,7 +715,8 @@ namespace MatchThreePrototype
             _blockPool = FindAnyObjectByType<BlockPool>();
 
 
-            _itemHandler = GetComponent<PlayAreaItemHandler>();
+            _itemHandler = GetComponent<IPlayAreaItemHandler>();
+            _obstacleHandler = GetComponent<IPlayAreaObstacleHandler>();
 
         }
 

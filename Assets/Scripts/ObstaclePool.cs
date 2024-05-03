@@ -12,12 +12,12 @@ namespace MatchThreePrototype
 
         [SerializeField] private List<ObstaclePrefabConfig> _obstaclePrefabConfig = new List<ObstaclePrefabConfig>();
 
-        private List<Obstacle> _availableObstalces = new List<Obstacle>();
+        private List<PlayAreaObstacle> _availableObstalces = new List<PlayAreaObstacle>();
 
         public bool IsInitialized { get => _isInitialized; }
         private bool _isInitialized = false;
 
-        internal Obstacle GetNextAvailable(ObstacleTypes type)
+        internal PlayAreaObstacle GetNextAvailable(ObstacleTypes type)
         {
             if (_availableObstalces.Count > 0)
             {
@@ -25,7 +25,7 @@ namespace MatchThreePrototype
                 {
                     if (_availableObstalces[i].ObstacleType == type)
                     {
-                        Obstacle returnObstacle = _availableObstalces[i];
+                        PlayAreaObstacle returnObstacle = _availableObstalces[i];
                         _availableObstalces.RemoveAt(i);
                         return returnObstacle;
                     }
@@ -37,11 +37,11 @@ namespace MatchThreePrototype
             return null;
         }
 
-        internal Obstacle GetNextAvailable()
+        internal PlayAreaObstacle GetNextAvailable()
         {
             if (_availableObstalces.Count > 0)
             {
-                Obstacle returnObstacle = _availableObstalces[0];
+                PlayAreaObstacle returnObstacle = _availableObstalces[0];
                 _availableObstalces.RemoveAt(0);
                 return returnObstacle;
             }
@@ -51,7 +51,7 @@ namespace MatchThreePrototype
             return null;
         }
 
-        internal void Return(Obstacle obstacle)
+        internal void Return(PlayAreaObstacle obstacle)
         {
             PutInPool(obstacle);
         }
@@ -62,13 +62,13 @@ namespace MatchThreePrototype
             {
                 for (int j = 0; j < _maxPerType; j++)
                 {
-                    PutInPool(Instantiate(_obstaclePrefabConfig[i].Prefab) as Obstacle);
+                    PutInPool(Instantiate(_obstaclePrefabConfig[i].Prefab) as PlayAreaObstacle);
                 }
             }
 
             _isInitialized = true;
         }
-        private void PutInPool(Obstacle obstacle)
+        private void PutInPool(PlayAreaObstacle obstacle)
         {
             //block.transform.parent = transform;
             obstacle.transform.SetParent(transform);
@@ -99,7 +99,7 @@ namespace MatchThreePrototype
         public struct ObstaclePrefabConfig
         {
             public ObstacleTypes Type;
-            public Obstacle Prefab;
+            public PlayAreaObstacle Prefab;
             //public List<AudioClip> AudioClip;
         }
     }

@@ -19,7 +19,7 @@ namespace MatchThreePrototype
             //_image = GetComponentInChildren<Image>();
             _debugText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
 
-            _itemHandler = GetComponent<PlayAreaItemHandler>();
+            _itemHandler = GetComponent<IPlayAreaItemHandler>();
         }
 
         void Start()

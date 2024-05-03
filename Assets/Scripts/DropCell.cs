@@ -10,12 +10,12 @@ namespace MatchThreePrototype
 
         private PlayAreaColumn _parentColumn;
 
-        public Obstacle Obstacle { get => _obstacle; }
-        private Obstacle _obstacle;  // ITEM currently in cell
-        [SerializeField] private Image _obstacleImage;
-
         public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
         private IPlayAreaItemHandler _itemHandler;
+
+        public IPlayAreaObstacleHandler ObstacleHandler { get => _obstacleHandler; }
+        private IPlayAreaObstacleHandler _obstacleHandler;
+
 
         //private Image _image;
         private TMPro.TextMeshProUGUI _debugText;
@@ -58,23 +58,10 @@ namespace MatchThreePrototype
             _rectTransform.anchorMax = new Vector2(_rectTransform.anchorMax.x, rowInfo.MaxY);
         }
 
-        internal void SetObstacle(Obstacle obstacle)
-        {
-            _obstacle = obstacle;
-            _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, 1f);
-            _obstacleImage.sprite = obstacle.Sprite;
-        }
-        internal void RemoveObstacle()
-        {
-            _obstacle = null;
-            _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, 0);
-            _obstacleImage.sprite = null;
-        }
-
         public override string ToString()
         {
             //return base.ToString() + "Item=" + _item + " Obsatcle=" + _obstacle;
-            return base.ToString() + "Item=" + _itemHandler.GetItem() + " Obsatcle=" + _obstacle;
+            return base.ToString() + "Item=" + _itemHandler.GetItem() + " Obsatcle=" + _obstacleHandler.GetObstacle();
         }
 
         internal void UpdateDropPosition(out bool hasArrived)
@@ -95,15 +82,18 @@ namespace MatchThreePrototype
         {
             _targetCell.RemoveStagedDropCell();
 
-            if (_itemHandler.ContainsItem())
+            if (_itemHandler.GetItem() != null)
             {
                 _targetCell.ItemHandler.SetItem(_itemHandler.GetItem());
                 _itemHandler.RemoveItemReferenceAndImage();
             }
-            else if (_obstacle != null)
+            //else if (_obstacle != null)
+            else if (_obstacleHandler.GetObstacle() != null)
             {
-                _targetCell.SetObstacle(_obstacle);
-                RemoveObstacle();
+                //_targetCell.SetObstacle(_obstacle);
+                _targetCell.ObstacleHandler.SetObstacle(_obstacleHandler.GetObstacle());
+                //RemoveObstacle();
+                _obstacleHandler.RemoveObstacle();
             }
 
             // return drop item to home position
@@ -141,7 +131,9 @@ namespace MatchThreePrototype
 
             SettingsController.OnNewDropSpeedDelegate += OnNewDropSpeed;
 
-            _itemHandler = GetComponent<PlayAreaItemHandler>();
+            _itemHandler = GetComponent<IPlayAreaItemHandler>();
+
+            _obstacleHandler = GetComponent<IPlayAreaObstacleHandler>();
 
         }
         // Start is called before the first frame update

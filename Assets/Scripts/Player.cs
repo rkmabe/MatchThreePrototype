@@ -85,7 +85,7 @@ namespace MatchThreePrototype
                     //_dragOriginCell = cell;
 
                     //if (cell.Item != null && (cell.Block == null && cell.Obstacle == null))
-                    if (cell.ItemHandler.ContainsItem() && (cell.Block == null && cell.Obstacle == null))
+                    if (cell.ItemHandler.GetItem() != null && (cell.Block == null && cell.ObstacleHandler.GetObstacle() == null))
                     {
                         _dragOriginCell = cell;
 
@@ -110,7 +110,8 @@ namespace MatchThreePrototype
                     PlayAreaCell dragDestinationCell;
                     bool isDestinationWithinRange = _playArea.IsPositionInSwapRange(_inputUpPosition, _dragOriginCell, out dragDestinationCell);
 
-                    if (dragDestinationCell != null && dragDestinationCell.Block == null && dragDestinationCell.Obstacle == null && isDestinationWithinRange)
+                    //if (dragDestinationCell != null && dragDestinationCell.Block == null && dragDestinationCell.Obstacle == null && isDestinationWithinRange)
+                    if (dragDestinationCell != null && dragDestinationCell.Block == null && dragDestinationCell.ObstacleHandler.GetObstacle() == null && isDestinationWithinRange)
                     {
                         //Debug.Log("Finger UP on " + cell.ColumnNumber + "," + cell.Number);
 
@@ -146,7 +147,7 @@ namespace MatchThreePrototype
 
                             // start at destination and move to origin ("drag to" position to "drag from" position)
                             //if (dragDestinationCell.Item == null)
-                            if (!dragDestinationCell.ItemHandler.ContainsItem())
+                            if (dragDestinationCell.ItemHandler.GetItem() == null)
                             {
                                 _playArea.CellMoveToOrigin.RemoveTarget();   // used in PlayArea update - target MUST be cleared here!
                             }
@@ -195,7 +196,7 @@ namespace MatchThreePrototype
                 //Debug.Log("Drag to " + _dragTouch.position);
 
                 //if (_dragOriginCell != null && _playArea.HeldItemCell.Item != null)
-                if (_dragOriginCell != null && _playArea.HeldItemCell.ItemHandler.ContainsItem()) 
+                if (_dragOriginCell != null && _playArea.HeldItemCell.ItemHandler.GetItem() != null)
                 {
                     PlayAreaCell dragOverCell;
                     if (_playArea.IsPositionInSwapRange(_dragTouch.position, _dragOriginCell, out dragOverCell))

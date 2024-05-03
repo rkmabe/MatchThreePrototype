@@ -6,6 +6,12 @@ namespace MatchThreePrototype
     public class Statics
     {
 
+
+        public static float ALPHA_ON = 1;
+        public static float ALPHA_OFF = 0;
+
+        //private static float BLOCK_ALPHA_ON = .65f;
+
         public static float Interpolate(float x, float x1, float x2, float y1, float y2)
         {
             return y1 + ((x - x1) / (x2 - x1) * (y2 - y1));

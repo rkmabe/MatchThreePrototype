@@ -240,7 +240,7 @@ namespace MatchThreePrototype
                             CellInPlay cellToObstruct = cellsIToPick[rand];
 
                             // select an Allowed Block and apply it to the randomly slected cell in play
-                            Obstacle obstacle = GetAllowedObstacle();
+                            PlayAreaObstacle obstacle = GetAllowedObstacle();
 
                             PlayAreaColumn col = GetPlayAreaColumn(cellToObstruct.column);
                             PlayAreaCell cell = GetPlayAreaCell(col, cellToObstruct.row);
@@ -251,14 +251,13 @@ namespace MatchThreePrototype
                             //    cell.RemoveItem();
                             //}
 
-                            if(cell.ItemHandler.ContainsItem())
+                            if (cell.ItemHandler.GetItem() != null)
                             {
-                                //cell.ItemHandler.Remove();
-                                //cell.RemoveItem();
                                 cell.ItemHandler.RemoveItemReferenceAndImage();
                             }
 
-                            cell.SetObstacle(obstacle);
+                            //cell.SetObstacle(obstacle);
+                            cell.ObstacleHandler.SetObstacle(obstacle);
 
                             cellsIToPick.RemoveAt(rand);
                         }
@@ -305,7 +304,7 @@ namespace MatchThreePrototype
             _isPopulated = true;
         }
 
-        internal Obstacle GetAllowedObstacle()
+        internal PlayAreaObstacle GetAllowedObstacle()
         {
             if (_allowedObstacleTypes.Count == 0)
             {
@@ -697,8 +696,7 @@ namespace MatchThreePrototype
             // process any active SwapItemCells
             bool anyCellsSwapping = false;
 
-            //if (_cellMoveToOrigin.Item != null)
-            if (_cellMoveToOrigin.ItemHandler.ContainsItem())
+            if (_cellMoveToOrigin.ItemHandler.GetItem() != null)
             {
                 anyCellsSwapping = true;
                 bool hasSwapArrived;
@@ -708,8 +706,8 @@ namespace MatchThreePrototype
                     _cellMoveToOrigin.ProcessOnArrival();
                 }
             }
-            //if (_cellMoveToDestination.Item != null)
-            if (_cellMoveToDestination.ItemHandler.ContainsItem())
+
+            if (_cellMoveToDestination.ItemHandler.GetItem() != null)
             {
                 anyCellsSwapping = true;
                 bool hasSwapArrived;

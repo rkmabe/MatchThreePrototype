@@ -69,7 +69,7 @@ namespace MatchThreePrototype
         {
 
             //if (_item == null)
-            if (!_itemHandler.ContainsItem())
+            if (_itemHandler.GetItem() == null)
             {
                 Debug.LogError("ITEM should NOT be null on arrival!");
                 //Debug.Break();
@@ -130,7 +130,7 @@ namespace MatchThreePrototype
 
             SettingsController.OnNewMoveSpeedDelegate  += OnNewMoveSpeed;
 
-            _itemHandler = GetComponent<PlayAreaItemHandler>();
+            _itemHandler = GetComponent<IPlayAreaItemHandler>();
         }
 
         // Start is called before the first frame update
