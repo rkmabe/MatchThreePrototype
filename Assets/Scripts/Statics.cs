@@ -8,6 +8,8 @@ namespace MatchThreePrototype
 
 
         public static float ALPHA_ON = 1;
+        public static float BLOCK_ALPHA_ON = .65f;
+
         public static float ALPHA_OFF = 0;
 
         //private static float BLOCK_ALPHA_ON = .65f;

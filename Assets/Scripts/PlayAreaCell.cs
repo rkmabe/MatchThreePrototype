@@ -22,15 +22,14 @@ namespace MatchThreePrototype
         private PlayArea _playArea;
         private PlayAreaColumn _parentColumn;
 
-        public Block Block { get => _block; }
-        private Block _block;
-        [SerializeField] private Image _blockImage;
-
         public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
         private IPlayAreaItemHandler _itemHandler;
 
         public IPlayAreaObstacleHandler ObstacleHandler { get => _obstacleHandler; }
         private IPlayAreaObstacleHandler _obstacleHandler;
+
+        public IPlayAreaBlockHandler BlockHandler { get => _blockHandler; }
+        private IPlayAreaBlockHandler _blockHandler;
 
         internal PlayAreaItem StagedItem { get => _stagedItem; }
         private PlayAreaItem _stagedItem;
@@ -55,8 +54,6 @@ namespace MatchThreePrototype
         public bool IsProcessingBlockRemoval { get => _isProcessingBlockRemoval; }
         internal bool _isProcessingBlockRemoval;
         private float _secsBlockRemovalProcessing = 0;
-        //private static float BLOCK_REMOVAL_DURATION = .5f; //2.25f; // .25f;
-        private static float BLOCK_ALPHA_ON = .65f;
 
         public bool IsProcessingItemRemoval { get => _isProcessingItemRemoval; }
         internal bool _isProcessingItemRemoval;
@@ -68,9 +65,6 @@ namespace MatchThreePrototype
 
         internal static float DEFAULT_REMOVAL_DURATION = .5f;
         private float _removalDuration = DEFAULT_REMOVAL_DURATION;
-
-        //private static float ALPHA_ON = 1;
-        //private static float ALPHA_OFF = 0;
 
 
         public override string ToString()
@@ -457,32 +451,6 @@ namespace MatchThreePrototype
 
         }
 
-        internal void SetBlock(Block block)
-        {
-            _block= block;
-            _blockImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, BLOCK_ALPHA_ON);
-            _blockImage.sprite = block.CurrentSprite;
-        }
-
-        internal void RemoveBlockLevel()
-        {
-
-            bool allLevelsRemoved;
-            _block.RemoveLevel(out allLevelsRemoved);
-            if (allLevelsRemoved)
-            {
-                // TODO: restore this to prefab state before returning to pool .. 
-                // any missing levels must be restored .. just cache them .. 
-                _blockPool.Return(_block);
-                _block = null;
-            }
-            else
-            {
-                _blockImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, BLOCK_ALPHA_ON);
-                _blockImage.sprite = _block.CurrentSprite;
-            }
-        }
-
         internal void SetStagedDropCell(DropCell dropCell)
         {
             _stagedDropCell = dropCell;
@@ -557,7 +525,8 @@ namespace MatchThreePrototype
             }
             else
             {
-                _obstacleHandler.GetImage().color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
+                //_obstacleHandler.GetImage().color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
+                _obstacleHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, 0);
                 _obstacleHandler.GetImage().sprite = null;
 
                 _isProcessingObstacleRemoval = false;
@@ -571,15 +540,15 @@ namespace MatchThreePrototype
             float alphaLerp;
             if (_secsBlockRemovalProcessing < _removalDuration)
             {
-                alphaLerp = Mathf.Lerp(BLOCK_ALPHA_ON, Statics.ALPHA_OFF, _secsBlockRemovalProcessing / _removalDuration);
-                _blockImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, alphaLerp);
+                alphaLerp = Mathf.Lerp(Statics.BLOCK_ALPHA_ON, Statics.ALPHA_OFF, _secsBlockRemovalProcessing / _removalDuration);
+                _blockHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, alphaLerp);
 
                 _secsBlockRemovalProcessing += Time.deltaTime;
             }
             else
             {
-                _blockImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
-                _blockImage.sprite = null;
+                _blockHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, 0);
+                _blockHandler.GetImage().sprite = null;
 
                 _isProcessingBlockRemoval = false;
             }
@@ -645,7 +614,8 @@ namespace MatchThreePrototype
             //    Debug.LogError("sprite is already null! - " + _parentColumn.Number + ", " + _number);
             //}
 
-            if (_block == null)
+            //if (_block == null)
+            if (_blockHandler.GetBlock() == null)
             {
                 _isProcessingItemRemoval = true;
                 _secsItemRemovalProcessing = 0;
@@ -717,6 +687,7 @@ namespace MatchThreePrototype
 
             _itemHandler = GetComponent<IPlayAreaItemHandler>();
             _obstacleHandler = GetComponent<IPlayAreaObstacleHandler>();
+            _blockHandler = GetComponent<IPlayAreaBlockHandler>();
 
         }
 

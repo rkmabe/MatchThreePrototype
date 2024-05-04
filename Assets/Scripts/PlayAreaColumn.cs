@@ -26,7 +26,6 @@ namespace MatchThreePrototype
 
             for (int i = 0; i < _dropCells.Count; i++)
             {
-                //if (_dropCells[i].Item == null && _dropCells[i].Obstacle == null)
                 if (_dropCells[i].ItemHandler.GetItem() == null && _dropCells[i].ObstacleHandler.GetObstacle() == null)
                 {
                     return _dropCells[i];
@@ -53,8 +52,7 @@ namespace MatchThreePrototype
                     PlayAreaCell cellUp = _playArea.GetPlayAreaCell(this, cellNumUp);
 
                     // once a blocked cell is encoutned, stop trying to find drop items
-                    //if (cellUp.Block != null || (  cellUp.Obstacle != null && !cellUp.Obstacle.CanDrop ))
-                    if (cellUp.Block != null || (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.ObstacleHandler.CanDrop()))
+                    if (cellUp.BlockHandler.GetBlock() != null || (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.ObstacleHandler.CanDrop()))
                     {
                         //hitBlock = true;
                         // if we hit a block, we stop.
@@ -70,16 +68,12 @@ namespace MatchThreePrototype
 
                         cellUp.ItemHandler.RemoveItemReferenceAndImage();
                     }
-                    //else if (cellUp.Obstacle != null && cellUp.Obstacle.CanDrop)
                     else if (cellUp.ObstacleHandler.GetObstacle() != null && cellUp.ObstacleHandler.CanDrop())
                     {
                         dropCell = GetEmptyDropCell();
                         dropCell.SetDropFromPosition(GetRowInfo(cellUp.Number));
-                        //dropCell.SetObstacle(cellUp.Obstacle);
-                        //dropCell.SetObstacle(cellUp.ObstacleHandler.GetObstacle());
                         dropCell.ObstacleHandler.SetObstacle(cellUp.ObstacleHandler.GetObstacle());
 
-                        //cellUp.RemoveObstacle();
                         cellUp.ObstacleHandler.RemoveObstacle();
                     }
                     else
@@ -98,7 +92,6 @@ namespace MatchThreePrototype
                     float topmostMaxY = 0;
                     for (int i = 0; i < _dropCells.Count; i++)
                     {
-                        //if (_dropCells[i].Item != null || _dropCells[i].Obstacle != null)
                         if (_dropCells[i].ItemHandler.GetItem() != null || _dropCells[i].ObstacleHandler.GetObstacle() != null)
                         {
                             if (_dropCells[i].RectMinY > topmostMinY)
@@ -162,7 +155,6 @@ namespace MatchThreePrototype
                     _cells[i].UpdateObstacleRemovalAnimation(out isComplete);
                     if (isComplete)
                     {
-                        //_cells[i].RemoveObstacle();
                         _cells[i].ObstacleHandler.RemoveObstacle();
                     }
                     anyCellsProcessingRemoval = true;
@@ -174,7 +166,7 @@ namespace MatchThreePrototype
                     _cells[i].UpdateBlockRemovalAnimation(out isComplete);
                     if (isComplete)
                     {
-                        _cells[i].RemoveBlockLevel();
+                        _cells[i].BlockHandler.RemoveBlockLevel();
                     }
 
                     anyCellsProcessingRemoval = true;
@@ -200,7 +192,6 @@ namespace MatchThreePrototype
             anyCellsStaged = false;
             for (int i = _cells.Count - 1; i >= 0; i--)
             {
-                //if (_cells[i].Item == null && _cells[i].Obstacle == null && _cells[i].StagedDropCell == null)
                 if (_cells[i].ItemHandler.GetItem() == null && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].StagedDropCell == null)
                 {
                     DropCell dropCell = FindDropItem(_cells[i]);

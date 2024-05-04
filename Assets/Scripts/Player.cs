@@ -85,7 +85,7 @@ namespace MatchThreePrototype
                     //_dragOriginCell = cell;
 
                     //if (cell.Item != null && (cell.Block == null && cell.Obstacle == null))
-                    if (cell.ItemHandler.GetItem() != null && (cell.Block == null && cell.ObstacleHandler.GetObstacle() == null))
+                    if (cell.ItemHandler.GetItem() != null && (cell.BlockHandler.GetBlock() == null && cell.ObstacleHandler.GetObstacle() == null))
                     {
                         _dragOriginCell = cell;
 
@@ -111,7 +111,7 @@ namespace MatchThreePrototype
                     bool isDestinationWithinRange = _playArea.IsPositionInSwapRange(_inputUpPosition, _dragOriginCell, out dragDestinationCell);
 
                     //if (dragDestinationCell != null && dragDestinationCell.Block == null && dragDestinationCell.Obstacle == null && isDestinationWithinRange)
-                    if (dragDestinationCell != null && dragDestinationCell.Block == null && dragDestinationCell.ObstacleHandler.GetObstacle() == null && isDestinationWithinRange)
+                    if (dragDestinationCell != null && dragDestinationCell.BlockHandler.GetBlock() == null && dragDestinationCell.ObstacleHandler.GetObstacle() == null && isDestinationWithinRange)
                     {
                         //Debug.Log("Finger UP on " + cell.ColumnNumber + "," + cell.Number);
 

@@ -48,12 +48,6 @@ namespace MatchThreePrototype
 
         [SerializeField] private RectTransform _playAreaRect;
 
-
-        //[Header("YOU must consider num cells in play area!")]
-        //[SerializeField] private int _numCellsToBlock;
-        //[SerializeField] private int _numCellsToObstruct;
-        //private int _numCellsToBlock;
-        //private int _numCellsToObstruct;
         private float _percentCellsToBlock;
         private float _percentCellsToObstruct;
 
@@ -227,7 +221,6 @@ namespace MatchThreePrototype
 
             //"obstruct" a certain number of cells in play
             int numCellsToObstruct = Mathf.RoundToInt(_numCells * _percentCellsToObstruct);
-            //if (_numCellsToObstruct > 0 && _allowedObstacleTypes.Count > 0)
             if (numCellsToObstruct > 0 && _allowedObstacleTypes.Count > 0)
             {
                 for (int i = 0; i < numCellsToObstruct; i++)
@@ -244,12 +237,6 @@ namespace MatchThreePrototype
 
                             PlayAreaColumn col = GetPlayAreaColumn(cellToObstruct.column);
                             PlayAreaCell cell = GetPlayAreaCell(col, cellToObstruct.row);
-
-                            //cell.RemoveItem();
-                            //if (cell.Item != null)
-                            //{
-                            //    cell.RemoveItem();
-                            //}
 
                             if (cell.ItemHandler.GetItem() != null)
                             {
@@ -271,7 +258,6 @@ namespace MatchThreePrototype
             
             //"block out" a percentage of cells in itemsInPlay
             int numCellsToBlock = Mathf.RoundToInt(_numCells * _percentCellsToBlock);
-            //if (_numCellsToBlock > 0 && _allowedBlockTypes.Count > 0)
             if (numCellsToBlock > 0 && _allowedBlockTypes.Count > 0)
             {
                 for (int i = 0; i < numCellsToBlock; i++)
@@ -289,7 +275,7 @@ namespace MatchThreePrototype
                             PlayAreaColumn col = GetPlayAreaColumn(cellToBlock.column);
                             PlayAreaCell cell = GetPlayAreaCell(col, cellToBlock.row);
 
-                            cell.SetBlock(block);
+                            cell.BlockHandler.SetBlock(block);
 
                             cellsIToPick.RemoveAt(rand);
                         }
@@ -502,7 +488,6 @@ namespace MatchThreePrototype
             // return true if this drag position contains a play area cell within swap range
 
             cellTouched = null;
-            //PlayAreaCell cellAtPosition = null;
             bool withinPlayArea = false;
 
             _dummyEventData.position = touchPoint;
@@ -513,7 +498,6 @@ namespace MatchThreePrototype
                 for (int i = 0; i < results.Count; i++)
                 {
                     // one row of resuts should contain a play area cell.
-                    //cellAtPosition = results[i].gameObject.GetComponentInParent<PlayAreaCell>();
 
                     PlayAreaCell cellAtPosition = results[i].gameObject.GetComponentInParent<PlayAreaCell>();
                     if (cellAtPosition != null)
@@ -673,9 +657,6 @@ namespace MatchThreePrototype
             {
                 if (_itemPool.IsInitialized && _blockPool.IsInitialized && _obstaclePool.IsInitialized)
                 {
-                    // TODO: fix this!
-                    //_numCellsToBlock = _settingsController.GetNumBlocks();
-                    //_numCellsToObstruct = _settingsController.GetNumObstacles();
 
                     _percentCellsToBlock = _settingsController.GetPctBlock();
                     _percentCellsToObstruct = _settingsController.GetPctObstacle();
