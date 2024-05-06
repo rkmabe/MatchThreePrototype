@@ -234,7 +234,7 @@ namespace MatchThreePrototype
         {
             for (int i = _cellsToCatchMatches.Count-1; i >= 0 ; i--)
             {
-                (List <PlayAreaCell> matchesCaught, List<PlayAreaCell> obstaclesCaught) = _cellsToCatchMatches[i].CatchMatchThree(false, true);
+                (List<PlayAreaCell> matchesCaught, List<PlayAreaCell> obstaclesCaught) = _cellsToCatchMatches[i].MatchDetector.CatchMatchThree(true);
 
                 for (int j = 0; j < matchesCaught.Count; j++)
                 {

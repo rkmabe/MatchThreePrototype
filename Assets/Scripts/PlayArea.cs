@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using MatchThreePrototype.PlayAreaCellContent;
+using MatchThreePrototype.PlayAreaCellMatching;
 
 namespace MatchThreePrototype
 {
@@ -23,7 +24,7 @@ namespace MatchThreePrototype
         public int CellSwapRange { get => _cellSwapRange; }
         [SerializeField] private int _cellSwapRange = 0;
 
-        [Header("Must be UNIQUE!")]
+        //[Header("Must be UNIQUE!")]
         //[SerializeField] private List<ItemTypes> _allowedItemTypes;
         private List<ItemTypes> _allowedItemTypes;
 
@@ -47,6 +48,12 @@ namespace MatchThreePrototype
         [SerializeField] private HeldItemCell _heldItemCell;
 
         [SerializeField] private RectTransform _playAreaRect;
+
+        [SerializeField] bool DebugCheckMatches = false;
+
+        public bool EnableDebugBorderMatcher { get => _enableDebugBorderMatcher; }
+        [SerializeField] bool _enableDebugBorderMatcher = false;
+
 
         private float _percentCellsToBlock;
         private float _percentCellsToObstruct;
@@ -85,7 +92,8 @@ namespace MatchThreePrototype
             // only cells ajacent to modified cells must be checked most of the time.
 
             _numCellsChecked = 0;
-            PlayAreaCell.OnCellCheckMatchCompleteDelegate += OnCellCheckMatchComplete;
+            //PlayAreaCell.OnCellCheckMatchCompleteDelegate += OnCellCheckMatchComplete;
+            PlayAreaCellMatchDetector.OnCellCheckMatchCompleteDelegate += OnCellCheckMatchComplete;
 
             // advertise that you want cells to check
             OnCellCheckMatchRequestDelegate();
@@ -94,6 +102,8 @@ namespace MatchThreePrototype
         }
         private void OnCellCheckMatchComplete(bool isMatch3)
         {
+            // not reachable at this time, check above
+
             _numCellsChecked++;
             if (isMatch3)
             {
@@ -101,9 +111,9 @@ namespace MatchThreePrototype
             }
             if (_numCellsChecked == _numCells)
             {
-                Debug.Log("All cells MATHCED - QUE REMOVAL");
+                Debug.Log("All cells MATHCED");
 
-                PlayAreaCell.OnCellCheckMatchCompleteDelegate -= OnCellCheckMatchComplete;
+                PlayAreaCellMatchDetector.OnCellCheckMatchCompleteDelegate -= OnCellCheckMatchComplete;
 
                 if (_numMatch3s > 0)
                 {
@@ -640,35 +650,29 @@ namespace MatchThreePrototype
 
         }
 
-        //bool DEBUG_CHECK = false;
 
         // Update is called once per frame
         void Update()
         {
 
-            //if (DEBUG_CHECK)
-            //{
-            //    CheckAllCellMatches();
-            //    DEBUG_CHECK = false;
-            //}
+            if (DebugCheckMatches)
+            {
+                CheckAllCellMatches();
+                DebugCheckMatches = false;
+            }
 
             // do not process anything until populated
             if (!_isPopulated)
             {
                 if (_itemPool.IsInitialized && _blockPool.IsInitialized && _obstaclePool.IsInitialized)
                 {
-
                     _percentCellsToBlock = _settingsController.GetPctBlock();
                     _percentCellsToObstruct = _settingsController.GetPctObstacle();
 
                     _allowedItemTypes = PrototypeBuildItemTypes();
                     _isSwapRangeLimited = _settingsController.GetLimitSwapRange();
 
-
                     Populate();
-
-                    //DEBUG_CHECK = true;
-
                 }
                 return;
             }
@@ -783,39 +787,6 @@ namespace MatchThreePrototype
             public int column;
             public int row;
         }
-
-    }
-
-    public struct PlayAreaCellMatches
-    {
-        public ItemTypes ItemType;
-
-        public bool IsMatchUp;
-        public PlayAreaCell CellMatchUp;
-
-        public bool IsMatchDown;
-        public PlayAreaCell CellMatchDown;
-
-        public bool IsMatchLeft;
-        public PlayAreaCell CellMatchLeft;
-
-        public bool IsMatchRight;
-        public PlayAreaCell CellMatchRight;
-
-        public bool IsMiddleMatchVert;
-        public bool IsMiddleMatchHorz;
-
-        public bool IsObstacleUp;
-        public PlayAreaCell CellObstacleUp;
-
-        public bool IsObstacleDown;
-        public PlayAreaCell CellObstacleDown;
-
-        public bool IsObstacleLeft;
-        public PlayAreaCell CellObstacleLeft;
-
-        public bool IsObstacleRight;
-        public PlayAreaCell CellObstacleRight;
 
     }
 

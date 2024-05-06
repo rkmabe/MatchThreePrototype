@@ -1,4 +1,5 @@
 using Lofelt.NiceVibrations;
+using MatchThreePrototype.PlayAreaCellMatching;
 using UnityEngine;
 
 namespace MatchThreePrototype
@@ -45,7 +46,7 @@ namespace MatchThreePrototype
 
         private void OnDestroy()
         {
-            PlayAreaCell.OnMatchCaughtDelegate -= OnMatchCaught;
+            PlayAreaCellMatchDetector.OnMatchCaughtDelegate -= OnMatchCaught;
 
             SettingsButton.OnSettingsCloseDelegate -= OnSettingsClose;
             SettingsButton.OnSettingsOpenDelegate -= OnSettingsOpen;
@@ -53,7 +54,7 @@ namespace MatchThreePrototype
 
         private void Awake()
         {
-            PlayAreaCell.OnMatchCaughtDelegate += OnMatchCaught;
+            PlayAreaCellMatchDetector.OnMatchCaughtDelegate += OnMatchCaught;
 
             _itemPool = FindAnyObjectByType<ItemPool>();
 

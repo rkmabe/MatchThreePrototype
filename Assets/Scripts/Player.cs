@@ -82,9 +82,6 @@ namespace MatchThreePrototype
                 {
                     //Debug.Log("Finger down on " + cell.ColumnNumber + "," + cell.Number);
 
-                    //_dragOriginCell = cell;
-
-                    //if (cell.Item != null && (cell.Block == null && cell.Obstacle == null))
                     if (cell.ItemHandler.GetItem() != null && (cell.BlockHandler.GetBlock() == null && cell.ObstacleHandler.GetObstacle() == null))
                     {
                         _dragOriginCell = cell;
@@ -92,8 +89,6 @@ namespace MatchThreePrototype
                         _playArea.IndicateDragFromCell(cell);
 
                         _playArea.HeldItemCell.transform.position = cell.transform.position;
-                        //_playArea.HeldItemCell.SetItem(cell.Item);
-                        //_playArea.HeldItemCell.SetItem(cell.ItemHandler.GetItem());
 
                         // TODO: move HeldItemCell to Player .. assign when you assign play area .. 
                         _playArea.HeldItemCell.ItemHandler.SetItem(cell.ItemHandler.GetItem());
@@ -110,7 +105,6 @@ namespace MatchThreePrototype
                     PlayAreaCell dragDestinationCell;
                     bool isDestinationWithinRange = _playArea.IsPositionInSwapRange(_inputUpPosition, _dragOriginCell, out dragDestinationCell);
 
-                    //if (dragDestinationCell != null && dragDestinationCell.Block == null && dragDestinationCell.Obstacle == null && isDestinationWithinRange)
                     if (dragDestinationCell != null && dragDestinationCell.BlockHandler.GetBlock() == null && dragDestinationCell.ObstacleHandler.GetObstacle() == null && isDestinationWithinRange)
                     {
                         //Debug.Log("Finger UP on " + cell.ColumnNumber + "," + cell.Number);
@@ -120,51 +114,40 @@ namespace MatchThreePrototype
 
                         // there is ALWAYS an item in the ORIGIN cell, and there is ALWAYS a match at the destination cell.
                         // there is not necessarily an item in the DESTINATION.  There is NOT necessarily a MATCH at the ORGIN.                       
-                        //dragDestinationCell.SetStagedItem(_dragOriginCell.Item);
-                        //_dragOriginCell.SetStagedItem(dragDestinationCell.Item);
 
-                        dragDestinationCell.SetStagedItem(_dragOriginCell.ItemHandler.GetItem());
-                        _dragOriginCell.SetStagedItem(dragDestinationCell.ItemHandler.GetItem());
+                        dragDestinationCell.StagedItemHandler.SetStagedItem(_dragOriginCell.ItemHandler.GetItem());
+                        _dragOriginCell.StagedItemHandler.SetStagedItem(dragDestinationCell.ItemHandler.GetItem());
 
-                        (List<PlayAreaCell> matchesCaughtAtDestination, List<PlayAreaCell> obstaclesCaughtAtDestination) = dragDestinationCell.CatchMatchThree(false, false);
-
-                        //Debug.Log("Dest ObsNum=" + obstaclesCaughtAtDestination.Count);
+                        (List<PlayAreaCell> matchesCaughtAtDestination, List<PlayAreaCell> obstaclesCaughtAtDestination) = dragDestinationCell.MatchDetector.CatchMatchThree(false);
 
                         if (matchesCaughtAtDestination.Count > 0)
                         {
                             // start at origin and move to destination ("drag from" position to "drag to" position)
                             _playArea.CellMoveToDestination.transform.position = _dragOriginCell.transform.position;
                             _playArea.CellMoveToDestination.SetTargetCell(dragDestinationCell);
-                            //_playArea.CellMoveToDestination.SetItem(_dragOriginCell.Item);       // _dragOriginCell.Item should NEVER be null
-                            //_playArea.CellMoveToDestination.SetItem(_dragOriginCell.ItemHandler.GetItem());       // _dragOriginCell.Item should NEVER be null
+
                             _playArea.CellMoveToDestination.ItemHandler.SetItem(_dragOriginCell.ItemHandler.GetItem());       // _dragOriginCell.Item should NEVER be null
                             _playArea.CellMoveToDestination.SetCellMatchesCaught(matchesCaughtAtDestination);
 
                             _playArea.CellMoveToDestination.SetObstaclesCaught(obstaclesCaughtAtDestination);
-
-                            //_dragOriginCell.RemoveItem();
                             _dragOriginCell.ItemHandler.RemoveItemReferenceAndImage();
 
                             // start at destination and move to origin ("drag to" position to "drag from" position)
-                            //if (dragDestinationCell.Item == null)
                             if (dragDestinationCell.ItemHandler.GetItem() == null)
                             {
                                 _playArea.CellMoveToOrigin.RemoveTarget();   // used in PlayArea update - target MUST be cleared here!
                             }
                             else
                             {
-                                (List<PlayAreaCell> matchesCaughtAtOrigin, List<PlayAreaCell> obstaclesCaughtAtOrigin) = _dragOriginCell.CatchMatchThree(false, false);
+                                (List<PlayAreaCell> matchesCaughtAtOrigin, List<PlayAreaCell> obstaclesCaughtAtOrigin) = _dragOriginCell.MatchDetector.CatchMatchThree(false);
 
                                 _playArea.CellMoveToOrigin.transform.position = dragDestinationCell.transform.position;
                                 _playArea.CellMoveToOrigin.SetTargetCell(_dragOriginCell);
-                                //_playArea.CellMoveToOrigin.SetItem(dragDestinationCell.Item);
-                                //_playArea.CellMoveToOrigin.SetItem(dragDestinationCell.ItemHandler.GetItem());
                                 _playArea.CellMoveToOrigin.ItemHandler.SetItem(dragDestinationCell.ItemHandler.GetItem());
                                 _playArea.CellMoveToOrigin.SetCellMatchesCaught(matchesCaughtAtOrigin);
 
                                 _playArea.CellMoveToOrigin.SetObstaclesCaught(obstaclesCaughtAtOrigin);
 
-                                //dragDestinationCell.RemoveItem();
                                 dragDestinationCell.ItemHandler.RemoveItemReferenceAndImage();
                             }
                         }
@@ -174,8 +157,8 @@ namespace MatchThreePrototype
                             _moveNumText.text = "Moves: " + _moveNum.ToString();
                         }
 
-                        dragDestinationCell.RemoveStagedItem();
-                        _dragOriginCell.RemoveStagedItem();
+                        dragDestinationCell.StagedItemHandler.RemoveStagedItem();
+                        _dragOriginCell.StagedItemHandler.RemoveStagedItem();
 
                     }
 
@@ -183,11 +166,9 @@ namespace MatchThreePrototype
 
                 _playArea.ClearDragIndicators();
 
-                //_playArea.HeldItemCell.RemoveItem();
                 _playArea.HeldItemCell.ItemHandler.RemoveItemReferenceAndImage();
 
                 _dragOriginCell = null;
-
 
                 _inputUpPosition = Statics.Vector2Zero();
             }
@@ -195,7 +176,6 @@ namespace MatchThreePrototype
             {
                 //Debug.Log("Drag to " + _dragTouch.position);
 
-                //if (_dragOriginCell != null && _playArea.HeldItemCell.Item != null)
                 if (_dragOriginCell != null && _playArea.HeldItemCell.ItemHandler.GetItem() != null)
                 {
                     PlayAreaCell dragOverCell;

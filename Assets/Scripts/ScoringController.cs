@@ -1,3 +1,4 @@
+using MatchThreePrototype.PlayAreaCellMatching;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -167,12 +168,12 @@ namespace MatchThreePrototype
 
         private void OnDestroy()
         {
-            PlayAreaCell.OnMatchCaughtDelegate -= OnMatchCaught;
+            PlayAreaCellMatchDetector.OnMatchCaughtDelegate -= OnMatchCaught;
         }
 
         private void Awake()
         {
-            PlayAreaCell.OnMatchCaughtDelegate += OnMatchCaught;
+            PlayAreaCellMatchDetector.OnMatchCaughtDelegate += OnMatchCaught;
 
             _player = FindAnyObjectByType<Player>();
 
@@ -210,9 +211,6 @@ namespace MatchThreePrototype
 
     public class MatchRecord
     {
-        //public int MoveAttemptID;
-        //public int MoveNumber;
-
         public int PlayerMoveNum;
 
         public ItemTypes ItemType;
@@ -221,9 +219,7 @@ namespace MatchThreePrototype
 
         public override string ToString()
         {
-            //return "MoveAttemptID=" + MoveAttemptID + ", MoveNumber=" + MoveNumber + ", ItemType =" + ItemType + ", NumMatches=" + NumMatches + ", IsBonusCatch=" + IsBonusCatch;
             return "Move=" + PlayerMoveNum +  ", Type=" + ItemType + ", Num=" + NumMatches + ", Bonus=" + IsBonusCatch;
-            //return  "ItemType=" + ItemType + ", NumMatches=" + NumMatches + ", IsBonusCatch=" + IsBonusCatch;
         }
     }
 
