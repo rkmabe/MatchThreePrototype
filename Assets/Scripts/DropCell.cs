@@ -1,23 +1,18 @@
-using MatchThreePrototype.PlayAreaCellContent;
+using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.Obstacle;
 using UnityEngine;
-using UnityEngine.UI;
 using static MatchThreePrototype.PlayAreaColumn;
 
 namespace MatchThreePrototype
 {
-    public class DropCell : MonoBehaviour //, IItemHandler
+    public class DropCell : MonoBehaviour 
     {
-
-        private PlayAreaColumn _parentColumn;
-
         public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
         private IPlayAreaItemHandler _itemHandler;
 
         public IPlayAreaObstacleHandler ObstacleHandler { get => _obstacleHandler; }
         private IPlayAreaObstacleHandler _obstacleHandler;
 
-
-        //private Image _image;
         private TMPro.TextMeshProUGUI _debugText;
 
         public float RectMinY { get => _rectTransform.anchorMin.y; }
@@ -80,19 +75,16 @@ namespace MatchThreePrototype
 
         internal void TransferContentsToCell()
         {
-            _targetCell.RemoveStagedDropCell();
+            _targetCell.IsWaitingForDropCell = false;
 
             if (_itemHandler.GetItem() != null)
             {
                 _targetCell.ItemHandler.SetItem(_itemHandler.GetItem());
                 _itemHandler.RemoveItemReferenceAndImage();
             }
-            //else if (_obstacle != null)
             else if (_obstacleHandler.GetObstacle() != null)
             {
-                //_targetCell.SetObstacle(_obstacle);
                 _targetCell.ObstacleHandler.SetObstacle(_obstacleHandler.GetObstacle());
-                //RemoveObstacle();
                 _obstacleHandler.RemoveObstacle();
             }
 
@@ -123,7 +115,7 @@ namespace MatchThreePrototype
             //_image = GetComponentInChildren<Image>();
             _debugText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
 
-            _parentColumn = GetComponentInParent<PlayAreaColumn>();
+            //_parentColumn = GetComponentInParent<PlayAreaColumn>();
             //if (_parentColumn == null)
             //{
             //    Debug.LogError("DROP cell with NO column!");

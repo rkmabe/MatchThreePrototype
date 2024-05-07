@@ -1,4 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent;
+using MatchThreePrototype.PlayAreaCellContent.Item;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,4 +1,6 @@
-using MatchThreePrototype.PlayAreaCellContent;
+using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.Block;
+using MatchThreePrototype.PlayAreaCellContent.Obstacle;
 using MatchThreePrototype.PlayAreaCellMatching;
 using System;
 using UnityEngine;
@@ -32,13 +34,11 @@ namespace MatchThreePrototype
         public IStagedItemHandler StagedItemHandler { get => _stagedItemHandler; }
         private IStagedItemHandler _stagedItemHandler;
 
-        internal DropCell StagedDropCell { get => _stagedDropCell; }
-        private DropCell _stagedDropCell;
+        internal bool IsWaitingForDropCell { get => _isWaitingForDropCell; set => _isWaitingForDropCell = value; }
+        private bool _isWaitingForDropCell = false;
 
         public RectTransform RectTransform { get => _rectTransform; }
         private RectTransform _rectTransform;
-
-        private BlockPool _blockPool;
 
         public bool IsProcessingBlockRemoval { get => _isProcessingBlockRemoval; }
         internal bool _isProcessingBlockRemoval;
@@ -49,6 +49,8 @@ namespace MatchThreePrototype
         private float _secsItemRemovalProcessing = 0;
 
         public bool IsProcessingObstacleRemoval { get => _isProcessingObstacleRemoval; }
+
+
         internal bool _isProcessingObstacleRemoval;
         private float _secsObstacleRemovalProcessing = 0;
 
@@ -60,14 +62,14 @@ namespace MatchThreePrototype
             return ColumnNumber + "," + _number + " Item=" + _itemHandler.GetItem() + ", StagedItem=" + _stagedItemHandler.GetStagedItem();
         }
 
-        internal void SetStagedDropCell(DropCell dropCell)
-        {
-            _stagedDropCell = dropCell;
-        }
-        internal void RemoveStagedDropCell()
-        {
-            _stagedDropCell = null;
-        }
+        //internal void SetStagedDropCell(DropCell dropCell)
+        //{
+        //    _stagedDropCell = dropCell;
+        //}
+        //internal void RemoveStagedDropCell()
+        //{
+        //    _stagedDropCell = null;
+        //}
 
         // PlayAreaColumn sorts cells DESCENDING by CELL NUMBER (ie row number)
         public int CompareTo(PlayAreaCell compareCell)
@@ -82,7 +84,6 @@ namespace MatchThreePrototype
                 return compareCell.Number.CompareTo(this.Number); // descending
             }
         }
-
 
         internal void UpdateObstacleRemovalAnimation(out bool isComplete)
         {
@@ -184,7 +185,6 @@ namespace MatchThreePrototype
 
         }
 
-
         internal void QueueItemForRemoval()
         {
             if (_isProcessingItemRemoval)
@@ -236,7 +236,6 @@ namespace MatchThreePrototype
             }
         }
 
-
         internal void OnNewRemoveDuration(float duration)
         {
             _removalDuration = duration;
@@ -263,8 +262,6 @@ namespace MatchThreePrototype
             {
                 _debugText.text = _parentColumn.Number + ", " + _number;
             }
-
-            _blockPool = FindAnyObjectByType<BlockPool>();
 
 
             _itemHandler = GetComponent<IPlayAreaItemHandler>();

@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using MatchThreePrototype.PlayAreaCellContent;
+using MatchThreePrototype.PlayAreaCellContent.Obstacle;
+using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.Block;
 using MatchThreePrototype.PlayAreaCellMatching;
 
 namespace MatchThreePrototype
@@ -280,7 +282,7 @@ namespace MatchThreePrototype
                             CellInPlay cellToBlock = cellsIToPick[rand];
 
                             // select an Allowed Block and apply it to the randomly slected cell in play
-                            Block block = GetAllowedBlock();
+                            PlayAreaBlock block = GetAllowedBlock();
 
                             PlayAreaColumn col = GetPlayAreaColumn(cellToBlock.column);
                             PlayAreaCell cell = GetPlayAreaCell(col, cellToBlock.row);
@@ -317,7 +319,7 @@ namespace MatchThreePrototype
             }
         }
 
-        internal Block GetAllowedBlock()
+        internal PlayAreaBlock GetAllowedBlock()
         {
             if (_allowedBlockTypes.Count == 0)
             {

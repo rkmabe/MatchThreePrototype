@@ -1,7 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using MatchThreePrototype.PlayAreaCellContent.Item;
 
 namespace MatchThreePrototype.PlayAreaCellMatching
 {

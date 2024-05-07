@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using MatchThreePrototype.PlayAreaCellContent;
+using MatchThreePrototype.PlayAreaCellContent.Item;
 
 namespace MatchThreePrototype
 {

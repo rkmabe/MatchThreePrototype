@@ -192,12 +192,14 @@ namespace MatchThreePrototype
             anyCellsStaged = false;
             for (int i = _cells.Count - 1; i >= 0; i--)
             {
-                if (_cells[i].ItemHandler.GetItem() == null && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].StagedDropCell == null)
+                //if (_cells[i].ItemHandler.GetItem() == null && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].StagedDropCell == null)
+                if (_cells[i].ItemHandler.GetItem() == null && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].IsWaitingForDropCell == false)
                 {
                     DropCell dropCell = FindDropItem(_cells[i]);
                     if (dropCell != null)
                     {
-                        _cells[i].SetStagedDropCell(dropCell);
+                        //_cells[i].SetStagedDropCell(dropCell);
+                        _cells[i].IsWaitingForDropCell = true;
 
                         PlayAreaRowInfo dropToInfo = GetRowInfo(_cells[i].Number);
 
