@@ -1,5 +1,5 @@
 using MatchThreePrototype.PlayAreaCellContent;
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace MatchThreePrototype.PlayAreaCellMatching
         private PlayArea _playArea;
         private PlayAreaColumn _column;
         private PlayAreaCell _cell;
-        private IPlayAreaItemHandler _itemHandler;
+        private IItemHandler _itemHandler;
         private IStagedItemHandler  _stagedItemHandler;
 
         public delegate void OnMatchCaught(MatchRecord match);
@@ -55,7 +55,7 @@ namespace MatchThreePrototype.PlayAreaCellMatching
             m.IsObstacleRight = false;
             m.CellObstacleRight = null;
 
-            PlayAreaItem thisCellItem = (_stagedItemHandler.GetMatchWithStagedItem()) ? _stagedItemHandler.GetStagedItem() : _itemHandler.GetItem();
+            Item thisCellItem = (_stagedItemHandler.GetMatchWithStagedItem()) ? _stagedItemHandler.GetStagedItem() : _itemHandler.GetItem();
 
             // if there is NO item in the cell, there are NO matches.
             if (thisCellItem != null)
@@ -67,8 +67,9 @@ namespace MatchThreePrototype.PlayAreaCellMatching
                 PlayAreaCell cellUp = _playArea.GetPlayAreaCell(_column, _cell.Number - 1);
                 if (cellUp != null)
                 {
-                    PlayAreaItem itemUP = (cellUp.StagedItemHandler.GetMatchWithStagedItem()) ? cellUp.StagedItemHandler.GetStagedItem() : cellUp.ItemHandler.GetItem();
-                    if (itemUP != null && !cellUp.IsProcessingItemRemoval)
+                    Item itemUP = (cellUp.StagedItemHandler.GetMatchWithStagedItem()) ? cellUp.StagedItemHandler.GetStagedItem() : cellUp.ItemHandler.GetItem();
+                    //if (itemUP != null && !cellUp.IsProcessingItemRemoval)
+                    if (itemUP != null && !cellUp.ItemHandler.GetIsProcessingRemoval())
                     {
                         m.IsMatchUp = (itemUP.ItemType == m.ItemType) ? true : false;
                         if (m.IsMatchUp)
@@ -76,7 +77,8 @@ namespace MatchThreePrototype.PlayAreaCellMatching
                             m.CellMatchUp = cellUp;
                         }
                     }
-                    else if (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.IsProcessingObstacleRemoval)
+                    //else if (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.IsProcessingObstacleRemoval)
+                    else if (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.ObstacleHandler.GetIsProcessingRemoval())
                     {
                         m.IsObstacleUp = true;
                         m.CellObstacleUp = cellUp;
@@ -87,8 +89,9 @@ namespace MatchThreePrototype.PlayAreaCellMatching
                 PlayAreaCell cellDOWN = _playArea.GetPlayAreaCell(_column, _cell.Number + 1);
                 if (cellDOWN != null)
                 {
-                    PlayAreaItem itemDOWN = (cellDOWN.StagedItemHandler.GetMatchWithStagedItem()) ? cellDOWN.StagedItemHandler.GetStagedItem() : cellDOWN.ItemHandler.GetItem();
-                    if (itemDOWN != null && !cellDOWN.IsProcessingItemRemoval)
+                    Item itemDOWN = (cellDOWN.StagedItemHandler.GetMatchWithStagedItem()) ? cellDOWN.StagedItemHandler.GetStagedItem() : cellDOWN.ItemHandler.GetItem();
+                    //if (itemDOWN != null && !cellDOWN.IsProcessingItemRemoval)
+                    if (itemDOWN != null && !cellDOWN.ItemHandler.GetIsProcessingRemoval())
                     {
                         m.IsMatchDown = (itemDOWN.ItemType == m.ItemType) ? true : false;
                         if (m.IsMatchDown)
@@ -96,7 +99,8 @@ namespace MatchThreePrototype.PlayAreaCellMatching
                             m.CellMatchDown = cellDOWN;
                         }
                     }
-                    else if (cellDOWN.ObstacleHandler.GetObstacle() != null && !cellDOWN.IsProcessingObstacleRemoval)
+                    //else if (cellDOWN.ObstacleHandler.GetObstacle() != null && !cellDOWN.IsProcessingObstacleRemoval)
+                    else if (cellDOWN.ObstacleHandler.GetObstacle() != null && !cellDOWN.ObstacleHandler.GetIsProcessingRemoval())
                     {
                         m.IsObstacleDown = true;
                         m.CellObstacleDown = cellDOWN;
@@ -110,8 +114,9 @@ namespace MatchThreePrototype.PlayAreaCellMatching
                     PlayAreaCell cellLEFT = _playArea.GetPlayAreaCell(colulmnLeft, _cell.Number);
                     if (cellLEFT != null)
                     {
-                        PlayAreaItem itemLEFT = (cellLEFT.StagedItemHandler.GetMatchWithStagedItem()) ? cellLEFT.StagedItemHandler.GetStagedItem() : cellLEFT.ItemHandler.GetItem();
-                        if (itemLEFT != null && !cellLEFT.IsProcessingItemRemoval)
+                        Item itemLEFT = (cellLEFT.StagedItemHandler.GetMatchWithStagedItem()) ? cellLEFT.StagedItemHandler.GetStagedItem() : cellLEFT.ItemHandler.GetItem();
+                        //if (itemLEFT != null && !cellLEFT.IsProcessingItemRemoval)
+                        if (itemLEFT != null && !cellLEFT.ItemHandler.GetIsProcessingRemoval())
                         {
                             m.IsMatchLeft = (itemLEFT.ItemType == m.ItemType) ? true : false;
                             if (m.IsMatchLeft)
@@ -119,7 +124,8 @@ namespace MatchThreePrototype.PlayAreaCellMatching
                                 m.CellMatchLeft = cellLEFT;
                             }
                         }
-                        else if (cellLEFT.ObstacleHandler.GetObstacle() != null && !cellLEFT.IsProcessingObstacleRemoval)
+                        //else if (cellLEFT.ObstacleHandler.GetObstacle() != null && !cellLEFT.IsProcessingObstacleRemoval)
+                        else if (cellLEFT.ObstacleHandler.GetObstacle() != null && !cellLEFT.ObstacleHandler.GetIsProcessingRemoval())
                         {
                             m.IsObstacleLeft = true;
                             m.CellObstacleLeft = cellLEFT;
@@ -134,8 +140,9 @@ namespace MatchThreePrototype.PlayAreaCellMatching
                     PlayAreaCell cellRIGHT = _playArea.GetPlayAreaCell(columnRight, _cell.Number);
                     if (cellRIGHT != null)
                     {
-                        PlayAreaItem itemRIGHT = (cellRIGHT.StagedItemHandler.GetMatchWithStagedItem()) ? cellRIGHT.StagedItemHandler.GetStagedItem() : cellRIGHT.ItemHandler.GetItem();
-                        if (itemRIGHT != null && !cellRIGHT.IsProcessingItemRemoval)
+                        Item itemRIGHT = (cellRIGHT.StagedItemHandler.GetMatchWithStagedItem()) ? cellRIGHT.StagedItemHandler.GetStagedItem() : cellRIGHT.ItemHandler.GetItem();
+                        //if (itemRIGHT != null && !cellRIGHT.IsProcessingItemRemoval)
+                        if (itemRIGHT != null && !cellRIGHT.ItemHandler.GetIsProcessingRemoval())
                         {
                             m.IsMatchRight = (itemRIGHT.ItemType == m.ItemType) ? true : false;
                             if (m.IsMatchRight)
@@ -143,7 +150,8 @@ namespace MatchThreePrototype.PlayAreaCellMatching
                                 m.CellMatchRight = cellRIGHT;
                             }
                         }
-                        else if (cellRIGHT.ObstacleHandler.GetObstacle() != null && !cellRIGHT.IsProcessingObstacleRemoval)
+                        //else if (cellRIGHT.ObstacleHandler.GetObstacle() != null && !cellRIGHT.IsProcessingObstacleRemoval)
+                        else if (cellRIGHT.ObstacleHandler.GetObstacle() != null && !cellRIGHT.ObstacleHandler.GetIsProcessingRemoval())
                         {
                             m.IsObstacleRight = true;
                             m.CellObstacleRight = cellRIGHT;
@@ -396,7 +404,7 @@ namespace MatchThreePrototype.PlayAreaCellMatching
             OnCellCheckMatchCompleteDelegate(isMatch3);
         }
 
-        public void Setup(PlayArea playArea, PlayAreaColumn column, PlayAreaCell cell, IPlayAreaItemHandler itemHandler, IStagedItemHandler stagedItemHandler)
+        public void Setup(PlayArea playArea, PlayAreaColumn column, PlayAreaCell cell, IItemHandler itemHandler, IStagedItemHandler stagedItemHandler)
         {
             _playArea = playArea;
             _column = column;

@@ -1,4 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +8,7 @@ namespace MatchThreePrototype.PlayAreaCellMatching
     public interface IPlayAreaCellMatchDetector
     {
 
-        public void Setup(PlayArea playArea, PlayAreaColumn column, PlayAreaCell cell, IPlayAreaItemHandler itemHandler, IStagedItemHandler stagedItemHandler);
+        public void Setup(PlayArea playArea, PlayAreaColumn column, PlayAreaCell cell, IItemHandler itemHandler, IStagedItemHandler stagedItemHandler);
 
         public PlayAreaCellMatches CheckAdjacentMatches();
 

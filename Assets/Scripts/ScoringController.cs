@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MatchThreePrototype.PlayAreaCellContent;
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 
 namespace MatchThreePrototype
 {

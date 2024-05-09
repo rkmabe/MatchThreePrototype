@@ -1,4 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,8 +23,8 @@ namespace MatchThreePrototype
         private List<PlayAreaCell> _obstaclesCaught = new List<PlayAreaCell>();
 
 
-        public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
-        private IPlayAreaItemHandler _itemHandler;
+        public IItemHandler ItemHandler { get => _itemHandler; }
+        private IItemHandler _itemHandler;
 
 
         private TMPro.TextMeshProUGUI _debugText;
@@ -130,7 +130,7 @@ namespace MatchThreePrototype
 
             SettingsController.OnNewMoveSpeedDelegate  += OnNewMoveSpeed;
 
-            _itemHandler = GetComponent<IPlayAreaItemHandler>();
+            _itemHandler = GetComponent<IItemHandler>();
         }
 
         // Start is called before the first frame update

@@ -1,5 +1,5 @@
-using MatchThreePrototype.PlayAreaCellContent.Item;
-using MatchThreePrototype.PlayAreaCellContent.Obstacle;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
 using UnityEngine;
 using static MatchThreePrototype.PlayAreaColumn;
 
@@ -7,11 +7,11 @@ namespace MatchThreePrototype
 {
     public class DropCell : MonoBehaviour 
     {
-        public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
-        private IPlayAreaItemHandler _itemHandler;
+        public IItemHandler ItemHandler { get => _itemHandler; }
+        private IItemHandler _itemHandler;
 
-        public IPlayAreaObstacleHandler ObstacleHandler { get => _obstacleHandler; }
-        private IPlayAreaObstacleHandler _obstacleHandler;
+        public IObstacleHandler ObstacleHandler { get => _obstacleHandler; }
+        private IObstacleHandler _obstacleHandler;
 
         private TMPro.TextMeshProUGUI _debugText;
 
@@ -123,9 +123,9 @@ namespace MatchThreePrototype
 
             SettingsController.OnNewDropSpeedDelegate += OnNewDropSpeed;
 
-            _itemHandler = GetComponent<IPlayAreaItemHandler>();
+            _itemHandler = GetComponent<IItemHandler>();
 
-            _obstacleHandler = GetComponent<IPlayAreaObstacleHandler>();
+            _obstacleHandler = GetComponent<IObstacleHandler>();
 
         }
         // Start is called before the first frame update

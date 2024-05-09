@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7770646603368757775}
-  - component: {fileID: 6880468163320455341}
+  - component: {fileID: 7744600876348777571}
   m_Layer: 5
   m_Name: PlateHeavy
   m_TagString: Untagged
@@ -36,7 +36,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6880468163320455341
+--- !u!114 &7744600876348777571
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7484871972805648218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896fc69693b860640b85f7ceef840199, type: 3}
+  m_Script: {fileID: 11500000, guid: f04d24ea0ffd6984e87d8e4f2d0edc12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 3

@@ -1,4 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 
 namespace MatchThreePrototype.PlayAreaCellMatching
 {

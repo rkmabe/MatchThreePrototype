@@ -1,6 +1,6 @@
-using MatchThreePrototype.PlayAreaCellContent.Item;
-using MatchThreePrototype.PlayAreaCellContent.Block;
-using MatchThreePrototype.PlayAreaCellContent.Obstacle;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
 using MatchThreePrototype.PlayAreaCellMatching;
 using System;
 using UnityEngine;
@@ -19,14 +19,14 @@ namespace MatchThreePrototype
         private PlayArea _playArea;
         private PlayAreaColumn _parentColumn;
 
-        public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
-        private IPlayAreaItemHandler _itemHandler;
+        public IItemHandler ItemHandler { get => _itemHandler; }
+        private IItemHandler _itemHandler;
 
-        public IPlayAreaObstacleHandler ObstacleHandler { get => _obstacleHandler; }
-        private IPlayAreaObstacleHandler _obstacleHandler;
+        public IObstacleHandler ObstacleHandler { get => _obstacleHandler; }
+        private IObstacleHandler _obstacleHandler;
 
-        public IPlayAreaBlockHandler BlockHandler { get => _blockHandler; }
-        private IPlayAreaBlockHandler _blockHandler;
+        public IBlockHandler BlockHandler { get => _blockHandler; }
+        private IBlockHandler _blockHandler;
 
         public IPlayAreaCellMatchDetector MatchDetector { get => _matchDetector; }
         private IPlayAreaCellMatchDetector _matchDetector;
@@ -40,22 +40,20 @@ namespace MatchThreePrototype
         public RectTransform RectTransform { get => _rectTransform; }
         private RectTransform _rectTransform;
 
-        public bool IsProcessingBlockRemoval { get => _isProcessingBlockRemoval; }
-        internal bool _isProcessingBlockRemoval;
-        private float _secsBlockRemovalProcessing = 0;
+        //public bool IsProcessingBlockRemoval { get => _isProcessingBlockRemoval; }
+        //internal bool _isProcessingBlockRemoval;
+        //private float _secsBlockRemovalProcessing = 0;
 
-        public bool IsProcessingItemRemoval { get => _isProcessingItemRemoval; }
-        internal bool _isProcessingItemRemoval;
-        private float _secsItemRemovalProcessing = 0;
+        //public bool IsProcessingItemRemoval { get => _isProcessingItemRemoval; }
+        //internal bool _isProcessingItemRemoval;
+        //private float _secsItemRemovalProcessing = 0;
 
-        public bool IsProcessingObstacleRemoval { get => _isProcessingObstacleRemoval; }
-
-
-        internal bool _isProcessingObstacleRemoval;
-        private float _secsObstacleRemovalProcessing = 0;
+        //public bool IsProcessingObstacleRemoval { get => _isProcessingObstacleRemoval; }
+        //internal bool _isProcessingObstacleRemoval;
+        //private float _secsObstacleRemovalProcessing = 0;
 
         internal static float DEFAULT_REMOVAL_DURATION = .5f;
-        private float _removalDuration = DEFAULT_REMOVAL_DURATION;
+        //private float _removalDuration = DEFAULT_REMOVAL_DURATION;
 
         public override string ToString()
         {
@@ -85,69 +83,73 @@ namespace MatchThreePrototype
             }
         }
 
-        internal void UpdateObstacleRemovalAnimation(out bool isComplete)
-        {
-            //float alphaLerp;
-            //if (_secsObstacleRemovalProcessing < _removalDuration)
-            //{
-            //    alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsObstacleRemovalProcessing / _removalDuration);
-            //    _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, alphaLerp);
+        //internal void UpdateObstacleRemovalAnimation(out bool isComplete)
+        //{
+        //    //float alphaLerp;
+        //    //if (_secsObstacleRemovalProcessing < _removalDuration)
+        //    //{
+        //    //    alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsObstacleRemovalProcessing / _removalDuration);
+        //    //    _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, alphaLerp);
 
-            //    _secsObstacleRemovalProcessing += Time.deltaTime;
-            //}
-            //else
-            //{
-            //    _obstacleImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
-            //    _obstacleImage.sprite = null;
+        //    //    _secsObstacleRemovalProcessing += Time.deltaTime;
+        //    //}
+        //    //else
+        //    //{
+        //    //    _obstacleImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
+        //    //    _obstacleImage.sprite = null;
 
-            //    _isProcessingObstacleRemoval = false;
-            //}
-            //isComplete = !_isProcessingObstacleRemoval;
+        //    //    _isProcessingObstacleRemoval = false;
+        //    //}
+        //    //isComplete = !_isProcessingObstacleRemoval;
 
+        //    float _removalDuration = DEFAULT_REMOVAL_DURATION;
 
-            float alphaLerp;
-            if (_secsObstacleRemovalProcessing < _removalDuration)
-            {
-                alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsObstacleRemovalProcessing / _removalDuration);
-                _obstacleHandler.GetImage().color = new Color(_obstacleHandler.GetImage().color.r, _obstacleHandler.GetImage().color.g, _obstacleHandler.GetImage().color.b, alphaLerp);
+        //    float alphaLerp;
+        //    if (_secsObstacleRemovalProcessing < _removalDuration)
+        //    {
+        //        alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsObstacleRemovalProcessing / _removalDuration);
+        //        _obstacleHandler.GetImage().color = new Color(_obstacleHandler.GetImage().color.r, _obstacleHandler.GetImage().color.g, _obstacleHandler.GetImage().color.b, alphaLerp);
 
-                _secsObstacleRemovalProcessing += Time.deltaTime;
-            }
-            else
-            {
-                //_obstacleHandler.GetImage().color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
-                _obstacleHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, 0);
-                _obstacleHandler.GetImage().sprite = null;
+        //        _secsObstacleRemovalProcessing += Time.deltaTime;
+        //    }
+        //    else
+        //    {
+        //        //_obstacleHandler.GetImage().color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, 0);
+        //        _obstacleHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, 0);
+        //        _obstacleHandler.GetImage().sprite = null;
 
-                _isProcessingObstacleRemoval = false;
-            }
-            isComplete = !_isProcessingObstacleRemoval;
+        //        _isProcessingObstacleRemoval = false;
+        //    }
+        //    isComplete = !_isProcessingObstacleRemoval;
 
-        }
+        //}
 
-        internal void UpdateBlockRemovalAnimation(out bool isComplete)
-        {
-            float alphaLerp;
-            if (_secsBlockRemovalProcessing < _removalDuration)
-            {
-                alphaLerp = Mathf.Lerp(Statics.BLOCK_ALPHA_ON, Statics.ALPHA_OFF, _secsBlockRemovalProcessing / _removalDuration);
-                _blockHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, alphaLerp);
+        //internal void UpdateBlockRemovalAnimation(out bool isComplete)
+        //{
 
-                _secsBlockRemovalProcessing += Time.deltaTime;
-            }
-            else
-            {
-                _blockHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, 0);
-                _blockHandler.GetImage().sprite = null;
+        //    float _removalDuration = DEFAULT_REMOVAL_DURATION;
 
-                _isProcessingBlockRemoval = false;
-            }
+        //    float alphaLerp;
+        //    if (_secsBlockRemovalProcessing < _removalDuration)
+        //    {
+        //        alphaLerp = Mathf.Lerp(Statics.BLOCK_ALPHA_ON, Statics.ALPHA_OFF, _secsBlockRemovalProcessing / _removalDuration);
+        //        _blockHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, alphaLerp);
 
-            isComplete = !_isProcessingBlockRemoval;
-        }
+        //        _secsBlockRemovalProcessing += Time.deltaTime;
+        //    }
+        //    else
+        //    {
+        //        _blockHandler.GetImage().color = new Color(_blockHandler.GetImage().color.r, _blockHandler.GetImage().color.g, _blockHandler.GetImage().color.b, 0);
+        //        _blockHandler.GetImage().sprite = null;
 
-        internal void UpdateItemRemovalAnimation()
-        {
+        //        _isProcessingBlockRemoval = false;
+        //    }
+
+        //    isComplete = !_isProcessingBlockRemoval;
+        //}
+
+        //internal void UpdateItemRemovalAnimation()
+        //{
             //float alphaLerp;
             //if (_secsItemRemovalProcessing < _removalDuration)
             //{
@@ -166,32 +168,39 @@ namespace MatchThreePrototype
             //    _isProcessingItemRemoval = false;
             //}
 
-            float alphaLerp;
-            if (_secsItemRemovalProcessing < _removalDuration)
-            {                
-                alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsItemRemovalProcessing / _removalDuration);
-                _itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, alphaLerp);
+            //float alphaLerp;
+            //if (_secsItemRemovalProcessing < _removalDuration)
+            //{                
+            //    alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsItemRemovalProcessing / _removalDuration);
+            //    _itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, alphaLerp);
 
-                _secsItemRemovalProcessing += Time.deltaTime;
-            }
-            else
-            {
-                _itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, 0);
-                _itemHandler.GetImage().sprite = null;
+            //    _secsItemRemovalProcessing += Time.deltaTime;
+            //}
+            //else
+            //{
+            //    _itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, 0);
+            //    _itemHandler.GetImage().sprite = null;
 
-                _isProcessingItemRemoval = false;
-            }
+            //    _isProcessingItemRemoval = false;
+            //}
 
 
-        }
+        //}
 
         internal void QueueItemForRemoval()
         {
-            if (_isProcessingItemRemoval)
-            {
-                //Debug.Log("already processing removal! -" + _parentColumn.Number + ", " + _number);
-                return;
-            }
+            //if (_isProcessingItemRemoval)
+            //{
+            //    //Debug.Log("already processing removal! -" + _parentColumn.Number + ", " + _number);
+            //    return;
+            //}
+
+            //if (_itemHandler.GetIsProcessingRemoval() || _blockHandler.GetIsProcessingRemoval())
+            ////if (_itemHandler.GetIsProcessingRemoval())
+            //{
+            //    Debug.Log("already processing removal! -" + _parentColumn.Number + ", " + _number);
+            //    return;
+            //}
 
             // TODO: remove once you feel safe from this..
             //if (_item == null)
@@ -204,52 +213,94 @@ namespace MatchThreePrototype
             //}
 
             //if (_block == null)
-            if (_blockHandler.GetBlock() == null)
+            //if (_blockHandler.GetBlock() == null)
+            //{
+            //    _isProcessingItemRemoval = true;
+            //    _secsItemRemovalProcessing = 0;
+            //}
+            //else
+            //{
+            //    _isProcessingBlockRemoval = true;
+            //    _secsBlockRemovalProcessing = 0;
+            //}
+
+            if (_blockHandler.GetBlock() != null)
             {
-                _isProcessingItemRemoval = true;
-                _secsItemRemovalProcessing = 0;
+                if (_blockHandler.GetIsProcessingRemoval())
+                {
+                    Debug.Log("already processing BLOCK removal! -" + _parentColumn.Number + ", " + _number);
+                }
+                else
+                {
+                    _blockHandler.StartRemoval();
+                }
             }
             else
             {
-                _isProcessingBlockRemoval = true;
-                _secsBlockRemovalProcessing = 0;
+                if (_itemHandler.GetIsProcessingRemoval())
+                {
+                    Debug.Log("already processing ITEM removal! -" + _parentColumn.Number + ", " + _number);
+                }
+                else
+                {
+                    _itemHandler.StartRemoval();
+                }
             }
         }
 
         internal void QueueObstacleForRemoval()
         {
-            if (_isProcessingObstacleRemoval)
+            //if (_isProcessingObstacleRemoval)
+            //{
+            //    //Debug.Log("already processing OBSTACLE removal! -" + _parentColumn.Number + ", " + _number);
+            //    return;
+            //}
+
+            if (_obstacleHandler.GetIsProcessingRemoval())
             {
-                //Debug.Log("already processing OBSTACLE removal! -" + _parentColumn.Number + ", " + _number);
+                Debug.Log("already processing OBSTACLE removal! -" + _parentColumn.Number + ", " + _number);
                 return;
             }
+
+
+
             //if (_obstacle == null)
             //{
             //    Debug.LogError("OBSTACLE already null! - " + _parentColumn.Number + ", " + _number);
             //}
 
             //if (_obstacle != null)
-            if (_obstacleHandler.GetObstacle() != null)
-            {
-                _isProcessingObstacleRemoval = true;
-                _secsObstacleRemovalProcessing = 0;
-            }
+
+            //if (_obstacleHandler.GetObstacle() != null)
+            //{
+            //    _isProcessingObstacleRemoval = true;
+            //    _secsObstacleRemovalProcessing = 0;
+            //}
+
+            //if (_obstacleHandler.GetObstacle() != null)
+            //{
+            //    _isProcessingObstacleRemoval = true;
+            //    _secsObstacleRemovalProcessing = 0;
+            //}
+
+            _obstacleHandler.StartRemoval();
+
         }
 
-        internal void OnNewRemoveDuration(float duration)
-        {
-            _removalDuration = duration;
-        }
+        //internal void OnNewRemoveDuration(float duration)
+        //{
+        //    _removalDuration = duration;
+        //}
 
         private void OnDestroy()
         { 
-            SettingsController.OnNewRemoveDurationDelegate -= OnNewRemoveDuration;
+            //SettingsController.OnNewRemoveDurationDelegate -= OnNewRemoveDuration;
         }
 
         private void Awake()
         {
 
-            SettingsController.OnNewRemoveDurationDelegate += OnNewRemoveDuration;
+            //SettingsController.OnNewRemoveDurationDelegate += OnNewRemoveDuration;
 
             _rectTransform = GetComponentInChildren<RectTransform>();
 
@@ -264,9 +315,9 @@ namespace MatchThreePrototype
             }
 
 
-            _itemHandler = GetComponent<IPlayAreaItemHandler>();
-            _obstacleHandler = GetComponent<IPlayAreaObstacleHandler>();
-            _blockHandler = GetComponent<IPlayAreaBlockHandler>();
+            _itemHandler = GetComponent<IItemHandler>();
+            _obstacleHandler = GetComponent<IObstacleHandler>();
+            _blockHandler = GetComponent<IBlockHandler>();
 
             _stagedItemHandler = GetComponent<IStagedItemHandler>();
 

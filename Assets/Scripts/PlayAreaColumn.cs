@@ -60,7 +60,8 @@ namespace MatchThreePrototype
                         break;
                     }
 
-                    if (cellUp.ItemHandler.GetItem() != null && !cellUp.IsProcessingItemRemoval)
+                    //if (cellUp.ItemHandler.GetItem() != null && !cellUp.IsProcessingItemRemoval)
+                    if (cellUp.ItemHandler.GetItem() != null && !cellUp.ItemHandler.GetIsProcessingRemoval())
                     {
                         dropCell = GetEmptyDropCell();
                         dropCell.SetDropFromPosition(GetRowInfo(cellUp.Number));
@@ -143,35 +144,61 @@ namespace MatchThreePrototype
         }
 
 
+        internal void UpdateStateMachines()
+        {
+            for (int i = _cells.Count - 1; i >= 0; i--)
+            {
+                _cells[i].ItemHandler.UpdateStateMachine();
+                _cells[i].ObstacleHandler.UpdateStateMachine();
+                _cells[i].BlockHandler.UpdateStateMachine();
+
+                // OR
+                // for each statemachien in _cells[i].StateMachines - update                
+            }
+        }
+
 
         internal void UpdateRemovals(out bool anyCellsProcessingRemoval)
         {
             anyCellsProcessingRemoval = false;
             for (int i = _cells.Count - 1; i >= 0; i--)
             {
-                if (_cells[i].IsProcessingObstacleRemoval)
+                //if (_cells[i].IsProcessingObstacleRemoval)
+                //{
+                //    bool isComplete;
+                //    _cells[i].UpdateObstacleRemovalAnimation(out isComplete);
+                //    if (isComplete)
+                //    {
+                //        _cells[i].ObstacleHandler.RemoveObstacle();
+                //    }
+                //    anyCellsProcessingRemoval = true;
+                //}
+
+                if (_cells[i].ObstacleHandler.GetIsProcessingRemoval())
                 {
-                    bool isComplete;
-                    _cells[i].UpdateObstacleRemovalAnimation(out isComplete);
-                    if (isComplete)
-                    {
-                        _cells[i].ObstacleHandler.RemoveObstacle();
-                    }
                     anyCellsProcessingRemoval = true;
                 }
 
-                else if (_cells[i].IsProcessingBlockRemoval)
-                {
-                    bool isComplete;
-                    _cells[i].UpdateBlockRemovalAnimation(out isComplete);
-                    if (isComplete)
-                    {
-                        _cells[i].BlockHandler.RemoveBlockLevel();
-                    }
 
+                //else if (_cells[i].IsProcessingBlockRemoval)
+                //{
+                //    bool isComplete;
+                //    _cells[i].UpdateBlockRemovalAnimation(out isComplete);
+                //    if (isComplete)
+                //    {
+                //        _cells[i].BlockHandler.RemoveBlockLevel();
+                //    }
+
+                //    anyCellsProcessingRemoval = true;
+                //}
+
+                else if (_cells[i].BlockHandler.GetIsProcessingRemoval())
+                {
                     anyCellsProcessingRemoval = true;
                 }
-                else if (_cells[i].IsProcessingItemRemoval)
+
+                //else if (_cells[i].IsProcessingItemRemoval)
+                else if (_cells[i].ItemHandler.GetIsProcessingRemoval())
                 {
                     // remove the actual item (but leave the sprite)
                     if (_cells[i].ItemHandler.GetItem() != null)
@@ -181,7 +208,7 @@ namespace MatchThreePrototype
                     }
 
                     // when removal animation is complete, IsProcesingRemoval will be set to false
-                    _cells[i].UpdateItemRemovalAnimation();
+                    //_cells[i].UpdateItemRemovalAnimation();
 
                     anyCellsProcessingRemoval = true;
                 }

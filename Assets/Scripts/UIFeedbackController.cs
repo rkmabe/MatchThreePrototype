@@ -1,6 +1,6 @@
 using Lofelt.NiceVibrations;
 using MatchThreePrototype.PlayAreaCellMatching;
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using UnityEngine;
 
 namespace MatchThreePrototype

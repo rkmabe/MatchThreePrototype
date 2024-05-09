@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using MatchThreePrototype.PlayAreaCellContent.Obstacle;
-using MatchThreePrototype.PlayAreaCellContent.Item;
-using MatchThreePrototype.PlayAreaCellContent.Block;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
 using MatchThreePrototype.PlayAreaCellMatching;
 
 namespace MatchThreePrototype
@@ -68,7 +68,7 @@ namespace MatchThreePrototype
 
         private int _numCells;
 
-        private List<PlayAreaItem> _drawnItems = new List<PlayAreaItem>();
+        private List<Item> _drawnItems = new List<Item>();
 
         public bool IsPopulated { get => _isPopulated; }
         private bool _isPopulated = false;
@@ -191,7 +191,7 @@ namespace MatchThreePrototype
                 for (int j = 0; j < _columns[i].Cells.Count; j++)
                 {
                     List<ItemTypes> excludedItemTypes = new List<ItemTypes>();
-                    PlayAreaItem validItem = null;
+                    Item validItem = null;
                     int o = 0;
                     while (validItem == null)
                     {
@@ -245,7 +245,7 @@ namespace MatchThreePrototype
                             CellInPlay cellToObstruct = cellsIToPick[rand];
 
                             // select an Allowed Block and apply it to the randomly slected cell in play
-                            PlayAreaObstacle obstacle = GetAllowedObstacle();
+                            Obstacle obstacle = GetAllowedObstacle();
 
                             PlayAreaColumn col = GetPlayAreaColumn(cellToObstruct.column);
                             PlayAreaCell cell = GetPlayAreaCell(col, cellToObstruct.row);
@@ -282,7 +282,7 @@ namespace MatchThreePrototype
                             CellInPlay cellToBlock = cellsIToPick[rand];
 
                             // select an Allowed Block and apply it to the randomly slected cell in play
-                            PlayAreaBlock block = GetAllowedBlock();
+                            Block block = GetAllowedBlock();
 
                             PlayAreaColumn col = GetPlayAreaColumn(cellToBlock.column);
                             PlayAreaCell cell = GetPlayAreaCell(col, cellToBlock.row);
@@ -302,7 +302,7 @@ namespace MatchThreePrototype
             _isPopulated = true;
         }
 
-        internal PlayAreaObstacle GetAllowedObstacle()
+        internal Obstacle GetAllowedObstacle()
         {
             if (_allowedObstacleTypes.Count == 0)
             {
@@ -319,7 +319,7 @@ namespace MatchThreePrototype
             }
         }
 
-        internal PlayAreaBlock GetAllowedBlock()
+        internal Block GetAllowedBlock()
         {
             if (_allowedBlockTypes.Count == 0)
             {
@@ -336,12 +336,12 @@ namespace MatchThreePrototype
             }
         }
 
-        internal PlayAreaItem GetFromDrawnItems()
+        internal Item GetFromDrawnItems()
         {
             if (_drawnItems.Count > 0)
             {
                 int index = UnityEngine.Random.Range(0, _drawnItems.Count);
-                PlayAreaItem item = _drawnItems[index];
+                Item item = _drawnItems[index];
                 _drawnItems.RemoveAt(index);
 
                 return item;
@@ -351,7 +351,7 @@ namespace MatchThreePrototype
             return null;
         }
 
-        internal void ReturnToDrawnItems(PlayAreaItem item)
+        internal void ReturnToDrawnItems(Item item)
         {
             _drawnItems.Add(item);
         }
@@ -371,7 +371,7 @@ namespace MatchThreePrototype
                 {
                     ItemTypes itemType = _allowedItemTypes[i];
 
-                    PlayAreaItem item = _itemPool.GetNextAvailable(itemType);
+                    Item item = _itemPool.GetNextAvailable(itemType);
 
                     _drawnItems.Add(item);
                 }
@@ -380,7 +380,7 @@ namespace MatchThreePrototype
             int modTypesPerDrawCount = drawCount % _allowedItemTypes.Count;
             for (int i = 0; i < modTypesPerDrawCount; i++)
             {
-                PlayAreaItem item = _itemPool.GetNextAvailable();
+                Item item = _itemPool.GetNextAvailable();
                 _drawnItems.Add(item);
             }
 
@@ -391,7 +391,7 @@ namespace MatchThreePrototype
             for (int i = _drawnItems.Count - 1; i > 0; i--)
             {
                 int k = UnityEngine.Random.Range(0, i + 1);
-                PlayAreaItem itemToSwap = _drawnItems[k];
+                Item itemToSwap = _drawnItems[k];
                 _drawnItems[k] = _drawnItems[i];
                 _drawnItems[i] = itemToSwap;
             }
@@ -443,7 +443,7 @@ namespace MatchThreePrototype
             bool isMatch = false;
 
             // get item at position columnNum, cellnum 
-            PlayAreaItem itemAtPosition = GetPlayAreaItemAt(columnNum, cellNum);
+            Item itemAtPosition = GetPlayAreaItemAt(columnNum, cellNum);
             if (itemAtPosition != null)
             {
                 isMatch = itemTypeToMatch == itemAtPosition.ItemType ? true : false;
@@ -452,7 +452,7 @@ namespace MatchThreePrototype
             return isMatch;
         }
 
-        private PlayAreaItem GetPlayAreaItemAt(int columnNum, int cellNum)
+        private Item GetPlayAreaItemAt(int columnNum, int cellNum)
         {
             PlayAreaColumn column = GetPlayAreaColumn(columnNum);
 
@@ -679,6 +679,8 @@ namespace MatchThreePrototype
                 return;
             }
 
+
+
             // PROCESS SWAPS-------------------------------------------------------
             // process any active SwapItemCells
             bool anyCellsSwapping = false;
@@ -742,6 +744,12 @@ namespace MatchThreePrototype
             {
                 _isInFlux = true;
                 return;
+            }
+
+            // UPDATE STATE MACHINES-----------------------------------------------
+            for (int i = 0; i < _columns.Count; i++)
+            {
+                _columns[i].UpdateStateMachines();
             }
 
             // PROCESS REMOVALS-----------------------------------------------------

@@ -1,15 +1,15 @@
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 
 namespace MatchThreePrototype.PlayAreaCellMatching
 {
 
     public interface IStagedItemHandler
     {
-        public void SetStagedItem(PlayAreaItem item);
+        public void SetStagedItem(Item item);
 
         public void RemoveStagedItem();
 
-        public PlayAreaItem GetStagedItem();
+        public Item GetStagedItem();
 
         public bool GetMatchWithStagedItem();
     }

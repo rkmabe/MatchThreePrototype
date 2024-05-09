@@ -1,4 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,8 +7,8 @@ namespace MatchThreePrototype
 
     public class HeldItemCell : MonoBehaviour   //, IItemHandler
     {
-        public IPlayAreaItemHandler ItemHandler { get => _itemHandler; }
-        private IPlayAreaItemHandler _itemHandler;
+        public IItemHandler ItemHandler { get => _itemHandler; }
+        private IItemHandler _itemHandler;
 
 
         private TMPro.TextMeshProUGUI _debugText;
@@ -19,7 +19,7 @@ namespace MatchThreePrototype
             //_image = GetComponentInChildren<Image>();
             _debugText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
 
-            _itemHandler = GetComponent<IPlayAreaItemHandler>();
+            _itemHandler = GetComponent<IItemHandler>();
         }
 
         void Start()

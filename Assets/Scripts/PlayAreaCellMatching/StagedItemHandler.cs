@@ -1,4 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent.Item;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +9,13 @@ namespace MatchThreePrototype.PlayAreaCellMatching
     public class StagedItemHandler : MonoBehaviour, IStagedItemHandler
     {
 
-        internal PlayAreaItem StagedItem { get => _stagedItem; }
-        private PlayAreaItem _stagedItem;
+        internal Item StagedItem { get => _stagedItem; }
+        private Item _stagedItem;
 
         internal bool MatchWithStagedItem { get => _matchWithStagedItem; }
         private bool _matchWithStagedItem = false;
 
-        public void SetStagedItem(PlayAreaItem item)
+        public void SetStagedItem(Item item)
         {
             _matchWithStagedItem = true;
             _stagedItem = item;
@@ -26,7 +26,7 @@ namespace MatchThreePrototype.PlayAreaCellMatching
             _stagedItem = null;
         }
 
-        public PlayAreaItem GetStagedItem()
+        public Item GetStagedItem()
         {
             return _stagedItem;
         }
