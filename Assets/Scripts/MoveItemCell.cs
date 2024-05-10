@@ -92,7 +92,7 @@ namespace MatchThreePrototype
             }
 
             //RemoveItem();
-            _itemHandler.RemoveItemReferenceAndImage();
+            _itemHandler.RemoveItem();
                 RemoveTarget();
         }
 

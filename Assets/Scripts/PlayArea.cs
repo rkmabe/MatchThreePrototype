@@ -252,7 +252,7 @@ namespace MatchThreePrototype
 
                             if (cell.ItemHandler.GetItem() != null)
                             {
-                                cell.ItemHandler.RemoveItemReferenceAndImage();
+                                cell.ItemHandler.RemoveItem();
                             }
 
                             //cell.SetObstacle(obstacle);
@@ -351,7 +351,7 @@ namespace MatchThreePrototype
             return null;
         }
 
-        internal void ReturnToDrawnItems(Item item)
+        internal void OnDrawnItemReturn(Item item)
         {
             _drawnItems.Add(item);
         }
@@ -638,10 +638,12 @@ namespace MatchThreePrototype
             _originCellIndicatorImage = _originCellIndicator.GetComponentInChildren<Image>();
             _destinationCellIndicatorImage = _destinationCellIndicator.GetComponentInChildren<Image>();
 
+            ItemHandler.OnDrawnItemReturn += OnDrawnItemReturn;
+
         }
         private void OnDestroy()
         {
-
+            ItemHandler.OnDrawnItemReturn -= OnDrawnItemReturn;
         }
 
 
@@ -730,34 +732,29 @@ namespace MatchThreePrototype
             }
 
             // PROCESS MATCHES------------------------------------------------------
-            bool anyMatchRemoved = false;
+            bool anyMatchCaught = false;
             for (int i = 0; i < _columns.Count; i++)
             {
                 bool thisColumnMatchesCaught;
                 _columns[i].UpdateMatches(out thisColumnMatchesCaught);
                 if (thisColumnMatchesCaught)
                 {
-                    anyMatchRemoved = true;
+                    anyMatchCaught = true;
                 }
             }
-            if (anyMatchRemoved)
+            if (anyMatchCaught)
             {
                 _isInFlux = true;
                 return;
             }
 
             // UPDATE STATE MACHINES-----------------------------------------------
-            for (int i = 0; i < _columns.Count; i++)
-            {
-                _columns[i].UpdateStateMachines();
-            }
-
-            // PROCESS REMOVALS-----------------------------------------------------
+            // CHECK FOR REMOVALS
             bool anyColumnRemoving = false;
             for (int i = 0; i < _columns.Count; i++)
             {
                 bool thisColumnRemoving;
-                _columns[i].UpdateRemovals(out thisColumnRemoving);
+                _columns[i].UpdateStateMachines(out thisColumnRemoving);
                 if (thisColumnRemoving)
                 {
                     anyColumnRemoving = true;

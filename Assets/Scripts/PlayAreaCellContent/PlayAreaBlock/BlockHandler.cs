@@ -1,6 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +15,8 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
 
         public bool IsProcessingRemoval { get => _isProcessingRemoval; }
         private bool _isProcessingRemoval;
+
+        public static Action<Block> OnPooledBlockReturn;
 
         public void SetBlock(Block block)
         {
@@ -35,10 +35,9 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
             _block.RemoveLevel(out allLevelsRemoved);
             if (allLevelsRemoved)
             {
-                // TODO: restore this to prefab state before returning to pool .. 
-                // any missing levels must be restored .. just cache them .. 
-                //_blockPool.Return(_block);
-                Debug.Log("RETURN TO POOL!");
+                _block.RestoreFromCache();
+
+                OnPooledBlockReturn?.Invoke(_block);
 
                 _block = null;
             }
@@ -67,7 +66,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
         {
             return _isProcessingRemoval;
         }
-        public void StopRemoval()
+        public void FinishRemoval()
         {
             _isProcessingRemoval = false;
 

@@ -24,7 +24,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
         public void Exit()
         {
             //throw new System.NotImplementedException();
-            _itemHandler.StopRemoval();
+            _itemHandler.FinishRemoval();
         }
 
         public void Update()

@@ -21,7 +21,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
 
         public void StartRemoval();
         public bool GetIsProcessingRemoval();
-        public void StopRemoval();
+        public void FinishRemoval();
 
         public void UpdateStateMachine();
 

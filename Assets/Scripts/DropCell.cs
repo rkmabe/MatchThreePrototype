@@ -80,7 +80,7 @@ namespace MatchThreePrototype
             if (_itemHandler.GetItem() != null)
             {
                 _targetCell.ItemHandler.SetItem(_itemHandler.GetItem());
-                _itemHandler.RemoveItemReferenceAndImage();
+                _itemHandler.RemoveItem();
             }
             else if (_obstacleHandler.GetObstacle() != null)
             {

@@ -1,3 +1,4 @@
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,10 +53,10 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
             return null;
         }
 
-        internal void Return(Block block)
-        {
-            PutInPool(block);
-        }
+        //internal void Return(Block block)
+        //{
+        //    PutInPool(block);
+        //}
 
         private void InitializePool()
         {
@@ -80,9 +81,23 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
             _availableBlocks.Add(block);
         }
 
+
+        internal void OnBlockReturn(Block block)
+        {
+            PutInPool(block);
+        }
+
+
+        private void OnDestroy()
+        {
+            BlockHandler.OnPooledBlockReturn -= OnBlockReturn;
+        }
+
         private void Awake()
         {
             InitializePool();
+
+            BlockHandler.OnPooledBlockReturn += OnBlockReturn;
         }
 
         // Start is called before the first frame update

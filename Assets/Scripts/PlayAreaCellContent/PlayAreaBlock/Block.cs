@@ -25,11 +25,16 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
         // when the last level is removed, the item underneath should be allowed to match
         //public List<BlockLevel> LowerBlockLevels { get => _lowerBlockLevels; }
         [SerializeField] private List<BlockLevel> _lowerBlockLevels;
-
-
         [SerializeField] private BlockLevel _currBlockLevel;
 
+        // cache the abovev data on awake.
+        // so that teh block can be restored to default state before returning to object pool.
+        private List<BlockLevel> _lowerBlockLevelsCache = new List<BlockLevel>();
+        private BlockLevel _currBlockLevelCache;
+
+
         internal Sprite CurrentSprite { get => _currBlockLevel.Sprite; }
+
 
         internal void RemoveLevel(out bool allLevelsRemoved)
         {
@@ -43,6 +48,18 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
             {
                 allLevelsRemoved = true;
             }
+        }
+
+        internal void RestoreFromCache()
+        {
+            _lowerBlockLevels.AddRange(_lowerBlockLevelsCache);
+            _currBlockLevel = _currBlockLevelCache;
+        }
+
+        private void Awake()
+        {
+            _lowerBlockLevelsCache.AddRange(_lowerBlockLevels);
+            _currBlockLevelCache = _currBlockLevel;
         }
 
         // Start is called before the first frame update

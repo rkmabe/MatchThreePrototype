@@ -51,7 +51,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
             return null;
         }
 
-        internal void Return(Obstacle obstacle)
+        internal void OnPooledObstacleReturn(Obstacle obstacle)
         {
             PutInPool(obstacle);
         }
@@ -79,9 +79,16 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
         }
 
 
+        private void OnDestroy()
+        {
+            ObstacleHandler.OnPooledObstacleReturn -= OnPooledObstacleReturn;
+        }
+
         private void Awake()
         {
             InitializePool();
+
+            ObstacleHandler.OnPooledObstacleReturn += OnPooledObstacleReturn;
         }
 
         // Start is called before the first frame update
@@ -103,10 +110,5 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
             //public List<AudioClip> AudioClip;
         }
     }
-    //public enum ObstacleTypes
-    //{
-    //    None = 0,
-    //    RedWall = 1,
-    //    GreyWall = 2,
-    //}
+
 }

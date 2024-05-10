@@ -7,20 +7,14 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
         public Item GetItem();
         public void SetItem(Item item);
 
+        public void RemoveItem();
+
         public Image GetImage();
 
-        public void RemoveItemReferenceAndImage();
-        public void RemoveItemReference();
-        public void RemoveItemImage();
-
-
-
-
-        // TODO: refactor as IContentRemover ?
 
         public void StartRemoval();
         public bool GetIsProcessingRemoval();
-        public void StopRemoval();
+        public void FinishRemoval();
 
 
         public void UpdateStateMachine();

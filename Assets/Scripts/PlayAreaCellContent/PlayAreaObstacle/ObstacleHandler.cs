@@ -1,6 +1,4 @@
-using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +17,8 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
 
         public bool IsProcessingRemoval { get => _isProcessingRemoval; }
         private bool _isProcessingRemoval;
+
+        public static Action<Obstacle> OnPooledObstacleReturn;
 
         public void RemoveObstacle()
         {
@@ -58,9 +58,11 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
         {
             return _isProcessingRemoval;
         }
-        public void StopRemoval()
+        public void FinishRemoval()
         {
             _isProcessingRemoval = false;
+
+            OnPooledObstacleReturn?.Invoke(_obstacle);
 
             RemoveObstacle();
 

@@ -24,7 +24,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
         public void Exit()
         {
             //throw new System.NotImplementedException();
-            _obstacleHandler.StopRemoval();
+            _obstacleHandler.FinishRemoval();
         }
 
         public void Update()
@@ -45,8 +45,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
             {
                 Image image = _obstacleHandler.GetImage();
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
-
-                //_obstacleHandler.StopRemoval();
 
                 _obstacleHandler.StateMachine.TransitionTo(_obstacleHandler.StateMachine.IdleState);
 

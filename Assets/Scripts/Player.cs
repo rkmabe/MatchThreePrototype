@@ -82,7 +82,7 @@ namespace MatchThreePrototype
                 {
                     //Debug.Log("Finger down on " + cell.ColumnNumber + "," + cell.Number);
 
-                    if (cell.ItemHandler.GetItem() != null && (cell.BlockHandler.GetBlock() == null && cell.ObstacleHandler.GetObstacle() == null))
+                    if (cell.ItemHandler.GetItem() != null && cell.ItemHandler.GetIsProcessingRemoval()==false && (cell.BlockHandler.GetBlock() == null && cell.ObstacleHandler.GetObstacle() == null))
                     {
                         _dragOriginCell = cell;
 
@@ -130,10 +130,10 @@ namespace MatchThreePrototype
                             _playArea.CellMoveToDestination.SetCellMatchesCaught(matchesCaughtAtDestination);
 
                             _playArea.CellMoveToDestination.SetObstaclesCaught(obstaclesCaughtAtDestination);
-                            _dragOriginCell.ItemHandler.RemoveItemReferenceAndImage();
+                            _dragOriginCell.ItemHandler.RemoveItem();
 
                             // start at destination and move to origin ("drag to" position to "drag from" position)
-                            if (dragDestinationCell.ItemHandler.GetItem() == null)
+                            if (dragDestinationCell.ItemHandler.GetItem() == null || dragDestinationCell.ItemHandler.GetIsProcessingRemoval())
                             {
                                 _playArea.CellMoveToOrigin.RemoveTarget();   // used in PlayArea update - target MUST be cleared here!
                             }
@@ -148,7 +148,7 @@ namespace MatchThreePrototype
 
                                 _playArea.CellMoveToOrigin.SetObstaclesCaught(obstaclesCaughtAtOrigin);
 
-                                dragDestinationCell.ItemHandler.RemoveItemReferenceAndImage();
+                                dragDestinationCell.ItemHandler.RemoveItem();
                             }
                         }
                         else
@@ -166,7 +166,7 @@ namespace MatchThreePrototype
 
                 _playArea.ClearDragIndicators();
 
-                _playArea.HeldItemCell.ItemHandler.RemoveItemReferenceAndImage();
+                _playArea.HeldItemCell.ItemHandler.RemoveItem();
 
                 _dragOriginCell = null;
 

@@ -67,7 +67,7 @@ namespace MatchThreePrototype
                         dropCell.SetDropFromPosition(GetRowInfo(cellUp.Number));
                         dropCell.ItemHandler.SetItem(cellUp.ItemHandler.GetItem());
 
-                        cellUp.ItemHandler.RemoveItemReferenceAndImage();
+                        cellUp.ItemHandler.RemoveItem();
                     }
                     else if (cellUp.ObstacleHandler.GetObstacle() != null && cellUp.ObstacleHandler.CanDrop())
                     {
@@ -144,83 +144,36 @@ namespace MatchThreePrototype
         }
 
 
-        internal void UpdateStateMachines()
+        internal void UpdateStateMachines(out bool anyCellsProcessingRemoval)
         {
+
+            // OR
+            // for each statemachien in _cells[i].StateMachines - update     
+
+            anyCellsProcessingRemoval = false;
+
             for (int i = _cells.Count - 1; i >= 0; i--)
             {
                 _cells[i].ItemHandler.UpdateStateMachine();
                 _cells[i].ObstacleHandler.UpdateStateMachine();
                 _cells[i].BlockHandler.UpdateStateMachine();
 
-                // OR
-                // for each statemachien in _cells[i].StateMachines - update                
-            }
-        }
-
-
-        internal void UpdateRemovals(out bool anyCellsProcessingRemoval)
-        {
-            anyCellsProcessingRemoval = false;
-            for (int i = _cells.Count - 1; i >= 0; i--)
-            {
-                //if (_cells[i].IsProcessingObstacleRemoval)
-                //{
-                //    bool isComplete;
-                //    _cells[i].UpdateObstacleRemovalAnimation(out isComplete);
-                //    if (isComplete)
-                //    {
-                //        _cells[i].ObstacleHandler.RemoveObstacle();
-                //    }
-                //    anyCellsProcessingRemoval = true;
-                //}
-
-                if (_cells[i].ObstacleHandler.GetIsProcessingRemoval())
+                if (_cells[i].ObstacleHandler.GetIsProcessingRemoval() ||
+                    _cells[i].BlockHandler.GetIsProcessingRemoval() || 
+                    _cells[i].ItemHandler.GetIsProcessingRemoval() )
                 {
-                    anyCellsProcessingRemoval = true;
-                }
-
-
-                //else if (_cells[i].IsProcessingBlockRemoval)
-                //{
-                //    bool isComplete;
-                //    _cells[i].UpdateBlockRemovalAnimation(out isComplete);
-                //    if (isComplete)
-                //    {
-                //        _cells[i].BlockHandler.RemoveBlockLevel();
-                //    }
-
-                //    anyCellsProcessingRemoval = true;
-                //}
-
-                else if (_cells[i].BlockHandler.GetIsProcessingRemoval())
-                {
-                    anyCellsProcessingRemoval = true;
-                }
-
-                //else if (_cells[i].IsProcessingItemRemoval)
-                else if (_cells[i].ItemHandler.GetIsProcessingRemoval())
-                {
-                    // remove the actual item (but leave the sprite)
-                    if (_cells[i].ItemHandler.GetItem() != null)
-                    {
-                        _playArea.ReturnToDrawnItems(_cells[i].ItemHandler.GetItem());
-                        _cells[i].ItemHandler.RemoveItemReference();
-                    }
-
-                    // when removal animation is complete, IsProcesingRemoval will be set to false
-                    //_cells[i].UpdateItemRemovalAnimation();
-
                     anyCellsProcessingRemoval = true;
                 }
             }
         }
+
         internal void UpdateStagedDrops(out bool anyCellsStaged)
         {
             anyCellsStaged = false;
             for (int i = _cells.Count - 1; i >= 0; i--)
             {
-                //if (_cells[i].ItemHandler.GetItem() == null && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].StagedDropCell == null)
-                if (_cells[i].ItemHandler.GetItem() == null && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].IsWaitingForDropCell == false)
+
+                if (_cells[i].ItemHandler.GetItem() == null  && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].IsWaitingForDropCell == false && _cells[i].ItemHandler.GetIsProcessingRemoval() == false)
                 {
                     DropCell dropCell = FindDropItem(_cells[i]);
                     if (dropCell != null)

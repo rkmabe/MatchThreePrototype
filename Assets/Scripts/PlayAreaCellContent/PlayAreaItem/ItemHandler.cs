@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,13 +11,13 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 
         private Item _item;
 
-        //public ItemStateMachine StateMachine;
-
         public ItemStateMachine StateMachine { get => _stateMachine; }
         private ItemStateMachine _stateMachine;
 
         public bool IsProcessingRemoval { get => _isProcessingRemoval;  }
         private bool _isProcessingRemoval;
+
+        public static Action<Item> OnDrawnItemReturn;
 
         public void SetItem(Item item)
         {
@@ -33,18 +32,9 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
             return _item;
         }
 
-        public void RemoveItemReferenceAndImage()
-        {
-            RemoveItemReference();
-            RemoveItemImage();
-        }
-
-        public void RemoveItemReference()
+        public void RemoveItem()
         {
             _item = null;
-        }
-        public void RemoveItemImage()
-        {
             _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, Statics.ALPHA_OFF);
             _itemImage.sprite = null;
         }
@@ -56,16 +46,19 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 
         public void StartRemoval()
         {
-            // monitored by ItemIdleState; used to transition to RemovalState
             _isProcessingRemoval = true;
         }
         public bool GetIsProcessingRemoval()
         {
             return _isProcessingRemoval;
         }
-        public void StopRemoval()
+        public void FinishRemoval()
         {
             _isProcessingRemoval = false;
+
+            OnDrawnItemReturn?.Invoke(_item);
+
+            RemoveItem();
         }
 
 
@@ -84,12 +77,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
             _stateMachine = new ItemStateMachine(this);
             _stateMachine.Initialize(_stateMachine.IdleState);
         }
-
-        //private void Update()
-        //{
-        //    _stateMachine.Update();
-        //}
-
 
 
     }

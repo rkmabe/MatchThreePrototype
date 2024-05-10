@@ -24,11 +24,13 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
         public void Exit()
         {
             //throw new System.NotImplementedException();
-            _blockHandler.StopRemoval();
+            _blockHandler.FinishRemoval();
         }
 
         public void Update()
         {
+            // TODO: change to transition to next block level, if any.
+            // although only one level is currently in use, this is set up for mulitple levels.
 
             float alphaLerp;
             if (_secsRemovalProcessing < _removalDuration)
@@ -48,7 +50,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
 
                 _blockHandler.StateMachine.TransitionTo(_blockHandler.StateMachine.IdleState);
 
-                //_blockHandler.StopRemoval();
             }
 
         }
