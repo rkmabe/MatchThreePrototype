@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static MatchThreePrototype.PlayArea;
+using MatchThreePrototype.PlayAreaElements;
 
 namespace MatchThreePrototype.PlayAreaCellMatching
 {

@@ -2,6 +2,7 @@ using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MatchThreePrototype.PlayAreaElements;
 
 namespace MatchThreePrototype.PlayAreaCellMatching
 {

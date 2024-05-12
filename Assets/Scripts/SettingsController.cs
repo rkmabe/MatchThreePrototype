@@ -1,4 +1,5 @@
 using UnityEngine;
+using MatchThreePrototype.PlayAreaElements;
 
 namespace MatchThreePrototype
 {
