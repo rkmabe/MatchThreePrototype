@@ -12,13 +12,13 @@ namespace MatchThreePrototype.PlayAreaElements
         [SerializeField] private List<PlayAreaCell> _cells = new List<PlayAreaCell>();
 
 
-        private List<DropCell> _droppingCells = new List<DropCell>();
-
-        private IDropCellHandler _dropCellHandler;
-
         private PlayArea _playArea;
 
         private IRowInfoProvider _rowInfoProvider;
+
+        private IDropCellHandler _dropCellHandler;
+
+        private List<DropCell> _droppingCells = new List<DropCell>();
 
         private List<PlayAreaCell> _cellsToCatchMatches = new List<PlayAreaCell>();
 

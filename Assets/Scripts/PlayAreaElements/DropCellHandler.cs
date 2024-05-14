@@ -110,7 +110,8 @@ namespace MatchThreePrototype.PlayAreaElements
                     ////Debug.Log("FORCE 4 BLUE PINS");
                     //dropCell.SetItem(bluepin);
 
-                    dropCell.ItemHandler.SetItem(playArea.GetFromDrawnItems());
+                    //dropCell.ItemHandler.SetItem(playArea.GetFromDrawnItems());
+                    dropCell.ItemHandler.SetItem(playArea.DrawnItemsHandler.GetRandomItem());
                 }
             }
 

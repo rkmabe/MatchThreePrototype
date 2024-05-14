@@ -87,7 +87,8 @@ namespace MatchThreePrototype
                     {
                         _dragOriginCell = cell;
 
-                        _playArea.IndicateDragFromCell(cell);
+                        //_playArea.IndicateDragFromCell(cell);
+                        _playArea.CellIndicators.IndicateDragFromCell(cell);
 
                         _playArea.HeldItemCell.transform.position = cell.transform.position;
 
@@ -165,7 +166,8 @@ namespace MatchThreePrototype
 
                 }
 
-                _playArea.ClearDragIndicators();
+                //_playArea.ClearDragIndicators();
+                _playArea.CellIndicators.ClearDragIndicators();
 
                 _playArea.HeldItemCell.ItemHandler.RemoveItem();
 
@@ -185,7 +187,8 @@ namespace MatchThreePrototype
                         _playArea.HeldItemCell.transform.position = _dragTouch.position;
                         if (dragOverCell != null)
                         {
-                            _playArea.IndicateDragOverCell(dragOverCell);
+                            //_playArea.IndicateDragOverCell(dragOverCell);
+                            _playArea.CellIndicators.IndicateDragOverCell(dragOverCell);
                         }
                     }
                 }

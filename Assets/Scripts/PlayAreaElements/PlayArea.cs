@@ -12,6 +12,8 @@ namespace MatchThreePrototype.PlayAreaElements
 
     public class PlayArea : MonoBehaviour
     {
+        [SerializeField] private RectTransform _playAreaRect;
+
 
         [SerializeField] private List<PlayAreaColumn> _columns;
 
@@ -30,26 +32,14 @@ namespace MatchThreePrototype.PlayAreaElements
         //[SerializeField] private List<ItemTypes> _allowedItemTypes;
         private List<ItemTypes> _allowedItemTypes;
 
-        [SerializeField] private List<BlockTypes> _allowedBlockTypes;
-
-        [SerializeField] private List<ObstacleTypes> _allowedObstacleTypes;
-
         public MoveItemCell CellMoveToOrigin { get => _cellMoveToOrigin; }
         [SerializeField] private MoveItemCell _cellMoveToOrigin;
 
         public MoveItemCell CellMoveToDestination { get => _cellMoveToDestination; }
         [SerializeField] private MoveItemCell _cellMoveToDestination;
 
-        [SerializeField] private GameObject _destinationCellIndicator;
-        private Image _destinationCellIndicatorImage;
-
-        [SerializeField] private GameObject _originCellIndicator;
-        private Image _originCellIndicatorImage;
-
         public HeldItemCell HeldItemCell { get => _heldItemCell; }
         [SerializeField] private HeldItemCell _heldItemCell;
-
-        [SerializeField] private RectTransform _playAreaRect;
 
         [SerializeField] bool DebugCheckMatches = false;
 
@@ -68,9 +58,18 @@ namespace MatchThreePrototype.PlayAreaElements
 
         private int _numCells;
 
-        private List<Item> _drawnItems = new List<Item>();
+        public IDrawnItemsHandler DrawnItemsHandler { get => _drawnItemsHandler; }
+        private IDrawnItemsHandler _drawnItemsHandler;
 
-        public bool IsPopulated { get => _isPopulated; }
+        //public IPlayAreaPopulator PlayAreaPopulator { get => _playAreaPopulator; }
+        private IPlayAreaPopulator _playAreaPopulator;
+
+        public ICellIndicators CellIndicators { get => _cellIndicators; }
+        private ICellIndicators _cellIndicators;
+
+        //public IPlayAreaObjectProvider PlayAreaObjectProvider { get => _playAreaObjectProvider; }
+        //private IPlayAreaObjectProvider _playAreaObjectProvider;
+
         private bool _isPopulated = false;
 
         private int _numCellsChecked = 0;
@@ -88,23 +87,20 @@ namespace MatchThreePrototype.PlayAreaElements
 
         private void CheckAllCellMatches()
         {
-
-            // can be used to cause all cells to check mathes
-            // usually this is not necessary -
-            // only cells ajacent to modified cells must be checked most of the time.
+            // currently only used in editor tests
+            // can be used to cause all cells to check mathes, but
+            // usually only cells in new positions must be checked
 
             _numCellsChecked = 0;
-            //PlayAreaCell.OnCellCheckMatchCompleteDelegate += OnCellCheckMatchComplete;
             PlayAreaCellMatchDetector.OnCellCheckMatchCompleteDelegate += OnCellCheckMatchComplete;
 
             // advertise that you want cells to check
             OnCellCheckMatchRequestDelegate();
 
-            //_isCheckingMatches = true;
         }
         private void OnCellCheckMatchComplete(bool isMatch3)
         {
-            // not reachable at this time, check above
+            // currently only used in editor tests
 
             _numCellsChecked++;
             if (isMatch3)
@@ -116,358 +112,26 @@ namespace MatchThreePrototype.PlayAreaElements
                 Debug.Log("All cells MATHCED");
 
                 PlayAreaCellMatchDetector.OnCellCheckMatchCompleteDelegate -= OnCellCheckMatchComplete;
-
-                if (_numMatch3s > 0)
-                {
-
-                }
-
             }
-        }
-
-        internal void IndicateDragOverCell(PlayAreaCell dragOverCell)
-        {
-            _destinationCellIndicator.transform.position = dragOverCell.transform.position;
-            _destinationCellIndicatorImage.color = new Color(_destinationCellIndicatorImage.color.r, _destinationCellIndicatorImage.color.g, _destinationCellIndicatorImage.color.b, 1);
-        }
-
-        internal void IndicateDragFromCell(PlayAreaCell dragFromCell)
-        {
-            _originCellIndicator.transform.position = dragFromCell.transform.position;
-            _originCellIndicatorImage.color = new Color(_originCellIndicatorImage.color.r, _originCellIndicatorImage.color.g, _originCellIndicatorImage.color.b, 1);
-        }
-
-        internal void ClearDragIndicators()
-        {
-            _originCellIndicatorImage.color = new Color(_originCellIndicatorImage.color.r, _originCellIndicatorImage.color.g, _originCellIndicatorImage.color.b, 0);
-            _destinationCellIndicatorImage.color = new Color(_destinationCellIndicatorImage.color.r, _destinationCellIndicatorImage.color.g, _destinationCellIndicatorImage.color.b, 0);
-        }
-
-        private int GetDrawnItemsIndex(List<ItemTypes> excludedItemTypes)
-        {
-            if (excludedItemTypes.Count == 0)
-            {
-                return UnityEngine.Random.Range(0, _drawnItems.Count);
-            }
-            else
-            {
-                for (int i = 0; i < _drawnItems.Count; i++)
-                {
-                    bool isExcluded = false;
-                    for (int j = 0; j < excludedItemTypes.Count; j++)
-                    {
-                        if (_drawnItems[i].ItemType == excludedItemTypes[j])
-                        {
-                            isExcluded = true;
-                            break;
-                        }
-                    }
-                    if (!isExcluded)
-                    {
-                        return i;
-                    }
-                }
-            }
-
-            // you are never going to get here. .. unless you have too few allowed item types!
-            //Debug.LogError("oh yeah?");
-            return UnityEngine.Random.Range(0, _drawnItems.Count);
         }
 
         private void Populate()
         {
-            List<CellInPlay> cellsIToPick = new List<CellInPlay>();
-            int k = 0;
+            _drawnItemsHandler.DrawItems(_numCells, _allowedItemTypes, _itemPool);
 
-            // draw a pool of items
-            DrawItems();
+            _drawnItemsHandler.ShuffleItems();
 
-            // shuffle
-            ShuffleItems();
+            _playAreaPopulator.PlaceItems(_columns, _drawnItemsHandler);
 
-            // populate grid, ensuring that no match 3 is initially populated
-            for (int i = 0; i < _columns.Count; i++)
-            {
-                for (int j = 0; j < _columns[i].Cells.Count; j++)
-                {
-                    List<ItemTypes> excludedItemTypes = new List<ItemTypes>();
-                    Item validItem = null;
-                    int o = 0;
-                    while (validItem == null)
-                    {
-
-                        //int index = UnityEngine.Random.Range(0, _drawnItems.Count);
-                        int drawnItemsIndex = GetDrawnItemsIndex(excludedItemTypes);
-                        ItemTypes candidateItemType = _drawnItems[drawnItemsIndex].ItemType;
-                        if (IsPopulationPlacementValid(candidateItemType, _columns[i].Number, _columns[i].Cells[j].Number))
-                        {
-                            validItem = _drawnItems[drawnItemsIndex];
-
-                            //_columns[i].Cells[j].SetItem(validItem);
-                            _columns[i].Cells[j].ItemHandler.SetItem(validItem);
-
-                            _drawnItems.RemoveAt(drawnItemsIndex);
-
-                            k++;
-                            CellInPlay item = new CellInPlay();
-                            item.index = k;
-                            item.column = _columns[i].Number;
-                            item.row = _columns[i].Cells[j].Number;
-                            cellsIToPick.Add(item);
-
-                        }
-                        else
-                        {
-                            excludedItemTypes.Add(candidateItemType);
-                            o++;
-                            //Debug.Log("Match3 prevented at " + _columns[i].Number + ", " + _columns[i].Cells[j].Number);
-                        }
-                        if (o > 5)
-                        {
-                            Debug.Log("could not find valid item - SHOULD NOT HAPPEN!!");
-                            validItem = _drawnItems[0];
-                        }
-                    }
-                }
-            }
-
-            //"obstruct" a certain number of cells in play
             int numCellsToObstruct = Mathf.RoundToInt(_numCells * _percentCellsToObstruct);
-            if (numCellsToObstruct > 0 && _allowedObstacleTypes.Count > 0)
-            {
-                for (int i = 0; i < numCellsToObstruct; i++)
-                {
-                    if (cellsIToPick.Count > 0)
-                    {
-                        int rand = UnityEngine.Random.Range(0, cellsIToPick.Count);
-                        {
-                            // find cellToBlock in the play area and apply 
-                            CellInPlay cellToObstruct = cellsIToPick[rand];
-
-                            // select an Allowed Block and apply it to the randomly slected cell in play
-                            Obstacle obstacle = GetAllowedObstacle();
-
-                            PlayAreaColumn col = GetPlayAreaColumn(cellToObstruct.column);
-                            PlayAreaCell cell = GetPlayAreaCell(col, cellToObstruct.row);
-
-                            if (cell.ItemHandler.GetItem() != null)
-                            {
-                                cell.ItemHandler.RemoveItem();
-                            }
-
-                            //cell.SetObstacle(obstacle);
-                            cell.ObstacleHandler.SetObstacle(obstacle);
-
-                            cellsIToPick.RemoveAt(rand);
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("OUT of cells to pick to obstruct!");
-                    }
-                }
-            }
+            _playAreaPopulator.PlaceObstacles(numCellsToObstruct, _obstaclePool);
             
-            //"block out" a percentage of cells in itemsInPlay
             int numCellsToBlock = Mathf.RoundToInt(_numCells * _percentCellsToBlock);
-            if (numCellsToBlock > 0 && _allowedBlockTypes.Count > 0)
-            {
-                for (int i = 0; i < numCellsToBlock; i++)
-                {
-                    if (cellsIToPick.Count > 0)
-                    {
-                        int rand = UnityEngine.Random.Range(0, cellsIToPick.Count);
-                        {
-                            // find cellToBlock in the play area and apply the block
-                            CellInPlay cellToBlock = cellsIToPick[rand];
-
-                            // select an Allowed Block and apply it to the randomly slected cell in play
-                            Block block = GetAllowedBlock();
-
-                            PlayAreaColumn col = GetPlayAreaColumn(cellToBlock.column);
-                            PlayAreaCell cell = GetPlayAreaCell(col, cellToBlock.row);
-
-                            cell.BlockHandler.SetBlock(block);
-
-                            cellsIToPick.RemoveAt(rand);
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("OUT of cells to pick to block!");
-                    }
-                }
-            }
+            _playAreaPopulator.PlaceBlocks(numCellsToBlock, _blockPool);
 
             _isPopulated = true;
         }
 
-        internal Obstacle GetAllowedObstacle()
-        {
-            if (_allowedObstacleTypes.Count == 0)
-            {
-                return null;
-            }
-            if (_allowedObstacleTypes.Count == 1)
-            {
-                return _obstaclePool.GetNextAvailable(_allowedObstacleTypes[0]);
-            }
-            else
-            {
-                int rand = UnityEngine.Random.Range(0, _allowedObstacleTypes.Count);
-                return _obstaclePool.GetNextAvailable(_allowedObstacleTypes[rand]);
-            }
-        }
-
-        internal Block GetAllowedBlock()
-        {
-            if (_allowedBlockTypes.Count == 0)
-            {
-                return null;
-            }
-            if (_allowedBlockTypes.Count == 1)
-            {
-                return _blockPool.GetNextAvailable(_allowedBlockTypes[0]);
-            }
-            else 
-            {
-                int rand = UnityEngine.Random.Range(0, _allowedBlockTypes.Count);
-                return _blockPool.GetNextAvailable(_allowedBlockTypes[rand]);
-            }
-        }
-
-        internal Item GetFromDrawnItems()
-        {
-            if (_drawnItems.Count > 0)
-            {
-                int index = UnityEngine.Random.Range(0, _drawnItems.Count);
-                Item item = _drawnItems[index];
-                _drawnItems.RemoveAt(index);
-
-                return item;
-            }
-
-            Debug.LogError("No more DRAWN items!");
-            return null;
-        }
-
-        internal void OnDrawnItemReturn(Item item)
-        {
-            _drawnItems.Add(item);
-        }
-
-        private void DrawItems()
-        {
-            // draw enough items to fully populate play area twice.
-            // try to draw an equal amount of each type.
-            // if not an even divide, draw a random type for each remainder.
-
-            int drawCount = _numCells * 2;
-
-            int divTypesPerDrawCount = drawCount / _allowedItemTypes.Count;
-            for (int i = 0; i < _allowedItemTypes.Count; i++)
-            {
-                for (int j = 0; j < divTypesPerDrawCount; j++)
-                {
-                    ItemTypes itemType = _allowedItemTypes[i];
-
-                    Item item = _itemPool.GetNextAvailable(itemType);
-
-                    _drawnItems.Add(item);
-                }
-            }
-
-            int modTypesPerDrawCount = drawCount % _allowedItemTypes.Count;
-            for (int i = 0; i < modTypesPerDrawCount; i++)
-            {
-                Item item = _itemPool.GetNextAvailable();
-                _drawnItems.Add(item);
-            }
-
-        }
-
-        private void ShuffleItems()
-        {
-            for (int i = _drawnItems.Count - 1; i > 0; i--)
-            {
-                int k = UnityEngine.Random.Range(0, i + 1);
-                Item itemToSwap = _drawnItems[k];
-                _drawnItems[k] = _drawnItems[i];
-                _drawnItems[i] = itemToSwap;
-            }
-        }
-
-        private bool IsPopulationPlacementValid(ItemTypes itemTypeToPlace, int columnNum, int cellNum)
-        {
-            // check to see if a match 3 will occur as a result of this POPULATION placement.
-            // if it will, the placement is invalid.
-
-            // items are populated from columns left to right and cells UP to DOWN
-            // .. but could be DOWN to UP, depending on cell sort
-
-            bool isMatchOneAbove = IsItemAtPositionMatch1(itemTypeToPlace, columnNum, cellNum - 1);
-            if (isMatchOneAbove)
-            {
-                bool isMatchTwoAbove = IsItemAtPositionMatch1(itemTypeToPlace, columnNum, cellNum - 2);
-                if (isMatchTwoAbove)
-                {
-                    return false;
-                }
-            }
-
-            bool isMatchOneBelow = IsItemAtPositionMatch1(itemTypeToPlace, columnNum, cellNum + 1);
-            if (isMatchOneBelow)
-            {
-                bool isMatchTwoBelow = IsItemAtPositionMatch1(itemTypeToPlace, columnNum, cellNum + 2);
-                if (isMatchTwoBelow)
-                {
-                    return false;
-                }
-            }
-
-            bool isMatchOneLeft = IsItemAtPositionMatch1(itemTypeToPlace, columnNum - 1, cellNum);
-            if (isMatchOneLeft)
-            {
-                bool isMatchTwoLeft = IsItemAtPositionMatch1(itemTypeToPlace, columnNum - 2, cellNum);
-                if (isMatchTwoLeft)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool IsItemAtPositionMatch1(ItemTypes itemTypeToMatch, int columnNum, int cellNum)
-        {
-            bool isMatch = false;
-
-            // get item at position columnNum, cellnum 
-            Item itemAtPosition = GetPlayAreaItemAt(columnNum, cellNum);
-            if (itemAtPosition != null)
-            {
-                isMatch = itemTypeToMatch == itemAtPosition.ItemType ? true : false;
-            }
-
-            return isMatch;
-        }
-
-        private Item GetPlayAreaItemAt(int columnNum, int cellNum)
-        {
-            PlayAreaColumn column = GetPlayAreaColumn(columnNum);
-
-            if (column != null)
-            {
-                PlayAreaCell cell = GetPlayAreaCell(column, cellNum);
-                if (cell != null)
-                {
-                    //return cell.Item;
-                    return cell.ItemHandler.GetItem();
-                }
-            }
-
-            return null;
-        }
 
         internal PlayAreaCell GetPlayAreaCell(PlayAreaColumn column, int cellNum)
         {
@@ -494,6 +158,7 @@ namespace MatchThreePrototype.PlayAreaElements
 
             return null;
         }
+
 
         internal bool IsPositionInSwapRange(Vector2 touchPoint, PlayAreaCell dragOriginCell, out PlayAreaCell cellTouched)
         {
@@ -626,34 +291,28 @@ namespace MatchThreePrototype.PlayAreaElements
         private void Awake()
         {
             _graphicRaycaster = GetComponentInParent<GraphicRaycaster>();
-
+            
             _itemPool = FindAnyObjectByType<ItemPool>();
             _blockPool = FindObjectOfType<BlockPool>();
             _obstaclePool = FindObjectOfType<ObstaclePool>();
-
             _settingsController = FindAnyObjectByType<SettingsController>();
 
             _numCells = GetCellCount();
 
-            _originCellIndicatorImage = _originCellIndicator.GetComponentInChildren<Image>();
-            _destinationCellIndicatorImage = _destinationCellIndicator.GetComponentInChildren<Image>();
 
-            ItemHandler.OnDrawnItemReturn += OnDrawnItemReturn;
+            _drawnItemsHandler = GetComponent<IDrawnItemsHandler>();
+            _playAreaPopulator = GetComponent<IPlayAreaPopulator>();
+            _cellIndicators = GetComponent<ICellIndicators>();
 
         }
         private void OnDestroy()
         {
-            ItemHandler.OnDrawnItemReturn -= OnDrawnItemReturn;
         }
-
 
         // Start is called before the first frame update
         void Start()
         {
-
-
         }
-
 
         // Update is called once per frame
         void Update()
@@ -681,10 +340,7 @@ namespace MatchThreePrototype.PlayAreaElements
                 return;
             }
 
-
-
             // PROCESS SWAPS-------------------------------------------------------
-            // process any active SwapItemCells
             bool anyCellsSwapping = false;
 
             if (_cellMoveToOrigin.ItemHandler.GetItem() != null)
@@ -748,8 +404,7 @@ namespace MatchThreePrototype.PlayAreaElements
                 return;
             }
 
-            // UPDATE STATE MACHINES-----------------------------------------------
-            // CHECK FOR REMOVALS
+            // UPDATE STATE MACHINES----------CHECK FOR IN PROCESS REMOVALS--------
             bool anyColumnRemoving = false;
             for (int i = 0; i < _columns.Count; i++)
             {
@@ -783,7 +438,6 @@ namespace MatchThreePrototype.PlayAreaElements
                 return;
             }
 
-
             // if we make it here, the play area is NOT in flux
             _isInFlux = false;
         }
@@ -794,11 +448,5 @@ namespace MatchThreePrototype.PlayAreaElements
             public int column;
             public int row;
         }
-
     }
-
-
 }
-
-
-
