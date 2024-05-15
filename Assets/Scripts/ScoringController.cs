@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using MatchThreePrototype.PlayAreaCellContent;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
+using MatchThreePrototype.PlayerTouchInput;
 
 namespace MatchThreePrototype
 {
@@ -40,7 +40,7 @@ namespace MatchThreePrototype
         [SerializeField] private TMPro.TextMeshProUGUI _numBlackBallsText;
         private int _numBlackBalls;
 
-        private Player _player;
+        private PlayerTouchInput.Player _player;
 
         private List<MatchRecord> _matchRecords = new List<MatchRecord>();
         private List<MoveRecord> _moveRecords = new List<MoveRecord>();

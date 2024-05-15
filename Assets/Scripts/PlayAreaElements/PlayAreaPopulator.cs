@@ -1,7 +1,6 @@
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
-using MatchThreePrototype.PlayAreaElements;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,10 +14,18 @@ namespace MatchThreePrototype.PlayAreaElements
 
         List<ItemPlacedInfo> _cellsContainingOnlyItems = new List<ItemPlacedInfo>();
 
+        IDrawnItemsHandler _drawnItemsHandler;
         ObstaclePool _obstaclePool;
         BlockPool _blockPool;
 
-        public void PlaceItems(List<PlayAreaColumn> columns, IDrawnItemsHandler drawnItemsHandler)
+        public void Setup(IDrawnItemsHandler drawnItemsHandler, ObstaclePool obstaclePool, BlockPool blockPool)
+        {
+            _drawnItemsHandler = drawnItemsHandler;
+            _obstaclePool = obstaclePool;
+            _blockPool = blockPool;
+        }
+
+        public void PlaceItems(List<PlayAreaColumn> columns)
         {
             // populate grid, ensuring that no match 3 is initially populated
             for (int i = 0; i < columns.Count; i++)
@@ -32,12 +39,10 @@ namespace MatchThreePrototype.PlayAreaElements
                     int o = 0;
                     while (validItem == null)
                     {
-                        List<Item> drawnItems = drawnItemsHandler.GetDrawnItems();
+                        List<Item> drawnItems = _drawnItemsHandler.GetDrawnItems();
 
-                        int drawnItemsIndex = drawnItemsHandler.GetDrawnItemsIndex(excludedItemTypes);
+                        int drawnItemsIndex = _drawnItemsHandler.GetDrawnItemsIndex(excludedItemTypes);
                         ItemTypes candidateItemType = drawnItems[drawnItemsIndex].ItemType;
-
-
 
                         if (IsPopulationPlacementValid(candidateItemType, columns[i].Number, columns[i].Cells[j].Number))
                         {
@@ -79,9 +84,8 @@ namespace MatchThreePrototype.PlayAreaElements
             }
         }
 
-        public void PlaceObstacles(int numCellsToObstruct, ObstaclePool obstaclePool)
+        public void PlaceObstacles(int numCellsToObstruct)
         {
-            _obstaclePool = obstaclePool;
 
             if (numCellsToObstruct > 0 && _allowedObstacleTypes.Count > 0)
             {
@@ -115,10 +119,8 @@ namespace MatchThreePrototype.PlayAreaElements
                 }
             }
         }
-        public void PlaceBlocks(int numCellsToBlock, BlockPool blockPool)
+        public void PlaceBlocks(int numCellsToBlock)
         {
-            _blockPool = blockPool;
-
             if (numCellsToBlock > 0 && _allowedBlockTypes.Count > 0)
             {
                 for (int i = 0; i < numCellsToBlock; i++)

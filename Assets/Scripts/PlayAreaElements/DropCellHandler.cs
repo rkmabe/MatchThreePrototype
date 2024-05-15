@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,25 +8,18 @@ namespace MatchThreePrototype.PlayAreaElements
     {
         [SerializeField] private List<DropCell> _dropCells;
 
+        private PlayArea _playArea;
+        private PlayAreaColumn _column;
+        private IRowInfoProvider _rowInfoProvider;
 
-        private DropCell GetEmptyDropCell()
+        public void Setup(PlayArea playArea, PlayAreaColumn column, IRowInfoProvider rowInfoProvider)
         {
-            // Drop Items are like an elevator to the column and the item is the passenger.
-            // There should be one drop cell per PlayAreaCell setup in the edtior.  So we should never run out.
-
-            for (int i = 0; i < _dropCells.Count; i++)
-            {
-                if (_dropCells[i].ItemHandler.GetItem() == null && _dropCells[i].ObstacleHandler.GetObstacle() == null)
-                {
-                    return _dropCells[i];
-                }
-            }
-
-            Debug.LogError("No DROP CELL availalbe!");
-            return null;
+            _playArea = playArea;
+            _column = column;
+            _rowInfoProvider = rowInfoProvider;
         }
 
-        public DropCell FindDropCell(PlayArea playArea, PlayAreaColumn column, PlayAreaCell cell, IRowInfoProvider rowInfoProvider)
+        public DropCell FindDropCell(PlayAreaCell cell)
         {
             DropCell dropCell = null;
 
@@ -40,7 +32,7 @@ namespace MatchThreePrototype.PlayAreaElements
                 if (cellNumUp > 0)
                 {
                     // this is NOT the top cell
-                    PlayAreaCell cellUp = playArea.GetPlayAreaCell(column, cellNumUp);
+                    PlayAreaCell cellUp = _playArea.GetPlayAreaCell(_column, cellNumUp);
 
                     // once a blocked cell is encoutned, stop trying to find drop items
                     if (cellUp.BlockHandler.GetBlock() != null || (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.ObstacleHandler.CanDrop()))
@@ -54,7 +46,7 @@ namespace MatchThreePrototype.PlayAreaElements
                     if (cellUp.ItemHandler.GetItem() != null && !cellUp.ItemHandler.GetIsProcessingRemoval())
                     {
                         dropCell = GetEmptyDropCell();
-                        dropCell.SetDropFromPosition(rowInfoProvider.GetRowInfo(cellUp.Number));
+                        dropCell.SetDropFromPosition(_rowInfoProvider.GetRowInfo(cellUp.Number));
                         dropCell.ItemHandler.SetItem(cellUp.ItemHandler.GetItem());
 
                         cellUp.ItemHandler.RemoveItem();
@@ -62,7 +54,7 @@ namespace MatchThreePrototype.PlayAreaElements
                     else if (cellUp.ObstacleHandler.GetObstacle() != null && cellUp.ObstacleHandler.CanDrop())
                     {
                         dropCell = GetEmptyDropCell();
-                        dropCell.SetDropFromPosition(rowInfoProvider.GetRowInfo(cellUp.Number));
+                        dropCell.SetDropFromPosition(_rowInfoProvider.GetRowInfo(cellUp.Number));
                         dropCell.ObstacleHandler.SetObstacle(cellUp.ObstacleHandler.GetObstacle());
 
                         cellUp.ObstacleHandler.RemoveObstacle();
@@ -98,8 +90,8 @@ namespace MatchThreePrototype.PlayAreaElements
                     }
                     else
                     {
-                        float newMinY = topmostMinY + playArea.CellAnchorsHeight; // .11111f; 
-                        float newMaxY = topmostMaxY + playArea.CellAnchorsHeight; // .11111f;
+                        float newMinY = topmostMinY + _playArea.CellAnchorsHeight; // .11111f; 
+                        float newMaxY = topmostMaxY + _playArea.CellAnchorsHeight; // .11111f;
                         dropCell.SetDropFromPosition(newMinY, newMaxY);
                     }
 
@@ -111,7 +103,7 @@ namespace MatchThreePrototype.PlayAreaElements
                     //dropCell.SetItem(bluepin);
 
                     //dropCell.ItemHandler.SetItem(playArea.GetFromDrawnItems());
-                    dropCell.ItemHandler.SetItem(playArea.DrawnItemsHandler.GetRandomItem());
+                    dropCell.ItemHandler.SetItem(_playArea.DrawnItemsHandler.GetRandomItem());
                 }
             }
 
@@ -119,6 +111,22 @@ namespace MatchThreePrototype.PlayAreaElements
 
         }
 
+        private DropCell GetEmptyDropCell()
+        {
+            // Drop Items are like an elevator to the column and the item is the passenger.
+            // There should be one drop cell per PlayAreaCell setup in the edtior.  So we should never run out.
+
+            for (int i = 0; i < _dropCells.Count; i++)
+            {
+                if (_dropCells[i].ItemHandler.GetItem() == null && _dropCells[i].ObstacleHandler.GetObstacle() == null)
+                {
+                    return _dropCells[i];
+                }
+            }
+
+            Debug.LogError("No DROP CELL availalbe!");
+            return null;
+        }
 
 
         // Start is called before the first frame update

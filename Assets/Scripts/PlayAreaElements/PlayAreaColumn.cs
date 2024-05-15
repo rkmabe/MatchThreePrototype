@@ -52,7 +52,8 @@ namespace MatchThreePrototype.PlayAreaElements
 
                 if (_cells[i].ItemHandler.GetItem() == null  && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].IsWaitingForDropCell == false && _cells[i].ItemHandler.GetIsProcessingRemoval() == false)
                 {
-                    DropCell dropCell = _dropCellHandler.FindDropCell(_playArea, this, _cells[i], _rowInfoProvider);
+                    //DropCell dropCell = _dropCellHandler.FindDropCell(_playArea, this, _cells[i], _rowInfoProvider);
+                    DropCell dropCell = _dropCellHandler.FindDropCell(_cells[i]);
                     if (dropCell != null)
                     {
                         _cells[i].IsWaitingForDropCell = true;
@@ -117,6 +118,7 @@ namespace MatchThreePrototype.PlayAreaElements
             _dropCellHandler = GetComponent<IDropCellHandler>();
 
 
+
         }
 
         // Start is called before the first frame update
@@ -124,6 +126,8 @@ namespace MatchThreePrototype.PlayAreaElements
         {
             // this MUST be done in start.  PlayAreaCell caches RectTransform in Awake.
             _rowInfoProvider.SetupRowInfo(_cells);
+
+            _dropCellHandler.Setup(_playArea, this, _rowInfoProvider);
         }
 
         // Update is called once per frame

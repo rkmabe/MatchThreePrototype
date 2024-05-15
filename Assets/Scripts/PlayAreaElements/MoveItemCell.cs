@@ -1,9 +1,8 @@
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
+using MatchThreePrototype.PlayAreaElements;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
-using MatchThreePrototype.PlayAreaElements;
+using MatchThreePrototype.Controllers;
 
 namespace MatchThreePrototype
 {
@@ -17,7 +16,6 @@ namespace MatchThreePrototype
         public int TargetColumn { get => _targetColNum; }
         private int _targetColNum;
 
-        //public PlayAreaCell TargetCell { get => _targetCell; }
         private PlayAreaCell _targetCell;
 
         private List<PlayAreaCell> _cellMatchesCaught = new List<PlayAreaCell>();
@@ -28,20 +26,13 @@ namespace MatchThreePrototype
         public IItemHandler ItemHandler { get => _itemHandler; }
         private IItemHandler _itemHandler;
 
-
         private TMPro.TextMeshProUGUI _debugText;
 
         private RectTransform _rectTransform;
 
-        //private RectTransform _targetRectTransform;
-
-        //private static float SWAP_SPEED = 3000;//300;
-
-
         internal static float DEFAULT_MOVE_SPEED = 3000;
         private float _moveSpeed = DEFAULT_MOVE_SPEED;
 
-        //internal void SetCellsToRemove(List<PlayAreaCell> _cells)
         internal void SetCellMatchesCaught(List<PlayAreaCell> cellMatchesCaught)
         {
             _cellMatchesCaught = cellMatchesCaught;
@@ -56,8 +47,6 @@ namespace MatchThreePrototype
             _targetCell = cell;
             _targetColNum = cell.ColumnNumber;
 
-            //_targetRectTransform = cell.RectTransform;
-
             _isMoving = true;
         }
 
@@ -70,10 +59,9 @@ namespace MatchThreePrototype
         internal void ProcessOnArrival()
         {
 
-            //if (_item == null)
             if (_itemHandler.GetItem() == null)
             {
-                Debug.LogError("ITEM should NOT be null on arrival!");
+                //Debug.LogError("ITEM should NOT be null on arrival!");
                 //Debug.Break();
             }
             else
@@ -81,7 +69,7 @@ namespace MatchThreePrototype
                 _targetCell.ItemHandler.SetItem(_itemHandler.GetItem());
             }
 
-            for (int i = _cellMatchesCaught.Count-1; i >= 0; i--)
+            for (int i = _cellMatchesCaught.Count - 1; i >= 0; i--)
             {
                 _cellMatchesCaught[i].QueueItemForRemoval();
                 _cellMatchesCaught.RemoveAt(i);
@@ -93,9 +81,8 @@ namespace MatchThreePrototype
                 _obstaclesCaught.RemoveAt(j);
             }
 
-            //RemoveItem();
             _itemHandler.RemoveItem();
-                RemoveTarget();
+            RemoveTarget();
         }
 
 

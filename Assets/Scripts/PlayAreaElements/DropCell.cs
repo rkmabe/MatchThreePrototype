@@ -1,5 +1,6 @@
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
+using MatchThreePrototype.Controllers;
 using UnityEngine;
 
 namespace MatchThreePrototype.PlayAreaElements
@@ -111,14 +112,7 @@ namespace MatchThreePrototype.PlayAreaElements
             _editorRectMinY = _rectTransform.anchorMin.y;
             _editorRectMaxY = _rectTransform.anchorMax.y;
 
-            //_image = GetComponentInChildren<Image>();
             _debugText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
-
-            //_parentColumn = GetComponentInParent<PlayAreaColumn>();
-            //if (_parentColumn == null)
-            //{
-            //    Debug.LogError("DROP cell with NO column!");
-            //}
 
             SettingsController.OnNewDropSpeedDelegate += OnNewDropSpeed;
 

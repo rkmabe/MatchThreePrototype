@@ -1,4 +1,3 @@
-using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,11 +51,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
             Debug.LogError("NO more BLOCKS in pool");
             return null;
         }
-
-        //internal void Return(Block block)
-        //{
-        //    PutInPool(block);
-        //}
 
         private void InitializePool()
         {
@@ -120,18 +114,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
             public Block Prefab;
         }
 
-        //[System.Serializable]
-        //public struct BlockLevel
-        //{
-        //    public int Num;
-        //    public Sprite Sprite;
-        //}
     }
-    //public enum BlockTypes
-    //{
-    //    None = 0,
-    //    PlateLight = 1,
-    //    PlateMedium = 2,
-    //    PlateHeavy = 3,
-    //}
+
 }

@@ -11,13 +11,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
         public BlockTypes BlockType { get => _type; }
         [SerializeField] private BlockTypes _type;
 
-        //public Sprite Sprite { get => _sprite; }
-        //[SerializeField] private Sprite _sprite;
-
-        // BLOCK LEVELS is the nubmer of matches required to clear the block
-        //public int BlockLevels { get => _blockLevels; }
-        //[SerializeField] private int _blockLevels;
-
 
         // we start with current block level.
         // if there are any _lowerBlockLevels, we move to the next lowest when the current is eliminated

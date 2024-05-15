@@ -1,13 +1,13 @@
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace MatchThreePrototype.PlayAreaElements
 {
     public interface IDrawnItemsHandler
     {
-        public void DrawItems(int numCells, List<ItemTypes> allowedItemTypes, ItemPool itemPool);
+        public void Setup(List<ItemTypes> allowedItemTypes, ItemPool itemPool);
+
+        public void DrawItems(int numCells);
 
         public void ShuffleItems();
 

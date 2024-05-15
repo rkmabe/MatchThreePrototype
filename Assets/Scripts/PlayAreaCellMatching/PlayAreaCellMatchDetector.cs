@@ -1,10 +1,7 @@
-using MatchThreePrototype.PlayAreaCellContent;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using MatchThreePrototype.PlayAreaElements;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace MatchThreePrototype.PlayAreaCellMatching
 {
@@ -18,6 +15,15 @@ namespace MatchThreePrototype.PlayAreaCellMatching
         private PlayAreaCell _cell;
         private IItemHandler _itemHandler;
         private IStagedItemHandler  _stagedItemHandler;
+
+        public void Setup(PlayArea playArea, PlayAreaColumn column, PlayAreaCell cell, IItemHandler itemHandler, IStagedItemHandler stagedItemHandler)
+        {
+            _playArea = playArea;
+            _column = column;
+            _cell = cell;
+            _itemHandler = itemHandler;
+            _stagedItemHandler = stagedItemHandler;
+        }
 
         public delegate void OnMatchCaught(MatchRecord match);
         public static OnMatchCaught OnMatchCaughtDelegate;
@@ -395,14 +401,7 @@ namespace MatchThreePrototype.PlayAreaCellMatching
             OnCellCheckMatchCompleteDelegate(isMatch3);
         }
 
-        public void Setup(PlayArea playArea, PlayAreaColumn column, PlayAreaCell cell, IItemHandler itemHandler, IStagedItemHandler stagedItemHandler)
-        {
-            _playArea = playArea;
-            _column = column;
-            _cell = cell;
-            _itemHandler = itemHandler;
-            _stagedItemHandler = stagedItemHandler;
-        }
+
 
         private void OnDestroy()
         {

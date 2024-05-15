@@ -10,7 +10,16 @@ namespace MatchThreePrototype.PlayAreaElements
     {
         private List<Item> _drawnItems = new List<Item>();
 
-        public void DrawItems(int numCells, List<ItemTypes> allowedItemTypes, ItemPool itemPool)
+        private List<ItemTypes> _allowedItemTypes;
+        private ItemPool _itemPool;
+
+        public void Setup(List<ItemTypes> allowedItemTypes, ItemPool itemPool)
+        {
+            _allowedItemTypes = allowedItemTypes;
+            _itemPool = itemPool;
+        }
+
+        public void DrawItems(int numCells)
         {
             // draw enough items to fully populate play area twice.
             // try to draw an equal amount of each type.
@@ -18,23 +27,23 @@ namespace MatchThreePrototype.PlayAreaElements
 
             int drawCount = numCells * 2;
 
-            int divTypesPerDrawCount = drawCount / allowedItemTypes.Count;
-            for (int i = 0; i < allowedItemTypes.Count; i++)
+            int divTypesPerDrawCount = drawCount / _allowedItemTypes.Count;
+            for (int i = 0; i < _allowedItemTypes.Count; i++)
             {
                 for (int j = 0; j < divTypesPerDrawCount; j++)
                 {
-                    ItemTypes itemType = allowedItemTypes[i];
+                    ItemTypes itemType = _allowedItemTypes[i];
 
-                    Item item = itemPool.GetNextAvailable(itemType);
+                    Item item = _itemPool.GetNextAvailable(itemType);
 
                     _drawnItems.Add(item);
                 }
             }
 
-            int modTypesPerDrawCount = drawCount % allowedItemTypes.Count;
+            int modTypesPerDrawCount = drawCount % _allowedItemTypes.Count;
             for (int i = 0; i < modTypesPerDrawCount; i++)
             {
-                Item item = itemPool.GetNextAvailable();
+                Item item = _itemPool.GetNextAvailable();
                 _drawnItems.Add(item);
             }
 

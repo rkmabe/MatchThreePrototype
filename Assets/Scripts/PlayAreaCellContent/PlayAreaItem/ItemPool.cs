@@ -132,15 +132,4 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
             public List<AudioClip> MatchAudioClip;
         }
     }
-    //public enum ItemTypes
-    //{
-    //    None = 0,
-    //    WhitePin = 1,
-    //    GreenPin = 2,
-    //    BluePin = 3,
-    //    RedPin = 4,
-    //    PurplePin = 5,
-    //    BlackBall = 6,
-    //    PinkPin = 7,
-    //}
 }

@@ -1,6 +1,7 @@
 using MatchThreePrototype.PlayAreaCellContent;
 using UnityEngine;
 using UnityEngine.UI;
+using MatchThreePrototype.Controllers;
 
 namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 {
@@ -17,13 +18,11 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 
         public void Enter()
         {
-            //throw new System.NotImplementedException();
             _secsRemovalProcessing = 0;
         }
 
         public void Exit()
         {
-            //throw new System.NotImplementedException();
             _itemHandler.FinishRemoval();
         }
 
@@ -37,7 +36,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
                 alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsRemovalProcessing / _removalDuration);
 
 
-                //_itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, alphaLerp);
                 Image image = _itemHandler.GetImage();
                 image.color = new Color(image.color.r, image.color.g, image.color.b, alphaLerp);
 
@@ -45,17 +43,11 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
             }
             else
             {
-                //_itemHandler.GetImage().color = new Color(_itemHandler.GetImage().color.r, _itemHandler.GetImage().color.g, _itemHandler.GetImage().color.b, 0);
-                //_itemHandler.GetImage().sprite = null;
 
                 Image image = _itemHandler.GetImage();
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
 
                 _itemHandler.StateMachine.TransitionTo(_itemHandler.StateMachine.IdleState);
-
-                //_isProcessingItemRemoval = false;
-                //_itemHandler.StopRemoval();
-
 
             }
 

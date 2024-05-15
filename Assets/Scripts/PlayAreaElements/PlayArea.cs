@@ -1,11 +1,10 @@
+using MatchThreePrototype.Controllers;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
+using MatchThreePrototype.PlayAreaCellMatching;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
-using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
-using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
-using MatchThreePrototype.PlayAreaCellMatching;
 
 namespace MatchThreePrototype.PlayAreaElements
 {
@@ -20,13 +19,6 @@ namespace MatchThreePrototype.PlayAreaElements
         public float CellAnchorsHeight { get => _cellAnchorsHeight; }
         [Header("Must match in Editor!")]
         [SerializeField] private float _cellAnchorsHeight = 0.11111f;
-
-        public bool IsSwapRangeLimited { get => _isSwapRangeLimited; }
-        //[SerializeField] private bool _isSwapRangeLimited = false;
-        private bool _isSwapRangeLimited = false;
-
-        public int CellSwapRange { get => _cellSwapRange; }
-        [SerializeField] private int _cellSwapRange = 0;
 
         //[Header("Must be UNIQUE!")]
         //[SerializeField] private List<ItemTypes> _allowedItemTypes;
@@ -50,8 +42,6 @@ namespace MatchThreePrototype.PlayAreaElements
         private float _percentCellsToBlock;
         private float _percentCellsToObstruct;
 
-        private GraphicRaycaster _graphicRaycaster;
-
         private ItemPool _itemPool;
         private BlockPool _blockPool;
         private ObstaclePool _obstaclePool;
@@ -61,14 +51,10 @@ namespace MatchThreePrototype.PlayAreaElements
         public IDrawnItemsHandler DrawnItemsHandler { get => _drawnItemsHandler; }
         private IDrawnItemsHandler _drawnItemsHandler;
 
-        //public IPlayAreaPopulator PlayAreaPopulator { get => _playAreaPopulator; }
         private IPlayAreaPopulator _playAreaPopulator;
 
         public ICellIndicators CellIndicators { get => _cellIndicators; }
         private ICellIndicators _cellIndicators;
-
-        //public IPlayAreaObjectProvider PlayAreaObjectProvider { get => _playAreaObjectProvider; }
-        //private IPlayAreaObjectProvider _playAreaObjectProvider;
 
         private bool _isPopulated = false;
 
@@ -77,8 +63,6 @@ namespace MatchThreePrototype.PlayAreaElements
 
         public bool IsInFlux { get => _isInFlux; }
         private bool _isInFlux = false;
-
-        private const string PLAY_AREA_RECT = "PLAY_AREA_RECT";
 
         public delegate void OnCellCheckMatchRequest();
         public static OnCellCheckMatchRequest OnCellCheckMatchRequestDelegate;
@@ -117,17 +101,22 @@ namespace MatchThreePrototype.PlayAreaElements
 
         private void Populate()
         {
-            _drawnItemsHandler.DrawItems(_numCells, _allowedItemTypes, _itemPool);
+
+            _drawnItemsHandler.Setup(_allowedItemTypes, _itemPool);
+
+            _drawnItemsHandler.DrawItems(_numCells);
 
             _drawnItemsHandler.ShuffleItems();
 
-            _playAreaPopulator.PlaceItems(_columns, _drawnItemsHandler);
+            _playAreaPopulator.Setup(_drawnItemsHandler, _obstaclePool, _blockPool);
+
+            _playAreaPopulator.PlaceItems(_columns);
 
             int numCellsToObstruct = Mathf.RoundToInt(_numCells * _percentCellsToObstruct);
-            _playAreaPopulator.PlaceObstacles(numCellsToObstruct, _obstaclePool);
+            _playAreaPopulator.PlaceObstacles(numCellsToObstruct);
             
             int numCellsToBlock = Mathf.RoundToInt(_numCells * _percentCellsToBlock);
-            _playAreaPopulator.PlaceBlocks(numCellsToBlock, _blockPool);
+            _playAreaPopulator.PlaceBlocks(numCellsToBlock);
 
             _isPopulated = true;
         }
@@ -158,93 +147,6 @@ namespace MatchThreePrototype.PlayAreaElements
 
             return null;
         }
-
-
-        internal bool IsPositionInSwapRange(Vector2 touchPoint, PlayAreaCell dragOriginCell, out PlayAreaCell cellTouched)
-        {
-            // return true if this drag position contains a play area cell within swap range
-
-            cellTouched = null;
-            bool withinPlayArea = false;
-
-            _dummyEventData.position = touchPoint;
-            List<RaycastResult> results = new List<RaycastResult>();
-            _graphicRaycaster.Raycast(_dummyEventData, results);
-            if (results.Count > 0)
-            {
-                for (int i = 0; i < results.Count; i++)
-                {
-                    // one row of resuts should contain a play area cell.
-
-                    PlayAreaCell cellAtPosition = results[i].gameObject.GetComponentInParent<PlayAreaCell>();
-                    if (cellAtPosition != null)
-                    {
-                        cellTouched = cellAtPosition;
-                    }
-
-                    if (results[i].gameObject.tag == PLAY_AREA_RECT)
-                    {
-                        withinPlayArea = true;
-                    }
-                }
-            }
-
-            if (_isSwapRangeLimited)
-            {
-                if (cellTouched != null)
-                {
-                    // if the swap range is limited, the cell touched must be within swap range
-                    int rowMin = dragOriginCell.Number - _cellSwapRange;
-                    int rowMax = dragOriginCell.Number + _cellSwapRange;
-
-                    int colMin = dragOriginCell.ColumnNumber - _cellSwapRange;
-                    int colMax = dragOriginCell.ColumnNumber + _cellSwapRange;
-
-                    if ((cellTouched.Number >= rowMin && cellTouched.Number <= rowMax) &&
-                        (cellTouched.ColumnNumber >= colMin && cellTouched.ColumnNumber <= colMax))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    // no touched cell - we cannot be in range
-                    return false;
-                }
-
-            }
-            else
-            {
-                // if swap range is not limited this is a valid drag posiition if it is within the play area rect
-                return withinPlayArea;
-            }
-
-        }
-
-        internal PlayAreaCell GetCellAtPosition(Vector2 tapPoint)
-        {
-            _dummyEventData.position = tapPoint;
-
-            List<RaycastResult> results = new List<RaycastResult>();
-
-            _graphicRaycaster.Raycast(_dummyEventData, results);
-
-            for (int i = 0; i < results.Count; i++)
-            {
-                PlayAreaCell cellAtPosition = results[i].gameObject.GetComponentInParent<PlayAreaCell>();
-                if (cellAtPosition != null)
-                {
-                    return cellAtPosition;
-                }
-            }
-
-            return null;
-        }
-        private PointerEventData _dummyEventData = new PointerEventData(null);
 
         private int GetCellCount()
         {
@@ -290,8 +192,6 @@ namespace MatchThreePrototype.PlayAreaElements
 
         private void Awake()
         {
-            _graphicRaycaster = GetComponentInParent<GraphicRaycaster>();
-            
             _itemPool = FindAnyObjectByType<ItemPool>();
             _blockPool = FindObjectOfType<BlockPool>();
             _obstaclePool = FindObjectOfType<ObstaclePool>();
@@ -302,6 +202,7 @@ namespace MatchThreePrototype.PlayAreaElements
 
             _drawnItemsHandler = GetComponent<IDrawnItemsHandler>();
             _playAreaPopulator = GetComponent<IPlayAreaPopulator>();
+
             _cellIndicators = GetComponent<ICellIndicators>();
 
         }
@@ -325,6 +226,8 @@ namespace MatchThreePrototype.PlayAreaElements
             }
 
             // do not process anything until populated
+            // PROTOTYPE of play area population process.
+            // In Production, this will be triggered when a level is loaded.
             if (!_isPopulated)
             {
                 if (_itemPool.IsInitialized && _blockPool.IsInitialized && _obstaclePool.IsInitialized)
@@ -333,7 +236,7 @@ namespace MatchThreePrototype.PlayAreaElements
                     _percentCellsToObstruct = _settingsController.GetPctObstacle();
 
                     _allowedItemTypes = PrototypeBuildItemTypes();
-                    _isSwapRangeLimited = _settingsController.GetLimitSwapRange();
+                    //_isSwapRangeLimited = _settingsController.GetLimitSwapRange();
 
                     Populate();
                 }

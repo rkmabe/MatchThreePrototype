@@ -1,6 +1,6 @@
-using MatchThreePrototype.PlayAreaCellContent;
 using UnityEngine;
 using UnityEngine.UI;
+using MatchThreePrototype.Controllers;
 
 namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
 {
