@@ -1,7 +1,7 @@
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle;
-using MatchThreePrototype.PlayAreaCellMatching;
+using MatchThreePrototype.MatchDetection;
 using System;
 using UnityEngine;
 

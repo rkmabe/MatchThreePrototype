@@ -5,7 +5,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 {
     public class Item : MonoBehaviour
     {
-        // Start is called before the first frame update
 
         public ItemTypes ItemType { get => _type; }
         [SerializeField] private ItemTypes _type;
@@ -39,5 +38,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
         BlackBall = 6,
         PinkPin = 7,
     }
+
 
 }

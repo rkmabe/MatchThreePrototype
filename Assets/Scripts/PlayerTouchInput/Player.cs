@@ -125,6 +125,11 @@ namespace MatchThreePrototype.PlayerTouchInput
 
                         if (matchesCaughtAtDestination.Count > 0)
                         {
+
+                            //_moveNum++;
+                            //_moveNumText.text = "Move: " + _moveNum.ToString();
+
+
                             // start at origin and move to destination ("drag from" position to "drag to" position)
                             _playArea.CellMoveToDestination.transform.position = _dragOriginCell.transform.position;
                             _playArea.CellMoveToDestination.SetTargetCell(dragDestinationCell);
@@ -151,6 +156,7 @@ namespace MatchThreePrototype.PlayerTouchInput
 
                                 dragDestinationCell.ItemHandler.RemoveItem();
                             }
+
                         }
                         else
                         {
