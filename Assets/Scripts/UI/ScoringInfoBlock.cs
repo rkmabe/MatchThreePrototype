@@ -40,9 +40,6 @@ namespace MatchThreePrototype.UI
 
         private PlayerTouchInput.Player _player;
 
-        //private List<MatchRecord> _matchRecords = new List<MatchRecord>();
-        //private List<MoveRecord> _moveRecords = new List<MoveRecord>();
-
         int _lastMoveNum = 0;
 
         internal void UpdateNumWhitePins(int numPins)
@@ -81,12 +78,8 @@ namespace MatchThreePrototype.UI
             _numBlackBallsText.text = "Bb: " + _numBlackBalls.ToString();
         }
 
-
-
-
         internal void UpdateMoveText(MoveRecord rec)
         {
-
             if (rec.PlayerMoveNum != _lastMoveNum)
             {
                 _infoText.text = string.Empty;
@@ -106,92 +99,10 @@ namespace MatchThreePrototype.UI
                 _infoText.text += Environment.NewLine + text;
             }
 
-
             SetTextNavInteractable();
 
-
             _lastMoveNum = rec.PlayerMoveNum;
-
         }
-
-
-        //private void OnMatchCaught(MatchRecord match)
-        //{
-
-        //    //Debug.Log("_moveAttemptID=" + _moveAttemptID);
-
-
-        //    if (_lastMoveNum != _player.MoveNum)
-        //    {
-        //        // new move - clear LastMove detail text
-        //        _infoText.text = string.Empty;
-
-        //        //_infoText.textInfo.Clear();
-
-        //        _currInfoTextPageNum = 1;
-        //    }
-
-
-        //    //match.ItemType.UpdateScore();
-
-        //    //if (match.MatchBase != null)
-        //    //{
-        //    //    match.MatchBase.GamePlayEvent();
-        //    //}
-
-        //    //if (match.ItemType == ItemTypes.WhitePin)
-        //    //{
-        //    //    _numWhitePins += match.NumMatches;
-        //    //    _numWhitePinsText.text = "W: " + _numWhitePins.ToString();
-        //    //}
-        //    //else if (match.ItemType == ItemTypes.GreenPin)
-        //    //{
-        //    //    _numGreenPins += match.NumMatches;
-        //    //    _numGreenPinsText.text = "G: " + _numGreenPins.ToString();
-        //    //}
-        //    //else if (match.ItemType == ItemTypes.BluePin)
-        //    //{
-        //    //    _numBluePins += match.NumMatches;
-        //    //    _numBluePinsText.text = "Bl: " + _numBluePins.ToString();
-        //    //}
-        //    //else if (match.ItemType == ItemTypes.RedPin)
-        //    //{
-        //    //    _numRedPins += match.NumMatches;
-        //    //    _numRedPinsText.text = "R: " + _numRedPins.ToString();
-        //    //}
-        //    //else if (match.ItemType == ItemTypes.PurplePin)
-        //    //{
-        //    //    _numPurplePins += match.NumMatches;
-        //    //    _numPurplePinsText.text = "Pu: " + _numPurplePins.ToString();
-        //    //}
-        //    //else if (match.ItemType == ItemTypes.PinkPin)
-        //    //{
-        //    //    _numPinkPins += match.NumMatches;
-        //    //    _numPinkPinsText.text = "Pi: " + _numPinkPins.ToString();
-        //    //}
-        //    //else if (match.ItemType == ItemTypes.BlackBall)
-        //    //{
-        //    //    _numBlackBalls += match.NumMatches;
-        //    //    _numBlackBallsText.text = "Bb: " + _numBlackBalls.ToString();
-        //    //}
-
-        //    match.PlayerMoveNum = _player.MoveNum;
-        //    _matchRecords.Add(match);
-
-
-
-        //    if (_infoText.text == string.Empty)
-        //    {
-        //        _infoText.text = match.ToString();
-        //    }
-        //    else
-        //    {
-        //        _infoText.text += Environment.NewLine + match.ToString();
-        //    }
-        //    SetTextNavInteractable();
-
-        //    _lastMoveNum = _player.MoveNum;
-        //}
 
         private void SetTextNavInteractable()
         {
@@ -245,18 +156,12 @@ namespace MatchThreePrototype.UI
 
         private void OnDestroy()
         {
-            //PlayAreaCellMatchDetector.OnMatchCaughtDelegate -= OnMatchCaught;
         }
 
         private void Awake()
         {
-            //PlayAreaCellMatchDetector.OnMatchCaughtDelegate += OnMatchCaught;
-
-            _player = FindAnyObjectByType<Player>();
-
             _infoUpButton.onClick.AddListener(OnInfoUpClick);
             _infoDownButton.onClick.AddListener(OnInfoDownClick);
-
         }
 
         // Start is called before the first frame update
@@ -271,47 +176,5 @@ namespace MatchThreePrototype.UI
 
         }
     }
-
-
-
-
-
-    //public struct MoveRecord
-    //{
-    //    public int MoveNumber;
-    //    public int MoveAttemptID;
-
-    //    public int TotalItemsRemoved;
-    //    public int MatchesRemoved;
-
-    //}
-
-    //public class MatchRecord
-    //{
-    //    public int PlayerMoveNum;
-
-    //    public ItemTypes ItemType;
-    //    public int NumMatches;
-    //    public bool IsBonusCatch;
-
-    //    public MatchBase MatchBase;
-
-    //    public override string ToString()
-    //    {
-    //        return "Move=" + PlayerMoveNum +  ", Type=" + ItemType + ", Num=" + NumMatches + ", Bonus=" + IsBonusCatch;
-    //    }
-    //}
-
-    //struct MatchRecord2
-    //{
-    //    public int PlayerMoveNum;
-    //    public MatchBase MatchBase;
-    //}
-
-    //struct MoveRecord
-    //{
-    //    public int PlayerMoveNum;
-    //    public List<MatchBase> Matches;
-    //}
 
 }

@@ -1,8 +1,9 @@
+using MatchThreePrototype.MatchReaction;
+using MatchThreePrototype.MatchReaction.MatchTypes;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using MatchThreePrototype.PlayAreaElements;
 using System.Collections.Generic;
 using UnityEngine;
-using MatchThreePrototype.MatchReaction;
 
 namespace MatchThreePrototype.MatchDetection
 {
@@ -27,9 +28,6 @@ namespace MatchThreePrototype.MatchDetection
             _itemHandler = itemHandler;
             _stagedItemHandler = stagedItemHandler;
         }
-
-        //public delegate void OnMatchCaught(MatchRecord match);
-        //public static OnMatchCaught OnMatchCaughtDelegate;
 
         public delegate void OnMatchCaught(Match match);
         public static OnMatchCaught OnMatchCaughtDelegate;
@@ -282,16 +280,6 @@ namespace MatchThreePrototype.MatchDetection
                 // vertical match 3 detected!
                 matchesCaught.AddRange(vertCellMatches);
 
-                //MatchRecord match = new MatchRecord();
-                //match.ItemType = m1.ItemType;
-                //match.NumMatches = vertCellMatches.Count;
-                //match.IsBonusCatch = isDrop;
-
-                //match.MatchBase = _matchFactory.GetNewMatchBase(m1.ItemType);
-                //match.MatchBase.ItemType = m1.ItemType;
-                //match.MatchBase.NumMatches = vertCellMatches.Count;
-                //match.MatchBase.IsBonusCatch = isDrop;
-
                 Match match = _matchFactory.GetNewMatchBase(m1.ItemType);
                 match.ItemType = m1.ItemType;
                 match.NumMatches = vertCellMatches.Count;
@@ -299,10 +287,9 @@ namespace MatchThreePrototype.MatchDetection
 
                 OnMatchCaughtDelegate(match);
 
+                obstaclesCaught.AddRange(vertObstaclesAdjacent);
 
                 //Debug.Log("VERT MATCH - " + match.ItemType);
-
-                obstaclesCaught.AddRange(vertObstaclesAdjacent);
 
             }
 
@@ -393,21 +380,10 @@ namespace MatchThreePrototype.MatchDetection
                     }
                 }
 
-                //MatchRecord match = new MatchRecord();
-                //match.ItemType = m1.ItemType;
-                //match.NumMatches = horzCellMatches.Count;
-                //match.IsBonusCatch = isDrop;
-
-                //match.MatchBase = _matchFactory.GetNewMatchBase(m1.ItemType);
-                //match.MatchBase.ItemType = m1.ItemType;
-                //match.MatchBase.NumMatches = horzCellMatches.Count;
-                //match.MatchBase.IsBonusCatch = isDrop;
-
                 Match match = _matchFactory.GetNewMatchBase(m1.ItemType);
                 match.ItemType = m1.ItemType;
                 match.NumMatches = horzCellMatches.Count;
                 match.IsBonusCatch = isDrop;
-
 
                 OnMatchCaughtDelegate(match);
 

@@ -1,3 +1,4 @@
+using MatchThreePrototype.MatchReaction.MatchTypes;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using MatchThreePrototype.UI;
 using UnityEngine;
@@ -6,27 +7,24 @@ namespace MatchThreePrototype.MatchReaction
 {
     public class MatchTypeFactory : MonoBehaviour
     {
-
-        ScoreInfoBlock scoreInfo;
-
         public Match GetNewMatchBase(ItemTypes type)
         {
             switch (type)
             {
-                case ItemTypes.WhitePin: return new MatchWhitePin(scoreInfo);
-                case ItemTypes.RedPin: return new MatchRedPin(scoreInfo);
-                case ItemTypes.GreenPin : return new MatchGreenPin(scoreInfo);
-                case ItemTypes.BluePin: return new MatchBluePin(scoreInfo);
-                case ItemTypes.PurplePin: return new MatchPurplePin(scoreInfo);
-                case ItemTypes.PinkPin: return new MatchPinkPin(scoreInfo);
-                case ItemTypes.BlackBall: return new MatchBlackBall(scoreInfo);
+                case ItemTypes.WhitePin: return new MatchWhitePin();
+                case ItemTypes.RedPin: return new MatchRedPin();
+                case ItemTypes.GreenPin : return new MatchGreenPin();
+                case ItemTypes.BluePin: return new MatchBluePin();
+                case ItemTypes.PurplePin: return new MatchPurplePin();
+                case ItemTypes.PinkPin: return new MatchPinkPin();
+                case ItemTypes.BlackBall: return new MatchBlackBall();
                 default: return null;
             }
         }
 
         private void Awake()
         {
-            scoreInfo = FindFirstObjectByType<ScoreInfoBlock>();
+
         }
 
 
