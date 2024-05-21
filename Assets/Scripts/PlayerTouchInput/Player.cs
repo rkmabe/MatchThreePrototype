@@ -17,26 +17,150 @@ namespace MatchThreePrototype.PlayerTouchInput
         private int _moveNum = 0;
         [SerializeField] private TMPro.TextMeshProUGUI _moveNumText;
 
-        // objects for touch interaction with TouchDetector
-        private Touch _dragTouch = default(Touch);
-        private Vector2 _inputDownPosition = Statics.Vector2Zero();
-        private Vector2 _inputUpPosition = Statics.Vector2Zero();
-
         ITouchInfoProvider _touchInfoProvider;
 
         public void OnTouchInputDown(Vector3 position)
         {
-            _inputDownPosition = position;
+            if (!_playArea.IsInFlux)
+            {
+                ProcessFingerDown(position);
+            }
         }
+
         public void OnTouchInputDrag(Touch dragTouch)
         {
-            _dragTouch = dragTouch;
+            if (!_playArea.IsInFlux)
+            {
+                ProcessFingerDrag(dragTouch);
+            }
         }
         public void OnTouchInputUp(Vector3 position)
         {
-            _inputUpPosition = position;
+            if (!_playArea.IsInFlux)
+            {
+                ProcessFingerUp(position);
+            }
         }
 
+        private void ProcessFingerUp(Vector3 position)
+        {
+            if (_dragOriginCell != null)
+            {
+
+                PlayAreaCell dragDestinationCell;
+                bool isDestinationWithinRange = _touchInfoProvider.IsPositionInSwapRange(position, _dragOriginCell, out dragDestinationCell);
+
+                if (dragDestinationCell != null && dragDestinationCell.BlockHandler.GetBlock() == null && dragDestinationCell.ObstacleHandler.GetObstacle() == null && isDestinationWithinRange)
+                {
+                    //Debug.Log("Finger UP on " + cell.ColumnNumber + "," + cell.Number);
+
+                    _moveNum++;
+                    _moveNumText.text = "Move: " + _moveNum.ToString();
+
+                    // there is ALWAYS an item in the ORIGIN cell, and there is ALWAYS a match at the destination cell.
+                    // there is not necessarily an item in the DESTINATION.  There is NOT necessarily a MATCH at the ORGIN.                       
+
+                    dragDestinationCell.StagedItemHandler.SetStagedItem(_dragOriginCell.ItemHandler.GetItem());
+                    _dragOriginCell.StagedItemHandler.SetStagedItem(dragDestinationCell.ItemHandler.GetItem());
+
+                    (List<PlayAreaCell> matchesCaughtAtDestination, List<PlayAreaCell> obstaclesCaughtAtDestination) = dragDestinationCell.MatchDetector.CatchMatchThree(false);
+
+                    if (matchesCaughtAtDestination.Count > 0)
+                    {
+
+                        // TODO: this will change once out of prototype
+                        //_moveNum++;
+                        //_moveNumText.text = "Move: " + _moveNum.ToString();
+
+                        // start at origin and move to destination ("drag from" position to "drag to" position)
+                        _playArea.CellMoveToDestination.transform.position = _dragOriginCell.transform.position;
+                        _playArea.CellMoveToDestination.SetTargetCell(dragDestinationCell);
+                        _playArea.CellMoveToDestination.ItemHandler.SetItem(_dragOriginCell.ItemHandler.GetItem());       // _dragOriginCell.Item should NEVER be null
+                        _playArea.CellMoveToDestination.SetCellMatchesCaught(matchesCaughtAtDestination);
+                        _playArea.CellMoveToDestination.SetObstaclesCaught(obstaclesCaughtAtDestination);
+
+                        _dragOriginCell.ItemHandler.RemoveItem();
+
+                        // start at destination and move to origin ("drag to" position to "drag from" position)
+                        if (dragDestinationCell.ItemHandler.GetItem() == null || dragDestinationCell.ItemHandler.GetIsProcessingRemoval())
+                        {
+                            _playArea.CellMoveToOrigin.RemoveTarget();   // used in PlayArea update - target MUST be cleared here!
+                        }
+                        else
+                        {
+                            (List<PlayAreaCell> matchesCaughtAtOrigin, List<PlayAreaCell> obstaclesCaughtAtOrigin) = _dragOriginCell.MatchDetector.CatchMatchThree(false);
+
+                            _playArea.CellMoveToOrigin.transform.position = dragDestinationCell.transform.position;
+                            _playArea.CellMoveToOrigin.SetTargetCell(_dragOriginCell);
+                            _playArea.CellMoveToOrigin.ItemHandler.SetItem(dragDestinationCell.ItemHandler.GetItem());
+                            _playArea.CellMoveToOrigin.SetCellMatchesCaught(matchesCaughtAtOrigin);
+                            _playArea.CellMoveToOrigin.SetObstaclesCaught(obstaclesCaughtAtOrigin);
+
+                            dragDestinationCell.ItemHandler.RemoveItem();
+                        }
+
+                    }
+                    else
+                    {
+                        _moveNum--;
+                        _moveNumText.text = "Moves: " + _moveNum.ToString();
+                    }
+
+                    dragDestinationCell.StagedItemHandler.RemoveStagedItem();
+                    _dragOriginCell.StagedItemHandler.RemoveStagedItem();
+
+                }
+
+            }
+
+            _playArea.CellIndicators.ClearDragIndicators();
+
+            _playArea.HeldItemCell.ItemHandler.RemoveItem();
+
+            _dragOriginCell = null;
+        }
+
+        private void ProcessFingerDown(Vector3 position)
+        {
+            PlayAreaCell cell = _touchInfoProvider.GetCellAtPosition(position);
+
+            if (cell != null)
+            {
+                //Debug.Log("Finger down on " + cell.ColumnNumber + "," + cell.Number);
+
+                if (cell.ItemHandler.GetItem() != null && cell.ItemHandler.GetIsProcessingRemoval() == false && (cell.BlockHandler.GetBlock() == null && cell.ObstacleHandler.GetObstacle() == null))
+                {
+                    _dragOriginCell = cell;
+
+                    _playArea.CellIndicators.IndicateDragFromCell(cell);
+
+                    _playArea.HeldItemCell.transform.position = cell.transform.position;
+
+                    _playArea.HeldItemCell.ItemHandler.SetItem(cell.ItemHandler.GetItem());
+                }
+            }
+        }
+
+        private void ProcessFingerDrag(Touch dragTouch)
+        {
+
+            if (_dragOriginCell != null && _playArea.HeldItemCell.ItemHandler.GetItem() != null)
+            {
+                PlayAreaCell dragOverCell;
+                if (_touchInfoProvider.IsPositionInSwapRange(dragTouch.position, _dragOriginCell, out dragOverCell))
+                {
+                    _playArea.HeldItemCell.transform.position = dragTouch.position;
+                    if (dragOverCell != null)
+                    {
+                        _playArea.CellIndicators.IndicateDragOverCell(dragOverCell);
+                    }
+                }
+                //else
+                //{
+                //    Debug.Log("not in range");
+                //}
+            }
+        }
 
 
         private void OnDestroy()
@@ -48,6 +172,7 @@ namespace MatchThreePrototype.PlayerTouchInput
 
         private void Awake()
         {
+
             TouchDetector.OnTouchInputDownDelegate += OnTouchInputDown;
             TouchDetector.OnTouchInputUpDelegate += OnTouchInputUp;
             TouchDetector.OnTouchInputDragDelegate += OnTouchInputDrag;
@@ -62,145 +187,5 @@ namespace MatchThreePrototype.PlayerTouchInput
 
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-            // process no input if play area in flux
-            if (_playArea.IsInFlux)
-            {
-                _inputDownPosition = Statics.Vector2Zero();
-                _inputUpPosition = Statics.Vector2Zero();
-                _dragTouch = default(Touch);
-
-                return;
-            }
-
-            if (_inputDownPosition != Statics.Vector2Zero())
-            {
-                // look for tile touched
-                PlayAreaCell cell = _touchInfoProvider.GetCellAtPosition(_inputDownPosition);
-                
-
-                if (cell != null)
-                {
-                    //Debug.Log("Finger down on " + cell.ColumnNumber + "," + cell.Number);
-
-                    if (cell.ItemHandler.GetItem() != null && cell.ItemHandler.GetIsProcessingRemoval()==false && (cell.BlockHandler.GetBlock() == null && cell.ObstacleHandler.GetObstacle() == null))
-                    {
-                        _dragOriginCell = cell;
-
-                        _playArea.CellIndicators.IndicateDragFromCell(cell);
-
-                        _playArea.HeldItemCell.transform.position = cell.transform.position;
-
-                        _playArea.HeldItemCell.ItemHandler.SetItem(cell.ItemHandler.GetItem());
-                    }
-                }
-
-                _inputDownPosition = Statics.Vector2Zero();
-            }
-            else if (_inputUpPosition != Statics.Vector2Zero())
-            {
-                if (_dragOriginCell != null)
-                {
-
-                    PlayAreaCell dragDestinationCell;
-                    bool isDestinationWithinRange = _touchInfoProvider.IsPositionInSwapRange(_inputUpPosition, _dragOriginCell, out dragDestinationCell);
-
-                    if (dragDestinationCell != null && dragDestinationCell.BlockHandler.GetBlock() == null && dragDestinationCell.ObstacleHandler.GetObstacle() == null && isDestinationWithinRange)
-                    {
-                        //Debug.Log("Finger UP on " + cell.ColumnNumber + "," + cell.Number);
-
-                        _moveNum++;
-                        _moveNumText.text = "Move: " + _moveNum.ToString();
-
-                        // there is ALWAYS an item in the ORIGIN cell, and there is ALWAYS a match at the destination cell.
-                        // there is not necessarily an item in the DESTINATION.  There is NOT necessarily a MATCH at the ORGIN.                       
-
-                        dragDestinationCell.StagedItemHandler.SetStagedItem(_dragOriginCell.ItemHandler.GetItem());
-                        _dragOriginCell.StagedItemHandler.SetStagedItem(dragDestinationCell.ItemHandler.GetItem());
-
-                        (List<PlayAreaCell> matchesCaughtAtDestination, List<PlayAreaCell> obstaclesCaughtAtDestination) = dragDestinationCell.MatchDetector.CatchMatchThree(false);
-
-                        if (matchesCaughtAtDestination.Count > 0)
-                        {
-
-                            //_moveNum++;
-                            //_moveNumText.text = "Move: " + _moveNum.ToString();
-
-
-                            // start at origin and move to destination ("drag from" position to "drag to" position)
-                            _playArea.CellMoveToDestination.transform.position = _dragOriginCell.transform.position;
-                            _playArea.CellMoveToDestination.SetTargetCell(dragDestinationCell);
-                            _playArea.CellMoveToDestination.ItemHandler.SetItem(_dragOriginCell.ItemHandler.GetItem());       // _dragOriginCell.Item should NEVER be null
-                            _playArea.CellMoveToDestination.SetCellMatchesCaught(matchesCaughtAtDestination);
-                            _playArea.CellMoveToDestination.SetObstaclesCaught(obstaclesCaughtAtDestination);
-
-                            _dragOriginCell.ItemHandler.RemoveItem();
-
-                            // start at destination and move to origin ("drag to" position to "drag from" position)
-                            if (dragDestinationCell.ItemHandler.GetItem() == null || dragDestinationCell.ItemHandler.GetIsProcessingRemoval())
-                            {
-                                _playArea.CellMoveToOrigin.RemoveTarget();   // used in PlayArea update - target MUST be cleared here!
-                            }
-                            else
-                            {
-                                (List<PlayAreaCell> matchesCaughtAtOrigin, List<PlayAreaCell> obstaclesCaughtAtOrigin) = _dragOriginCell.MatchDetector.CatchMatchThree(false);
-
-                                _playArea.CellMoveToOrigin.transform.position = dragDestinationCell.transform.position;
-                                _playArea.CellMoveToOrigin.SetTargetCell(_dragOriginCell);
-                                _playArea.CellMoveToOrigin.ItemHandler.SetItem(dragDestinationCell.ItemHandler.GetItem());
-                                _playArea.CellMoveToOrigin.SetCellMatchesCaught(matchesCaughtAtOrigin);
-                                _playArea.CellMoveToOrigin.SetObstaclesCaught(obstaclesCaughtAtOrigin);
-
-                                dragDestinationCell.ItemHandler.RemoveItem();
-                            }
-
-                        }
-                        else
-                        {
-                            _moveNum--;
-                            _moveNumText.text = "Moves: " + _moveNum.ToString();
-                        }
-
-                        dragDestinationCell.StagedItemHandler.RemoveStagedItem();
-                        _dragOriginCell.StagedItemHandler.RemoveStagedItem();
-
-                    }
-
-                }
-
-                //_playArea.ClearDragIndicators();
-                _playArea.CellIndicators.ClearDragIndicators();
-
-                _playArea.HeldItemCell.ItemHandler.RemoveItem();
-
-                _dragOriginCell = null;
-
-                _inputUpPosition = Statics.Vector2Zero();
-            }
-            else if (!_dragTouch.Equals(default(Touch)))
-            {
-                //Debug.Log("Drag to " + _dragTouch.position);
-
-                if (_dragOriginCell != null && _playArea.HeldItemCell.ItemHandler.GetItem() != null)
-                {
-                    PlayAreaCell dragOverCell;
-                    //if (_playArea.IsPositionInSwapRange(_dragTouch.position, _dragOriginCell, out dragOverCell))
-                    if (_touchInfoProvider.IsPositionInSwapRange(_dragTouch.position, _dragOriginCell, out dragOverCell))
-                    {
-                        _playArea.HeldItemCell.transform.position = _dragTouch.position;
-                        if (dragOverCell != null)
-                        {
-                            //_playArea.IndicateDragOverCell(dragOverCell);
-                            _playArea.CellIndicators.IndicateDragOverCell(dragOverCell);
-                        }
-                    }
-                }
-
-                _dragTouch = default(Touch);
-            }
-        }
     }
 }

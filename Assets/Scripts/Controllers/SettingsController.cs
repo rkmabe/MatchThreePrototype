@@ -1,4 +1,5 @@
 using MatchThreePrototype.PlayAreaElements;
+using MatchThreePrototype.PlayerTouchInput;
 using UnityEngine;
 
 namespace MatchThreePrototype.Controllers
@@ -22,6 +23,11 @@ namespace MatchThreePrototype.Controllers
 
         public delegate void OnNewRemoveDuration(float speed);
         public static OnNewRemoveDuration OnNewRemoveDurationDelegate;
+
+        public delegate void OnChangeLimitSwapRange(bool isLimited);
+        public static OnChangeLimitSwapRange OnChangeLimitSwapRangeDelegate;
+
+        
 
 
         private const int TOGGLE_OFF = 0;
@@ -222,6 +228,11 @@ namespace MatchThreePrototype.Controllers
             {
                 PlayerPrefs.SetInt(LIMIT_SWAP_RANGE, TOGGLE_OFF);
             }
+            SignalChangeLimitSwapRange(isToggled);
+        }
+        private void SignalChangeLimitSwapRange(bool isLimited)
+        {
+            OnChangeLimitSwapRangeDelegate?.Invoke(isLimited);
         }
 
         // DEBUG TEXTS
@@ -274,7 +285,32 @@ namespace MatchThreePrototype.Controllers
             PlayerPrefs.SetInt(NUM_ITEM_TYPES, numItemTypes);
         }
 
+        private void PublishChangesToDefaults()
+        {
+            float moveSpeed = GetMoveSpeed();
+            if (moveSpeed != MoveItemCell.DEFAULT_MOVE_SPEED)
+            {
+                SignalNewMoveSpeed(moveSpeed);
+            }
 
+            float dropSpeed = GetDropSpeed();
+            if (dropSpeed != DropCell.DEFAULT_DROP_SPEED)
+            {
+                SignalNewDropSpeed(dropSpeed);
+            }
+
+            float removalDuration = GetRemoveDuration();
+            if (removalDuration != PlayAreaCell.DEFAULT_REMOVAL_DURATION)
+            {
+                SignalNewRemoveDuration(removalDuration);
+            }
+
+            bool isSwapRangeLimited = GetLimitSwapRange();
+            if (isSwapRangeLimited != TouchInfoProvider.DEFAULT_SWAP_RANGE_LIMITED)
+            {
+                SignalChangeLimitSwapRange(isSwapRangeLimited);
+            }
+        }
 
 
         private void Awake()
@@ -300,32 +336,12 @@ namespace MatchThreePrototype.Controllers
                 EnableDebugTexts(true);
             }
 
-            float moveSpeed = GetMoveSpeed();
-            if (moveSpeed != MoveItemCell.DEFAULT_MOVE_SPEED)
-            {
-                SignalNewMoveSpeed(moveSpeed);
-            }
-
-            float dropSpeed = GetDropSpeed();
-            if (dropSpeed != DropCell.DEFAULT_DROP_SPEED)
-            {
-                SignalNewDropSpeed(dropSpeed);
-            }
-
-            float removalDuration = GetRemoveDuration();
-            if (removalDuration != PlayAreaCell.DEFAULT_REMOVAL_DURATION)
-            {
-                SignalNewRemoveDuration(removalDuration);
-            }
-
-            //GetNumBlocks();
-            //GetNumObstacles();
         }
 
         // Start is called before the first frame update
         void Start()
         {
-
+            PublishChangesToDefaults();
         }
 
         // Update is called once per frame

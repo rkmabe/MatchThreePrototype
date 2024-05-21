@@ -97,12 +97,11 @@ namespace MatchThreePrototype.PlayAreaElements
 
 
                     //// test "4 blue pin horz" case
-                    //ItemPool itemPool = FindAnyObjectByType<ItemPool>();
-                    //Item bluepin = itemPool.GetNextAvailable(ItemTypes.BluePin);
-                    ////Debug.Log("FORCE 4 BLUE PINS");
-                    //dropCell.SetItem(bluepin);
+                    //MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.ItemPool itemPool = FindAnyObjectByType<MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.ItemPool>();
+                    //MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.Item bluepin = itemPool.GetNextAvailable(MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.ItemTypes.BluePin);
+                    //Debug.Log("FORCE 4 BLUE PINS");
+                    //dropCell.ItemHandler.SetItem(bluepin);
 
-                    //dropCell.ItemHandler.SetItem(playArea.GetFromDrawnItems());
                     dropCell.ItemHandler.SetItem(_playArea.DrawnItemsHandler.GetRandomItem());
                 }
             }

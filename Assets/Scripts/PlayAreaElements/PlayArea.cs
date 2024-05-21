@@ -243,6 +243,8 @@ namespace MatchThreePrototype.PlayAreaElements
                 return;
             }
 
+            //return;
+
             // PROCESS SWAPS-------------------------------------------------------
             bool anyCellsSwapping = false;
 

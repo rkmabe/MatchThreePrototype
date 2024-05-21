@@ -68,7 +68,8 @@ namespace MatchThreePrototype.MatchDetection
             Item thisCellItem = (_stagedItemHandler.GetMatchWithStagedItem()) ? _stagedItemHandler.GetStagedItem() : _itemHandler.GetItem();
 
             // if there is NO item in the cell, there are NO matches.
-            if (thisCellItem != null && !_itemHandler.GetIsProcessingRemoval())
+            //if (thisCellItem != null && !_itemHandler.GetIsProcessingRemoval())
+                if (thisCellItem != null )
             {
 
                 m.ItemType = thisCellItem.ItemType;
@@ -78,7 +79,8 @@ namespace MatchThreePrototype.MatchDetection
                 if (cellUp != null)
                 {
                     Item itemUP = (cellUp.StagedItemHandler.GetMatchWithStagedItem()) ? cellUp.StagedItemHandler.GetStagedItem() : cellUp.ItemHandler.GetItem();
-                    if (itemUP != null && !cellUp.ItemHandler.GetIsProcessingRemoval())
+                    //if (itemUP != null && !cellUp.ItemHandler.GetIsProcessingRemoval())
+                    if (itemUP != null)
                     {
                         m.IsMatchUp = (itemUP.ItemType == m.ItemType) ? true : false;
                         if (m.IsMatchUp)
@@ -86,7 +88,8 @@ namespace MatchThreePrototype.MatchDetection
                             m.CellMatchUp = cellUp;
                         }
                     }
-                    else if (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.ObstacleHandler.GetIsProcessingRemoval())
+                    //else if (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.ObstacleHandler.GetIsProcessingRemoval())
+                    else if (cellUp.ObstacleHandler.GetObstacle() != null)
                     {
                         m.IsObstacleUp = true;
                         m.CellObstacleUp = cellUp;
@@ -98,7 +101,8 @@ namespace MatchThreePrototype.MatchDetection
                 if (cellDOWN != null)
                 {
                     Item itemDOWN = (cellDOWN.StagedItemHandler.GetMatchWithStagedItem()) ? cellDOWN.StagedItemHandler.GetStagedItem() : cellDOWN.ItemHandler.GetItem();
-                    if (itemDOWN != null && !cellDOWN.ItemHandler.GetIsProcessingRemoval())
+                    //if (itemDOWN != null && !cellDOWN.ItemHandler.GetIsProcessingRemoval())
+                    if (itemDOWN != null)
                     {
                         m.IsMatchDown = (itemDOWN.ItemType == m.ItemType) ? true : false;
                         if (m.IsMatchDown)
@@ -106,8 +110,9 @@ namespace MatchThreePrototype.MatchDetection
                             m.CellMatchDown = cellDOWN;
                         }
                     }
-                    else if (cellDOWN.ObstacleHandler.GetObstacle() != null && !cellDOWN.ObstacleHandler.GetIsProcessingRemoval())
-                    {
+                    //else if (cellDOWN.ObstacleHandler.GetObstacle() != null && !cellDOWN.ObstacleHandler.GetIsProcessingRemoval())
+                    else if (cellDOWN.ObstacleHandler.GetObstacle() != null)
+                    {   
                         m.IsObstacleDown = true;
                         m.CellObstacleDown = cellDOWN;
                     }
@@ -121,7 +126,8 @@ namespace MatchThreePrototype.MatchDetection
                     if (cellLEFT != null)
                     {
                         Item itemLEFT = (cellLEFT.StagedItemHandler.GetMatchWithStagedItem()) ? cellLEFT.StagedItemHandler.GetStagedItem() : cellLEFT.ItemHandler.GetItem();
-                        if (itemLEFT != null && !cellLEFT.ItemHandler.GetIsProcessingRemoval())
+                        //if (itemLEFT != null && !cellLEFT.ItemHandler.GetIsProcessingRemoval())
+                        if (itemLEFT != null)
                         {
                             m.IsMatchLeft = (itemLEFT.ItemType == m.ItemType) ? true : false;
                             if (m.IsMatchLeft)
@@ -129,7 +135,8 @@ namespace MatchThreePrototype.MatchDetection
                                 m.CellMatchLeft = cellLEFT;
                             }
                         }
-                        else if (cellLEFT.ObstacleHandler.GetObstacle() != null && !cellLEFT.ObstacleHandler.GetIsProcessingRemoval())
+                        //else if (cellLEFT.ObstacleHandler.GetObstacle() != null && !cellLEFT.ObstacleHandler.GetIsProcessingRemoval())
+                        else if (cellLEFT.ObstacleHandler.GetObstacle() != null)
                         {
                             m.IsObstacleLeft = true;
                             m.CellObstacleLeft = cellLEFT;
@@ -145,7 +152,8 @@ namespace MatchThreePrototype.MatchDetection
                     if (cellRIGHT != null)
                     {
                         Item itemRIGHT = (cellRIGHT.StagedItemHandler.GetMatchWithStagedItem()) ? cellRIGHT.StagedItemHandler.GetStagedItem() : cellRIGHT.ItemHandler.GetItem();
-                        if (itemRIGHT != null && !cellRIGHT.ItemHandler.GetIsProcessingRemoval())
+                        //if (itemRIGHT != null && !cellRIGHT.ItemHandler.GetIsProcessingRemoval())
+                        if (itemRIGHT != null)
                         {
                             m.IsMatchRight = (itemRIGHT.ItemType == m.ItemType) ? true : false;
                             if (m.IsMatchRight)
@@ -153,7 +161,8 @@ namespace MatchThreePrototype.MatchDetection
                                 m.CellMatchRight = cellRIGHT;
                             }
                         }
-                        else if (cellRIGHT.ObstacleHandler.GetObstacle() != null && !cellRIGHT.ObstacleHandler.GetIsProcessingRemoval())
+                        //else if (cellRIGHT.ObstacleHandler.GetObstacle() != null && !cellRIGHT.ObstacleHandler.GetIsProcessingRemoval())
+                        else if (cellRIGHT.ObstacleHandler.GetObstacle() != null)
                         {
                             m.IsObstacleRight = true;
                             m.CellObstacleRight = cellRIGHT;

@@ -77,6 +77,7 @@ namespace MatchThreePrototype.PlayAreaElements
         {
             _targetCell.IsWaitingForDropCell = false;
 
+
             if (_itemHandler.GetItem() != null)
             {
                 _targetCell.ItemHandler.SetItem(_itemHandler.GetItem());

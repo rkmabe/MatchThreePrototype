@@ -1,26 +1,27 @@
+using MatchThreePrototype.Controllers;
 using MatchThreePrototype.PlayAreaElements;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using MatchThreePrototype.Controllers;
 
 namespace MatchThreePrototype.PlayerTouchInput
 {
 
     public class TouchInfoProvider : MonoBehaviour, ITouchInfoProvider
     {
-
-
-
         private PointerEventData _dummyEventData = new PointerEventData(null);
 
         [SerializeField] private GraphicRaycaster _graphicRaycaster;
         [SerializeField] int _cellSwapRange = 1;
 
-        private SettingsController _settingsController;
 
 
+        public static bool DEFAULT_SWAP_RANGE_LIMITED = false;
+
+        private bool _isSwapRangeLimited = DEFAULT_SWAP_RANGE_LIMITED;
+
+        //private SettingsController _settingsController;
 
         public bool IsPositionInSwapRange(Vector2 touchPoint, PlayAreaCell dragOriginCell, out PlayAreaCell cellTouched)
         {
@@ -53,8 +54,9 @@ namespace MatchThreePrototype.PlayerTouchInput
                 }
             }
 
-            //if (_isSwapRangeLimited)
-            if (_settingsController.GetLimitSwapRange())
+
+            //if (_settingsController.GetLimitSwapRange())
+            if (_isSwapRangeLimited)
             {
                 if (cellTouched != null)
                 {
@@ -110,9 +112,22 @@ namespace MatchThreePrototype.PlayerTouchInput
             return null;
         }
 
+
+        public void OnChangeLimitSwapRange(bool isLImited)
+        {
+            _isSwapRangeLimited = isLImited;
+        }
+
+
+        private void OnDestroy()
+        {
+            SettingsController.OnChangeLimitSwapRangeDelegate -= OnChangeLimitSwapRange;
+        }
+
         private void Awake()
         {
-            _settingsController = FindAnyObjectByType<SettingsController>();
+
+            SettingsController.OnChangeLimitSwapRangeDelegate += OnChangeLimitSwapRange;
         }
 
         // Start is called before the first frame update
