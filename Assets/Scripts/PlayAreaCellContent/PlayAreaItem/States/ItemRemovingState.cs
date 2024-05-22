@@ -1,9 +1,8 @@
-using MatchThreePrototype.PlayAreaCellContent;
+using MatchThreePrototype.Controllers;
 using UnityEngine;
 using UnityEngine.UI;
-using MatchThreePrototype.Controllers;
 
-namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
+namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
 {
 
     public class ItemRemovingState : IContentState
@@ -32,9 +31,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
             float alphaLerp;
             if (_secsRemovalProcessing < _removalDuration)
             {
-
                 alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsRemovalProcessing / _removalDuration);
-
 
                 Image image = _itemHandler.GetImage();
                 image.color = new Color(image.color.r, image.color.g, image.color.b, alphaLerp);
@@ -43,14 +40,11 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
             }
             else
             {
-
                 Image image = _itemHandler.GetImage();
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
 
                 _itemHandler.StateMachine.TransitionTo(_itemHandler.StateMachine.IdleState);
-
             }
-
         }
 
         internal void OnNewRemoveDuration(float duration)

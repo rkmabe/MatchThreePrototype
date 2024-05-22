@@ -1,3 +1,4 @@
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,7 +42,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 
         public Image GetImage()
         {
-            return _itemImage;
+            return _itemImage;           
         }
 
         public void StartRemoval()

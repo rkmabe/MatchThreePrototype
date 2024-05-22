@@ -247,7 +247,6 @@ namespace MatchThreePrototype.PlayAreaElements
 
             // PROCESS SWAPS-------------------------------------------------------
             bool anyCellsSwapping = false;
-
             if (_cellMoveToOrigin.ItemHandler.GetItem() != null)
             {
                 anyCellsSwapping = true;

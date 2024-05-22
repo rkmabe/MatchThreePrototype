@@ -1,4 +1,6 @@
 using System;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
+using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States;
 
 namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 {
@@ -11,6 +13,9 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 
         public ItemIdleState IdleState;
         public ItemRemovingState RemovingState;
+
+        public ItemSizeFluctuateState SizeFluctuateState;
+        public ItemRotationFluctuateState RotationFluctuateState;
 
         public void Update()
         {
@@ -51,6 +56,8 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
         {
             IdleState = new ItemIdleState(itemHandler);
             RemovingState = new ItemRemovingState(itemHandler);
+            SizeFluctuateState = new ItemSizeFluctuateState(itemHandler);
+            RotationFluctuateState = new ItemRotationFluctuateState(itemHandler);
         }
     }
 }
