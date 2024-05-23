@@ -71,22 +71,12 @@ namespace MatchThreePrototype.UI
         internal void ResetTimer()
         {
             _currentTime = 0;
-            //_mainController.UI.UpdateWaveTimerText(INITIAL_VALUE);
             UpdateTimerWithCurrentTime();
         }
 
-
         private void OnPlay()
         {
-            // only start the timer if a wave is actually active (possible that game is paused when wave timer should not be running eg wave end or game over screen active)
-            //if (_mainController.WaveController.IsWaveActive)
-
-            // TODO: shoud the timer always start OnPlay?
-            if (true)
-            {
-                StartTimer();
-            }
-      
+            StartTimer();
         }
         private void OnPause(bool showScreen)
         {            

@@ -76,7 +76,6 @@ namespace MatchThreePrototype.PlayAreaElements
                         if (o > 5)
                         {
                             Debug.LogWarning("could not find valid item - SHOULD NOT HAPPEN!!");
-                            //validItem = _drawnItems[0];
                             validItem = drawnItems[0];
                         }
                     }
@@ -106,7 +105,6 @@ namespace MatchThreePrototype.PlayAreaElements
                                 cellToObstruct.cell.ItemHandler.RemoveItem();
                             }
 
-                            //cell.SetObstacle(obstacle);
                             cellToObstruct.cell.ObstacleHandler.SetObstacle(obstacle);
 
                             _cellsContainingOnlyItems.RemoveAt(rand);

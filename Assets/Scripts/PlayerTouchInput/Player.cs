@@ -155,10 +155,6 @@ namespace MatchThreePrototype.PlayerTouchInput
                         _playArea.CellIndicators.IndicateDragOverCell(dragOverCell);
                     }
                 }
-                //else
-                //{
-                //    Debug.Log("not in range");
-                //}
             }
         }
 

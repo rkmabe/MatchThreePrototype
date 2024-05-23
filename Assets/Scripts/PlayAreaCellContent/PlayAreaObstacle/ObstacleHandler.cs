@@ -31,8 +31,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
             _obstacle = obstacle;
             _obstacleImage.color = new Color(_obstacleImage.color.r, _obstacleImage.color.g, _obstacleImage.color.b, Statics.ALPHA_ON);
             _obstacleImage.sprite = obstacle.Sprite;
-
-            //_stateMachine.Initialize(_stateMachine.IdleState);
         }
 
         public Obstacle GetObstacle()

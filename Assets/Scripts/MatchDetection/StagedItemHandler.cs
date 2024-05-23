@@ -1,6 +1,4 @@
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MatchThreePrototype.MatchDetection

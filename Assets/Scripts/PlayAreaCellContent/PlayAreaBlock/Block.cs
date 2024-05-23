@@ -16,7 +16,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
         // if there are any _lowerBlockLevels, we move to the next lowest when the current is eliminated
         // if there are no lower block levels, the entire block is eliminated
         // when the last level is removed, the item underneath should be allowed to match
-        //public List<BlockLevel> LowerBlockLevels { get => _lowerBlockLevels; }
+
         [SerializeField] private List<BlockLevel> _lowerBlockLevels;
         [SerializeField] private BlockLevel _currBlockLevel;
 

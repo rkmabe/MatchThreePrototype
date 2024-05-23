@@ -23,10 +23,7 @@ namespace MatchThreePrototype.PlayAreaElements
         private List<PlayAreaCell> _cellsToCatchMatches = new List<PlayAreaCell>();
 
         internal void UpdateStateMachines(out bool anyCellsProcessingRemoval)
-        {
-
-            // OR
-            // for each statemachien in _cells[i].StateMachines - update     
+        { 
 
             anyCellsProcessingRemoval = false;
 
@@ -52,7 +49,6 @@ namespace MatchThreePrototype.PlayAreaElements
 
                 if (_cells[i].ItemHandler.GetItem() == null  && _cells[i].ObstacleHandler.GetObstacle() == null && _cells[i].IsWaitingForDropCell == false && _cells[i].ItemHandler.GetIsProcessingRemoval() == false)
                 {
-                    //DropCell dropCell = _dropCellHandler.FindDropCell(_playArea, this, _cells[i], _rowInfoProvider);
                     DropCell dropCell = _dropCellHandler.FindDropCell(_cells[i]);
                     if (dropCell != null)
                     {

@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 namespace MatchThreePrototype.MatchDetection
 {
-
-
     public class DebugBorderMatcher : MonoBehaviour
     {
 

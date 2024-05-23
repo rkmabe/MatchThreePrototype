@@ -1,6 +1,5 @@
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
 {

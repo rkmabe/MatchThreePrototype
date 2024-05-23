@@ -1,4 +1,3 @@
-using MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,8 +24,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
             _item = item;
             _itemImage.color = new Color(_itemImage.color.r, _itemImage.color.g, _itemImage.color.b, Statics.ALPHA_ON);
             _itemImage.sprite = item.Sprite;
-
-            //_stateMachine.Initialize(_stateMachine.IdleState);
         }
         public Item GetItem()
         {

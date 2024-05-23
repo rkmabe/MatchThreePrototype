@@ -12,15 +12,9 @@ namespace MatchThreePrototype.UI
         [SerializeField] private Button _button;
 
 
-
         private void OnButtonClick()
         {
             HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
-
-            //Debug.Log("SHOW HELP!");
-            //_helpController.ShowScreen();
-
-            //ResetScene()
 
             if (Time.timeScale == 0)
             {

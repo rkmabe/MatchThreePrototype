@@ -12,8 +12,8 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
         private static Vector3 ROTATION_DEF_VEC = new Vector3(0, 0, 0);
 
         private static float ROTATION_DEF = 1;
-        private static float ROTATION_MIN = -2.5f;
-        private static float ROTATION_MAX = 2.5f;
+        private static float ROTATION_MIN = -3;
+        private static float ROTATION_MAX = 3;
 
         private static float MAX_STATE_DURATION = .5f;
 
@@ -48,7 +48,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
 
         public void Enter()
         {
-            _itemImageTransform = _itemHandler.GetImage().transform;
 
             _itemImageTransform.rotation = Quaternion.Euler(ROTATION_DEF_VEC);
 
@@ -142,6 +141,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
         public ItemRotationFluctuateState(ItemHandler itemHandler)
         {
             _itemHandler = itemHandler;
+            _itemImageTransform = _itemHandler.GetImage().transform;
         }
 
     }

@@ -1,6 +1,5 @@
 using MatchThreePrototype.MatchReaction.MatchTypes;
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
-using MatchThreePrototype.UI;
 using UnityEngine;
 
 namespace MatchThreePrototype.MatchReaction

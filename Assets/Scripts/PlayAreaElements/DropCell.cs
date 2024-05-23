@@ -19,8 +19,8 @@ namespace MatchThreePrototype.PlayAreaElements
         public float RectMaxY { get => _rectTransform.anchorMax.y; }
         private RectTransform _rectTransform;
 
-        public float EditorRectMinY { get => _editorRectMinY; }// { get => _rectTransformEditor.anchorMin.y; }
-        public float EditorRectMaxY { get => _editorRectMaxY; } //{ get => _rectTransformEditor.anchorMax.y; }
+        public float EditorRectMinY { get => _editorRectMinY; }
+        public float EditorRectMaxY { get => _editorRectMaxY; }
 
         private float _editorRectMinY;
         private float _editorRectMaxY;
@@ -55,7 +55,6 @@ namespace MatchThreePrototype.PlayAreaElements
 
         public override string ToString()
         {
-            //return base.ToString() + "Item=" + _item + " Obsatcle=" + _obstacle;
             return base.ToString() + "Item=" + _itemHandler.GetItem() + " Obsatcle=" + _obstacleHandler.GetObstacle();
         }
 
@@ -99,7 +98,6 @@ namespace MatchThreePrototype.PlayAreaElements
         internal void OnNewDropSpeed(float speed)
         {
             _dropSpeed = speed;
-            //Debug.Log(speed);
         }
 
         private void OnDestroy()

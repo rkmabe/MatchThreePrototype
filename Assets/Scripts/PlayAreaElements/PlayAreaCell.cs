@@ -109,7 +109,6 @@ namespace MatchThreePrototype.PlayAreaElements
 
         private void Awake()
         {
-            //_rectTransform = GetComponentInChildren<RectTransform>();
             _rectTransform = GetComponent<RectTransform>();
 
             _playArea = GetComponentInParent<PlayArea>();

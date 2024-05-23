@@ -12,7 +12,6 @@ namespace MatchThreePrototype.Controllers
         [SerializeField] private GameObject _playAreaContainer6x6;
         [SerializeField] private GameObject _playAreaContainer9x9;
 
-
         [SerializeField] private int _editorTestNativeFrameRate = 90;
 
         public delegate void OnNewMoveSpeed(float speed);
@@ -26,15 +25,10 @@ namespace MatchThreePrototype.Controllers
 
         public delegate void OnChangeLimitSwapRange(bool isLimited);
         public static OnChangeLimitSwapRange OnChangeLimitSwapRangeDelegate;
-
         
-
-
         private const int TOGGLE_OFF = 0;
         private const int TOGGLE_ON = 1;
 
-        //private static string NUM_BLOCKS = "NUM_BLOCKS";
-        //private static string NUM_OBSTACLES = "NUM_OBSTACLES";
         private static string PCT_BLOCK = "PCT_BLOCK";
         private static string PCT_OBSTACLE = "PCT_OBSTACLE";
 
@@ -66,7 +60,6 @@ namespace MatchThreePrototype.Controllers
 #endif
         }
 
-
         internal void SetDefaults()
         {
             SetDebugTextOn(false);
@@ -82,7 +75,6 @@ namespace MatchThreePrototype.Controllers
             SetNumItemTypes(4);
             SetPlayAreaSelection(PLAY_AREA_9X9);
         }
-
 
         private void EnableDebugTexts(bool enabled)
         {
@@ -115,7 +107,6 @@ namespace MatchThreePrototype.Controllers
             OnNewRemoveDurationDelegate?.Invoke(duration);
         }
 
-
         // MOVE SPEED
         internal float GetMoveSpeed()
         {
@@ -134,7 +125,6 @@ namespace MatchThreePrototype.Controllers
         {
             OnNewMoveSpeedDelegate?.Invoke(speed);
         }
-
 
         // DROP SPEED
         internal float GetDropSpeed()
@@ -311,7 +301,6 @@ namespace MatchThreePrototype.Controllers
                 SignalChangeLimitSwapRange(isSwapRangeLimited);
             }
         }
-
 
         private void Awake()
         {

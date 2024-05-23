@@ -1,8 +1,3 @@
-using MatchThreePrototype.PlayAreaCellContent;
-using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
 {

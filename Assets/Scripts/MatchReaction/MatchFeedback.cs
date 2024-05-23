@@ -34,7 +34,7 @@ namespace MatchThreePrototype.MatchReaction
         {
             PlayAreaCellMatchDetector.OnMatchCaughtDelegate += OnMatchCaught;
 
-            _itemPool = FindAnyObjectByType<ItemPool>();
+            _itemPool = FindFirstObjectByType<ItemPool>();
 
             _audioSource = GetComponent<AudioSource>();
         }

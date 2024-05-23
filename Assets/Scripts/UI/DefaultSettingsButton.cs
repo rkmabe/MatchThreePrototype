@@ -10,8 +10,6 @@ namespace MatchThreePrototype.UI
     public class DefaultSettingsButton : MonoBehaviour
     {
 
-        //[SerializeField] private Button _button;
-
         private Button _button;
 
         [SerializeField] SettingsController _settingsController;

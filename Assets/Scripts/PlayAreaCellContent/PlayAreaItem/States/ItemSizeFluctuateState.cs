@@ -48,7 +48,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
 
         public void Enter()
         {
-            _itemImageTransform = _itemHandler.GetImage().transform;
 
             _itemImageTransform.localScale = SCALE_DEF_VEC;
 
@@ -129,6 +128,7 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
         public ItemSizeFluctuateState(ItemHandler itemHandler)
         {
             _itemHandler = itemHandler;
+            _itemImageTransform = _itemHandler.GetImage().transform;
         }
 
     }

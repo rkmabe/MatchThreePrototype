@@ -37,7 +37,6 @@ namespace MatchThreePrototype.PlayAreaElements
                     // once a blocked cell is encoutned, stop trying to find drop items
                     if (cellUp.BlockHandler.GetBlock() != null || (cellUp.ObstacleHandler.GetObstacle() != null && !cellUp.ObstacleHandler.CanDrop()))
                     {
-                        //hitBlock = true;
                         // if we hit a block, we stop.
                         areDropsPrevented = true;
                         break;
@@ -96,10 +95,10 @@ namespace MatchThreePrototype.PlayAreaElements
                     }
 
 
-                    //// test "4 blue pin horz" case
+                    //// DEBUG: use to test dropping many items of the same type
                     //MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.ItemPool itemPool = FindAnyObjectByType<MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.ItemPool>();
                     //MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.Item bluepin = itemPool.GetNextAvailable(MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.ItemTypes.BluePin);
-                    //Debug.Log("FORCE 4 BLUE PINS");
+                    //Debug.Log("FORCE BLUE PINS");
                     //dropCell.ItemHandler.SetItem(bluepin);
 
                     dropCell.ItemHandler.SetItem(_playArea.DrawnItemsHandler.GetRandomItem());

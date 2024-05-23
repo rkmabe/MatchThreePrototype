@@ -1,12 +1,10 @@
 using MatchThreePrototype.PlayAreaCellContent.PlayAreaItem;
 using MatchThreePrototype.UI;
-using UnityEngine;
 
 namespace MatchThreePrototype.MatchReaction.MatchTypes
 {
     public abstract class Match
     {
-        //protected ScoreInfoBlock _scoreInfo;
 
         public ItemTypes ItemType;
         public int PlayerMoveNum;

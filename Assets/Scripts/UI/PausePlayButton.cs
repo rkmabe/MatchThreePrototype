@@ -37,8 +37,6 @@ namespace MatchThreePrototype.UI
             SettingsButton.OnSettingsCloseDelegate += OnSettingsClose;
             SettingsButton.OnSettingsOpenDelegate += OnSettingsOpen;
 
-            //CollapsibleScreen.OnOpenDelegate += OnSubscreenOpen;
-            //CollapsibleScreen.OnCloseDelegate += OnSubscreenClose;
         }
 
         // Start is called before the first frame update
@@ -55,9 +53,6 @@ namespace MatchThreePrototype.UI
 
         private void OnDestroy()
         {
-            //CollapsibleScreen.OnOpenDelegate -= OnSubscreenOpen;
-            //CollapsibleScreen.OnCloseDelegate -= OnSubscreenClose;
-
             PauseScreen.pauseFadeInCompleteDelegate -= OnPauseFadeInComplete;
             PauseScreen.pauseFadeOutCompleteDelegate -= OnPauseFadeOutComplete;
 
@@ -109,9 +104,6 @@ namespace MatchThreePrototype.UI
         private void OnPausePlayButtonClick()
         {
 
-            //SetInteractable(false);
-
-            // TODO: add vibration
             HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
 
             if (Time.timeScale > 0)
@@ -146,7 +138,6 @@ namespace MatchThreePrototype.UI
                 _pausePlayButtonImage.sprite = _playSprite;
             }
 
-            //Debug.Log("set time scale 0");
             Time.timeScale = 0;
 
 

@@ -24,8 +24,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
 
             _blockImage.color = new Color(_blockImage.color.r, _blockImage.color.g, _blockImage.color.b, Statics.BLOCK_ALPHA_ON);
             _blockImage.sprite = block.CurrentSprite;
-
-            //_stateMachine.Initialize(_stateMachine.IdleState);
         }
 
         public void RemoveBlockLevel()

@@ -1,4 +1,3 @@
-using MatchThreePrototype.PlayAreaCellContent;
 using UnityEngine;
 using UnityEngine.UI;
 using MatchThreePrototype.Controllers;
@@ -18,13 +17,11 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaBlock
 
         public void Enter()
         {
-            //throw new System.NotImplementedException();
             _secsRemovalProcessing = 0;
         }
 
         public void Exit()
         {
-            //throw new System.NotImplementedException();
             _blockHandler.FinishRemoval();
         }
 
