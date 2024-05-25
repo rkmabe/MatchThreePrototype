@@ -67,7 +67,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
 
         public void Exit()
         {
-            //_itemHandler.GetImage().transform.localScale = SCALE_DEF_VEC;
             _itemImageTransform.localScale = SCALE_DEF_VEC;
         }
 

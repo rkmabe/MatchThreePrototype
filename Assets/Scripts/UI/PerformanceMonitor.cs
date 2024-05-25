@@ -25,7 +25,6 @@ namespace MatchThreePrototype.UI
 
         private void Awake()
         {
-            //_UI = FindObjectOfType<UIController>();
             _fpsText = GetComponent<TMPro.TextMeshProUGUI>();
         }
 

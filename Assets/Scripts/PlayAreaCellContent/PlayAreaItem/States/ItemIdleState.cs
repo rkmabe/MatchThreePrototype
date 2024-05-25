@@ -7,7 +7,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
     public class ItemIdleState : IContentState
     {
         private ItemHandler _itemHandler;
-        private BlockHandler _blockHandler;
 
         private static float MIN_SECS_IDLE = 2;
         private static float MAX_SECS_IDLE = 20;

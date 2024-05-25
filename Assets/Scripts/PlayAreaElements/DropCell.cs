@@ -13,8 +13,6 @@ namespace MatchThreePrototype.PlayAreaElements
         public IObstacleHandler ObstacleHandler { get => _obstacleHandler; }
         private IObstacleHandler _obstacleHandler;
 
-        private TMPro.TextMeshProUGUI _debugText;
-
         public float RectMinY { get => _rectTransform.anchorMin.y; }
         public float RectMaxY { get => _rectTransform.anchorMax.y; }
         private RectTransform _rectTransform;
@@ -110,8 +108,6 @@ namespace MatchThreePrototype.PlayAreaElements
             _rectTransform = GetComponent<RectTransform>();
             _editorRectMinY = _rectTransform.anchorMin.y;
             _editorRectMaxY = _rectTransform.anchorMax.y;
-
-            _debugText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
 
             SettingsController.OnNewDropSpeedDelegate += OnNewDropSpeed;
 

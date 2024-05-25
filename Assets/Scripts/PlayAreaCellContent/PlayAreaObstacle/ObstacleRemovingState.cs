@@ -17,13 +17,11 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
 
         public void Enter()
         {
-            //throw new System.NotImplementedException();
             _secsRemovalProcessing = 0;
         }
 
         public void Exit()
         {
-            //throw new System.NotImplementedException();
             _obstacleHandler.FinishRemoval();
         }
 
@@ -33,7 +31,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
             float alphaLerp;
             if (_secsRemovalProcessing < _removalDuration)
             {
-
                 alphaLerp = Mathf.Lerp(Statics.ALPHA_ON, Statics.ALPHA_OFF, _secsRemovalProcessing / _removalDuration);
 
                 Image image = _obstacleHandler.GetImage();
@@ -47,7 +44,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
 
                 _obstacleHandler.StateMachine.TransitionTo(_obstacleHandler.StateMachine.IdleState);
-
             }
 
         }

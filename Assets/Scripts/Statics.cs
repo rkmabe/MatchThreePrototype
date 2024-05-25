@@ -14,8 +14,6 @@ namespace MatchThreePrototype
 
         public static string PLAY_AREA_RECT = "PLAY_AREA_RECT";
 
-        //private static float BLOCK_ALPHA_ON = .65f;
-
         public static float Interpolate(float x, float x1, float x2, float y1, float y2)
         {
             return y1 + ((x - x1) / (x2 - x1) * (y2 - y1));

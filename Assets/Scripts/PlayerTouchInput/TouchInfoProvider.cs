@@ -15,19 +15,13 @@ namespace MatchThreePrototype.PlayerTouchInput
         [SerializeField] private GraphicRaycaster _graphicRaycaster;
         [SerializeField] int _cellSwapRange = 1;
 
-
-
         public static bool DEFAULT_SWAP_RANGE_LIMITED = false;
 
         private bool _isSwapRangeLimited = DEFAULT_SWAP_RANGE_LIMITED;
 
-        //private SettingsController _settingsController;
-
         public bool IsPositionInSwapRange(Vector2 touchPoint, PlayAreaCell dragOriginCell, out PlayAreaCell cellTouched)
         {
             // return true if this drag position contains a play area cell within swap range
-
-            //int _cellSwapRange = 1;
 
             cellTouched = null;
             bool withinPlayArea = false;
@@ -54,8 +48,6 @@ namespace MatchThreePrototype.PlayerTouchInput
                 }
             }
 
-
-            //if (_settingsController.GetLimitSwapRange())
             if (_isSwapRangeLimited)
             {
                 if (cellTouched != null)

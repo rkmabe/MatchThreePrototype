@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace MatchThreePrototype.PlayAreaCellContent
 {
-
     public interface IContentState
     {
         public void Enter();

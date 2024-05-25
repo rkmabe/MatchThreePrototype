@@ -70,7 +70,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaObstacle
         }
         private void PutInPool(Obstacle obstacle)
         {
-            //block.transform.parent = transform;
             obstacle.transform.SetParent(transform);
             obstacle.transform.localPosition = Statics.Vector3Zero();
             obstacle.gameObject.SetActive(false);

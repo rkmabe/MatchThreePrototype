@@ -46,13 +46,10 @@ namespace MatchThreePrototype.PlayAreaElements
 
                         if (IsPopulationPlacementValid(candidateItemType, columns[i].Number, columns[i].Cells[j].Number))
                         {
-                            //validItem = _drawnItems[drawnItemsIndex];
                             validItem = drawnItems[drawnItemsIndex];
-
 
                             columns[i].Cells[j].ItemHandler.SetItem(validItem);
 
-                            //_drawnItems.RemoveAt(drawnItemsIndex);
                             drawnItems.RemoveAt(drawnItemsIndex);
 
                             itemPlacedCounter++;

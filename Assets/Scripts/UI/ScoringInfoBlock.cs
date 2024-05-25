@@ -14,7 +14,6 @@ namespace MatchThreePrototype.UI
         [SerializeField] private Button _infoUpButton;
         [SerializeField] private Button _infoDownButton;
         private int _currInfoTextPageNum = 1;
-        //[SerializeField] private TMPro.TextMeshProUGUI _infoTextPageCount;
 
         [SerializeField] private TMPro.TextMeshProUGUI _numWhitePinsText;
         private int _numWhitePins;
@@ -36,8 +35,6 @@ namespace MatchThreePrototype.UI
 
         [SerializeField] private TMPro.TextMeshProUGUI _numBlackBallsText;
         private int _numBlackBalls;
-
-        private PlayerTouchInput.Player _player;
 
         int _lastMoveNum = 0;
 

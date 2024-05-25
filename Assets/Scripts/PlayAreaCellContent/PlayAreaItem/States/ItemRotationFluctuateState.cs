@@ -67,7 +67,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
 
         public void Exit()
         {
-            //_itemHandler.GetImage().transform.rotation = Quaternion.Euler(SCALE_DEF_ROT);
             _itemImageTransform.rotation = Quaternion.Euler(ROTATION_DEF_VEC);
         }
 
@@ -94,10 +93,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
                 {
                     _secsInPart1 += Time.deltaTime;
 
-                    // part 1 - move from DEF to UP
-                    //float scaleLerp = Mathf.Lerp(SCALE_DEF, SCALE_UP_MAX, _secsInPart1 / _durationPart1);
-                    //_itemImageTransform.localScale = new Vector3(scaleLerp, scaleLerp, 1);
-
                     // part 1 - move from DEF to MAX
                     float rotLerp = Mathf.Lerp(ROTATION_DEF, ROTATION_MAX, _secsInPart1 / _durationPart1);
                     _itemImageTransform.rotation = Quaternion.Euler(new Vector3(0,0,rotLerp));
@@ -107,10 +102,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
                 {
                     _secsInPart2 += Time.deltaTime;
 
-                    // part 2 - move from UP to DOWN
-                    //float scaleLerp = Mathf.Lerp(SCALE_UP_MAX, SCALE_DOWN_MIN, _secsInPart2 / _durationPart2);
-                    //_itemImageTransform.localScale = new Vector3(scaleLerp, scaleLerp, 1);
-
                     // part 2 - from MAX to MIN
                     float rotLerp = Mathf.Lerp(ROTATION_MAX, ROTATION_MIN, _secsInPart2 / _durationPart2);
                     _itemImageTransform.rotation = Quaternion.Euler(new Vector3(0, 0, rotLerp));
@@ -118,10 +109,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem.States
                 else if (_secsInCycle < _cycleDuration)
                 {
                     _secsInPart3 += Time.deltaTime;
-
-                    // part 3 - move from DOWN to DEF
-                    //float scaleLerp = Mathf.Lerp(SCALE_DOWN_MIN, SCALE_DEF, _secsInPart3 / _durationPart3);
-                    //_itemImageTransform.localScale = new Vector3(scaleLerp, scaleLerp, 1);
 
                     // part 3 - move from DOWN to DEF
                     float rotLerp = Mathf.Lerp(ROTATION_MIN, ROTATION_DEF, _secsInPart3 / _durationPart3);

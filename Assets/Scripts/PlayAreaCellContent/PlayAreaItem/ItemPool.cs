@@ -56,7 +56,6 @@ namespace MatchThreePrototype.PlayAreaCellContent.PlayAreaItem
 
         private void PutInPool(Item item)
         {
-            //item.transform.parent = transform;
             item.transform.SetParent(transform);
             item.transform.localPosition = Statics.Vector3Zero();
             item.gameObject.SetActive(false);

@@ -52,7 +52,6 @@ namespace MatchThreePrototype.PlayAreaElements
         {
             if (excludedItemTypes.Count == 0)
             {
-                //return UnityEngine.Random.Range(0, _drawnItems.Count);
                 return UnityEngine.Random.Range(0, _drawnItems.Count);
             }
             else
